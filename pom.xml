@@ -44,6 +44,11 @@
 
     <dependencies>
         <dependency>
+         <groupId>org.jasig.cas</groupId>
+         <artifactId>cas-server-core</artifactId>
+         <version>${cas.version}</version>
+    </dependency>
+        <dependency>
             <groupId>org.jasig.cas</groupId>
             <artifactId>cas-server-webapp</artifactId>
             <version>${cas.version}</version>
