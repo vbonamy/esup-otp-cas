@@ -60,9 +60,9 @@
                    | If more than one instance of the same handler class is configured, you must explicitly
                    | set its name to something other than its default name (typically the simple class name).
                    -->
-                <!-- <entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver" />
-                <entry key-ref="primaryAuthenticationHandler" value-ref="primaryPrincipalResolver" /> -->
-                 <entry key-ref="ldapAuthenticationHandler" value-ref="usernamePasswordCredentialsResolver" />
+                <!-- <entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver" /> -->
+                <!-- <entry key-ref="primaryAuthenticationHandler" value-ref="primaryPrincipalResolver" /> -->
+                <entry key-ref="esupOtpApiAuthenticationHandler" value-ref="usernamePasswordCredentialsResolver" />
             </map>
         </constructor-arg>
 
@@ -87,11 +87,6 @@
             <bean class="org.jasig.cas.authentication.AnyAuthenticationPolicy" />
         </property>
     </bean>
-
-    <!-- Required for proxy ticket mechanism. -->
-    <bean id="proxyAuthenticationHandler"
-          class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler"
-          p:httpClient-ref="httpClient" />
 
     <!--
        | TODO: Replace this component with one suitable for your enviroment.
@@ -118,6 +113,13 @@
     <bean id="proxyPrincipalResolver"
           class="org.jasig.cas.authentication.principal.BasicPrincipalResolver" />
 
+    <!-- Esup Otp Api Handler -->
+    <bean id="esupOtpApiAuthenticationHandler"
+          class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler" />
+
+          <bean id="usernamePasswordCredentialsResolver"
+          class="org.jasig.cas.authentication.principal.BasicPrincipalResolver" />
+
     <!--
        | Resolves a principal from a credential using an attribute repository that is configured to resolve
        | against a deployer-specific store (e.g. LDAP).
@@ -126,84 +128,6 @@
           class="org.jasig.cas.authentication.principal.PersonDirectoryPrincipalResolver" >
         <property name="attributeRepository" ref="attributeRepository" />
     </bean>
-
-    <bean id="usernamePasswordCredentialsResolver"
-          class="org.jasig.cas.authentication.principal.BasicPrincipalResolver" />
-
-    <bean id="ldapAuthenticationHandler"
-      class="org.jasig.cas.authentication.LdapAuthenticationHandler"
-      p:principalIdAttribute="uid"
-      c:authenticator-ref="authenticator">
-    <property name="principalAttributeMap">
-        <map>
-            <!--
-               | This map provides a simple attribute resolution mechanism.
-               | Keys are LDAP attribute names, values are CAS attribute names.
-               | Use this facility instead of a PrincipalResolver if LDAP is
-               | the only attribute source.
-               -->
-            <entry key="uid" value="uid" />
-        </map>
-    </property>
-</bean>
-
-<bean id="authenticator" class="org.ldaptive.auth.Authenticator"
-      c:resolver-ref="dnResolver"
-      c:handler-ref="authHandler" />
-
-<!--
-   | The following DN format works for many directories, but may need to be
-   | customized.
-   -->
-<bean id="dnResolver"
-      class="org.ldaptive.auth.FormatDnResolver"
-      c:format="uid=%s,${ldap.authn.baseDn}" />
-
-<bean id="authHandler" class="org.ldaptive.auth.PooledBindAuthenticationHandler"
-      p:connectionFactory-ref="pooledLdapConnectionFactory" />
-
-<bean id="pooledLdapConnectionFactory"
-      class="org.ldaptive.pool.PooledConnectionFactory"
-      p:connectionPool-ref="connectionPool" />
-
-<bean id="connectionPool"
-      class="org.ldaptive.pool.BlockingConnectionPool"
-      init-method="initialize"
-      p:poolConfig-ref="ldapPoolConfig"
-      p:blockWaitTime="${ldap.pool.blockWaitTime}"
-      p:validator-ref="searchValidator"
-      p:pruneStrategy-ref="pruneStrategy"
-      p:connectionFactory-ref="connectionFactory" p:failFastInitialize="false"/>
-
-<bean id="ldapPoolConfig" class="org.ldaptive.pool.PoolConfig"
-      p:minPoolSize="${ldap.pool.minSize}"
-      p:maxPoolSize="${ldap.pool.maxSize}"
-      p:validateOnCheckOut="${ldap.pool.validateOnCheckout}"
-      p:validatePeriodically="${ldap.pool.validatePeriodically}"
-      p:validatePeriod="${ldap.pool.validatePeriod}" />
-
-<bean id="connectionFactory" class="org.ldaptive.DefaultConnectionFactory"
-      p:connectionConfig-ref="connectionConfig" />
-
-<bean id="connectionConfig" class="org.ldaptive.ConnectionConfig"
-      p:ldapUrl="${ldap.url}"
-      p:connectTimeout="${ldap.connectTimeout}"
-      p:useStartTLS="false" />
-      <!--
-      p:sslConfig-ref="sslConfig" />
-
-<bean id="sslConfig" class="org.ldaptive.ssl.SslConfig">
-    <property name="credentialConfig">
-        <bean class="org.ldaptive.ssl.X509CredentialConfig"
-              p:trustCertificates="${ldap.trustedCert}" />
-    </property>
-</bean> -->
-
-<bean id="pruneStrategy" class="org.ldaptive.pool.IdlePruneStrategy"
-      p:prunePeriod="${ldap.pool.prunePeriod}"
-      p:idleTime="${ldap.pool.idleTime}" />
-
-<bean id="searchValidator" class="org.ldaptive.pool.SearchValidator" />
 
     <!--
     Bean that defines the attributes that a service may return.  This example uses the Stub/Mock version.  A real implementation
