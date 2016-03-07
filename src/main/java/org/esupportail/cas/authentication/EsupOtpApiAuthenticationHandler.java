@@ -38,7 +38,7 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	}
 
 	private JSONObject verifyOtp(String uid, String otp) throws IOException {
-			String url = "http://localhost:3000/verify_code/google_authenticator/"+uid+"/"+otp;
+			String url = "http://localhost:3000/verify_code/"+uid+"/"+otp;
 
 			URL obj = new URL(url);
 			int responseCode;
