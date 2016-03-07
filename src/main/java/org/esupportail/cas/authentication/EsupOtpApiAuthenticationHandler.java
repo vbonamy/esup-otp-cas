@@ -6,6 +6,8 @@ import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuth
 import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.authentication.principal.SimplePrincipal;
 
+import org.json.*;
+
 import javax.security.auth.login.FailedLoginException;
 import org.jasig.cas.authentication.PreventedException;
 import java.security.GeneralSecurityException;
@@ -24,41 +26,18 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	@Override
 	protected final HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential credential)throws GeneralSecurityException, PreventedException{
 		try{
-			System.out.println(verifyOtp(credential.getUsername(), credential.getPassword()));
-			throw new FailedLoginException();
+			JSONObject response = verifyOtp(credential.getUsername(), credential.getPassword());
+			if(response.getString("code").equals("Ok")){
+				return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
+			}else{
+				throw new FailedLoginException();
+			}
 		}catch(IOException e){
-			// System.out.println(e.toString());
 			throw new PreventedException("HTTP Request error", e);
 		}
 	}
 
-	private String testGetRequest() throws IOException {
-			String url = "http://localhost:3000/send_code/google_authenticator/app/john";
-
-			URL obj = new URL(url);
-			int responseCode;
-			HttpURLConnection con;
-			con = (HttpURLConnection) obj.openConnection();
-			con.setRequestMethod("GET");
-			responseCode = con.getResponseCode();
-			
-			// System.out.println("\nSending 'GET' request to URL : " + url);
-			// System.out.println("Response Code : " + responseCode);
-
-			BufferedReader in = new BufferedReader(
-				new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-			return response.toString();
-	}
-
-	private String verifyOtp(String uid, String otp) throws IOException {
+	private JSONObject verifyOtp(String uid, String otp) throws IOException {
 			String url = "http://localhost:3000/verify_code/google_authenticator/"+uid+"/"+otp;
 
 			URL obj = new URL(url);
@@ -81,6 +60,19 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 			}
 			in.close();
 
-			return response.toString();
+			return new JSONObject(response.toString());
 	}
+
+	/**
+     * Creates a CAS principal with attributes
+     *
+     * @param username Username that was successfully authenticated which is used for principal
+     *
+     * @return Principal
+     *
+     * @throws LoginException On security policy errors related to principal creation.
+     */
+    protected Principal createPrincipal(final String username){
+        return new SimplePrincipal(username);
+    }
 }
