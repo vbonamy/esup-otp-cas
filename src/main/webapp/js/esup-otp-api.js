@@ -17,6 +17,7 @@ function send_code(transport) {
                         var responseObject = JSON.parse(req.responseText);
                         if(responseObject.code =="Ok"){
                           alert('Envoi du code via ' + transport);
+                          $('#list-transports').hide();
                         }else{
                           alert('Erreur ' + responseObject.message);
                         }
