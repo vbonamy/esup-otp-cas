@@ -36,7 +36,7 @@
     <div id="list-tranports">
       <h3>Veuillez choisir le moyen par lequel vous souhaitez recevoir votre code temporaire</h3>
       Votre login <input type="text" id="loginUser" name="LastName">
-      <p id="buttonMail" onclick="send_code('mail')" style="background-color: #210F7A; color: white; margin: 5px; text-align: center;">Mail</p> <p id="buttonSms" onclick="send_code('sms')" style="background-color: #210F7A; color: white; margin: 5px; text-align: center;" >Sms</p> <p id="buttonApp" onclick="send_code('app')" style="background-color: #210F7A; color: white; margin: 5px; text-align: center;">Application smartphone</p>
+      <p id="buttonMail" onclick="send_code('mail')" class="button">Mail</p> <p id="buttonSms" onclick="send_code('sms')" class="button" >Sms</p> <p id="buttonApp" onclick="send_code('app')" class="button">Application smartphone</p>
     </div>
     
     <section class="row">

@@ -36,7 +36,8 @@
   
   <spring:theme code="standard.custom.css.file" var="customCssFile" />
   <link type="text/css" rel="stylesheet" href="<c:url value="${customCssFile}" />" />
-  
+  <link type="text/css" rel="stylesheet" href="<c:url value="/css/esup-otp-api.css" />" />
+
   <link rel="icon" href="<c:url value="/favicon.ico" />" type="image/x-icon" />
   
   <!--[if lt IE 9]>
