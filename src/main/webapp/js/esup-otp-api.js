@@ -14,7 +14,13 @@ function send_code(transport) {
             req.onreadystatechange = function(aEvt) {
                 if (req.readyState == 4) {
                     if (req.status == 200) {
-                        alert('Envoi du code via ' + transport);
+                        var responseObject = JSON.parse(req.responseText);
+                        if(responseObject.code =="Ok"){
+                          alert('Envoi du code via ' + transport);
+                        }else{
+                          alert('Erreur ' + responseObject.message);
+                        }
+                        
                         code_send = false;
                     } else {
                         alert("Erreur " + req.status);
