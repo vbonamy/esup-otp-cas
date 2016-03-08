@@ -33,7 +33,7 @@
     <form:errors path="*" id="msg" cssClass="errors" element="div" htmlEscape="false" />
   
     <h2><spring:message code="screen.welcome.instructions" /></h2>
-    <div id="list-tranports">
+    <div id="list-transports">
       <h3>Veuillez choisir le moyen par lequel vous souhaitez recevoir votre code temporaire</h3>
       Votre login <input type="text" id="loginUser" name="LastName">
       <p id="buttonMail" onclick="send_code('mail')" class="button">Mail</p> <p id="buttonSms" onclick="send_code('sms')" class="button" >Sms</p> <p id="buttonApp" onclick="send_code('app')" class="button">Application smartphone</p>
