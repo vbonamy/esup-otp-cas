@@ -33,40 +33,6 @@
     <form:errors path="*" id="msg" cssClass="errors" element="div" htmlEscape="false" />
   
     <h2><spring:message code="screen.welcome.instructions" /></h2>
-    <script type="text/javascript">
-      var code_send = false;
-      var last_transport = '';
-      function send_code(transport){
-        if(!code_send){
-                if(document.getElementById('loginUser').value != ''){
-                  code_send = true;
-                  last_transport = transport;
-                  var req = new XMLHttpRequest();
-                  req.open('GET', 'https://tequila:3443/send_code/google_authenticator/'+transport+'/'+document.getElementById('loginUser').value, true);
-                  req.onerror = function(e){
-                    alert("Erreur :"+e.target.status);
-                  };
-                  req.onreadystatechange = function (aEvt) {
-                    if (req.readyState == 4) {
-                     if(req.status == 200){
-                      alert('Envoi du code via '+transport);
-                      code_send = false;
-                    }
-                    else{
-                      alert("Erreur "+req.status);
-                      code_send = false;
-                    }
-                  }
-                };
-                req.send(null);
-              }
-              else alert("Veuillez entrer votre login");
-            }
-            else{
-             alert("Vous devez attendre l'envoi du code via "+ last_transport); 
-            }
-    };
-  </script>
     <div id="list-tranports">
       <h3>Veuillez choisir le moyen par lequel vous souhaitez recevoir votre code temporaire</h3>
       Votre login <input type="text" id="loginUser" name="LastName">
