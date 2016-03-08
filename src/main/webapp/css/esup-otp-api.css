@@ -3,4 +3,15 @@ p.button {
     color: white;
     margin: 5px;
     text-align: center;
+    border-radius: 5px;
 }
+
+p.button:hover {
+    background-color: darkgray;
+}
+
+p.button:active {
+    background-color: lightgray;
+}
+
+
