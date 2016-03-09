@@ -31,16 +31,8 @@
   <form:form method="post" id="fm1" commandName="${commandName}" htmlEscape="true">
 
     <form:errors path="*" id="msg" cssClass="errors" element="div" htmlEscape="false" />
-    <p onclick="$('#list-transports').show();" class="button">Renvoyer code</p>
     <h2><spring:message code="screen.welcome.instructions" /></h2>
-    <div id="list-transports">
-      <div class="list-transports">
-      <h3>Veuillez choisir le moyen par lequel vous souhaitez recevoir votre code temporaire</h3>
-      Votre login <input type="text" id="loginUser" name="LastName">
-      <p id="buttonMail" onclick="send_code('mail')" class="button">Mail</p> <p id="buttonSms" onclick="send_code('sms')" class="button" >Sms</p> <p id="buttonApp" onclick="send_code('app')" class="button">Application smartphone</p>
-    </div>
-    </div>
-    
+  
     <section class="row">
       <label for="username"><spring:message code="screen.welcome.label.netid" /></label>
       <c:choose>
@@ -54,34 +46,43 @@
         </c:otherwise>
       </c:choose>
     </section>
-    
-    <section class="row">
-      <label for="password"><spring:message code="screen.welcome.label.password" /></label>
-      <%--
-      NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
-      "autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
-      information, see the following web page:
-      http://www.technofundo.com/tech/web/ie_autocomplete.html
-      --%>
-      <spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
-      <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
-    </section>
-    
-    <section class="row check">
-      <input id="warn" name="warn" value="true" tabindex="3" accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />" type="checkbox" />
-      <label for="warn"><spring:message code="screen.welcome.label.warn" /></label>
-     <input type="checkbox" name="rememberMe" id="rememberMe" value="true" />
-<label for="rememberMe">Remember Me</label>
-    </section>
-    
-    <section class="row btn-row">
-      <input type="hidden" name="lt" value="${loginTicket}" />
-      <input type="hidden" name="execution" value="${flowExecutionKey}" />
-      <input type="hidden" name="_eventId" value="submit" />
+    <div id="list-methods">
+      <h3>Google Authenticator</h3>
+      <div class="list-transports">
+        <p id="buttonMail" class="button" onclick="send_code('mail');">Mail</p>
+        <p id="buttonSms" class="button" onclick="send_code('sms');">Sms</p>
+        <p id="buttonApp" class="button" onclick="send_code('app');">Application smartphone</p>
+      </div>
+    </div>
+    <div id="auth">
+          <section class="row">
+            <label for="password"><spring:message code="screen.welcome.label.password" /></label>
+            <%--
+            NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
+            "autocomplete" that when set to "off" will tell certain browsers not to prompt to cache credentials.  For more
+            information, see the following web page:
+            http://www.technofundo.com/tech/web/ie_autocomplete.html
+            --%>
+            <spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
+            <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
+          </section>
+          
+          <section class="row check">
+            <input id="warn" name="warn" value="true" tabindex="3" accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />" type="checkbox" />
+            <label for="warn"><spring:message code="screen.welcome.label.warn" /></label>
+           <input type="checkbox" name="rememberMe" id="rememberMe" value="true" />
+      <label for="rememberMe">Remember Me</label>
+          </section>
+          
+          <section class="row btn-row">
+            <input type="hidden" name="lt" value="${loginTicket}" />
+            <input type="hidden" name="execution" value="${flowExecutionKey}" />
+            <input type="hidden" name="_eventId" value="submit" />
 
-      <input class="btn-submit" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="submit" />
-      <input class="btn-reset" name="reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="5" type="reset" />
-    </section>
+            <input class="btn-submit" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="submit" />
+            <input class="btn-reset" name="reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="5" type="reset" />
+          </section>
+    </div>
   </form:form>
 </div>
   
