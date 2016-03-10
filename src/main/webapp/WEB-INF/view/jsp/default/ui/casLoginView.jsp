@@ -45,15 +45,9 @@
           <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="off" htmlEscape="true" />
         </c:otherwise>
       </c:choose>
-      <p id="buttonMethods" class="button" onclick="get_methods();">Valider</p>
+      <p id="buttonMethods" class="button" onclick="get_available_transports();">Valider</p>
     </section>
     <div id="list-methods">
-      <h3>Google Authenticator</h3>
-      <div class="list-transports">
-        <p id="buttonMail" class="button" onclick="send_code('mail');">Mail</p>
-        <p id="buttonSms" class="button" onclick="send_code('sms');">Sms</p>
-        <p id="buttonApp" class="button" onclick="send_code('app');">Application smartphone</p>
-      </div>
     </div>
     <div id="auth">
           <section class="row">

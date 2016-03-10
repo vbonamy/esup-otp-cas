@@ -7,23 +7,21 @@ function send_code(transport) {
             code_send = true;
             last_transport = transport;
             var req = new XMLHttpRequest();
-            req.open('GET', 'https://tequila:3443/send_code/google_authenticator/' + transport + '/' + document.getElementById('username').value, true);
+            req.open('GET', 'https://tequila:3443/send_code/google_authenticator/' + transport + '/' + document.getElementById('username').innerHTML, true);
             req.onerror = function(e) {
                 alert("Erreur :" + e.target.status);
+                code_send = false;
             };
             req.onreadystatechange = function(aEvt) {
                 if (req.readyState == 4) {
                     if (req.status == 200) {
                         var responseObject = JSON.parse(req.responseText);
-                        if(responseObject.code =="Ok"){
-                          alert('Envoi du code via ' + transport);
-                        }else{
-                          alert('Erreur ' + responseObject.message);
+                        if (responseObject.code == "Ok") {
+                            alert('Envoi du code via ' + transport);
+                        } else {
+                            alert('Erreur ' + responseObject.message);
                         }
-                        
-                        code_send = false;
-                    } else {
-                        alert("Erreur " + req.status);
+
                         code_send = false;
                     }
                 }
@@ -35,21 +33,72 @@ function send_code(transport) {
     }
 };
 
-function get_methods() {
-        if (document.getElementById('username').value != '') {
-            alert("request api get get_methods");
-            $('#list-methods').show();
-            var username = document.getElementById('username').value;
-            $('#username').remove();
-            $('#buttonMethods').remove();
-            $('#usernameRow').append("<label id='username'>"+username+"</label>")
-        } else alert("Veuillez entrer votre login");
+function get_available_methods() {
+    var req = new XMLHttpRequest();
+    req.open('GET', 'https://tequila:3443/get_available_methods', true);
+    req.onerror = function(e) {
+        console.log(e);
+    };
+    req.onreadystatechange = function(aEvt) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var responseObject = JSON.parse(req.responseText);
+                if (responseObject.code == "Ok") {
+                    for(method in responseObject.methods_list){
+                        $('#list-methods').append("<div id='"+responseObject.methods_list[method].method+"'></div>");
+                        $('#'+responseObject.methods_list[method].method).append("<h3>" + responseObject.methods_list[method].method + "</h3>");
+                        for(transport in responseObject.methods_list[method].transports){
+                            $('#'+responseObject.methods_list[method].method).append("<p class='button "+responseObject.methods_list[method].transports[transport]+"' onclick='send_code(\""+responseObject.methods_list[method].transports[transport]+"\");'>" + responseObject.methods_list[method].transports[transport] + "</p>");
+                        }
+                    }
+                } else {
+                    alert('Erreur ' + responseObject.message);
+                }
+            }
+        }
+    };
+    req.send(null);
 };
 
-function init(){
+function get_available_transports() {
+    if (document.getElementById('username').value != '') {
+        var req = new XMLHttpRequest();
+        req.open('GET', 'https://tequila:3443/get_available_transports/'+document.getElementById('username').value, true);
+        req.onerror = function(e) {
+            console.log(e);
+        };
+        req.onreadystatechange = function(aEvt) {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    var responseObject = JSON.parse(req.responseText);
+                    if (responseObject.code == "Ok") {
+                        if(!responseObject.transports_list.sms){
+                            $('.sms').remove();
+                        }
+                        if(!responseObject.transports_list.mail){
+                            $('.mail').remove();
+                        }
+                        $('#list-methods').show();
+                        var username = document.getElementById('username').value;
+                        $('#username').remove();
+                        $('#buttonMethods').remove();
+                        $('#usernameRow').append("<label id='username'>" + username + "</label>");
+                    }
+                }
+            }
+        };
+        req.send(null);
+    } else alert("Veuillez entrer votre login");
+};
+
+
+
+function init() {
     $('#auth').hide();
     $('#list-methods').hide();
+    get_available_methods();
 };
+
 
 // <div id="list-transports">
 //   <div class="list-transports">
