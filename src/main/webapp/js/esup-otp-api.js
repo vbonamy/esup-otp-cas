@@ -17,11 +17,12 @@ function send_code(transport) {
                     if (req.status == 200) {
                         var responseObject = JSON.parse(req.responseText);
                         if (responseObject.code == "Ok") {
-                            alert('Envoi du code via ' + transport);
+                            console.log('Envoi du code via ' + transport);
+                            $('#auth').show();
+                            $('#list-methods').hide();
                         } else {
-                            alert('Erreur ' + responseObject.message);
+                            console.log('Erreur ' + responseObject.message);
                         }
-
                         code_send = false;
                     }
                 }
@@ -44,11 +45,11 @@ function get_available_methods() {
             if (req.status == 200) {
                 var responseObject = JSON.parse(req.responseText);
                 if (responseObject.code == "Ok") {
-                    for(method in responseObject.methods_list){
-                        $('#list-methods').append("<div id='"+responseObject.methods_list[method].method+"'></div>");
-                        $('#'+responseObject.methods_list[method].method).append("<h3>" + responseObject.methods_list[method].method + "</h3>");
-                        for(transport in responseObject.methods_list[method].transports){
-                            $('#'+responseObject.methods_list[method].method).append("<p class='button "+responseObject.methods_list[method].transports[transport]+"' onclick='send_code(\""+responseObject.methods_list[method].transports[transport]+"\");'>" + responseObject.methods_list[method].transports[transport] + "</p>");
+                    for (method in responseObject.methods_list) {
+                        $('#list-methods').append("<div id='" + responseObject.methods_list[method].method + "'></div>");
+                        $('#' + responseObject.methods_list[method].method).append("<h3>" + responseObject.methods_list[method].method + "</h3>");
+                        for (transport in responseObject.methods_list[method].transports) {
+                            $('#' + responseObject.methods_list[method].method).append("<p class='button " + responseObject.methods_list[method].transports[transport] + "' onclick='send_code(\"" + responseObject.methods_list[method].transports[transport] + "\");'>" + responseObject.methods_list[method].transports[transport] + "</p>");
                         }
                     }
                 } else {
@@ -63,7 +64,7 @@ function get_available_methods() {
 function get_available_transports() {
     if (document.getElementById('username').value != '') {
         var req = new XMLHttpRequest();
-        req.open('GET', 'https://tequila:3443/get_available_transports/'+document.getElementById('username').value, true);
+        req.open('GET', 'https://tequila:3443/get_available_transports/' + document.getElementById('username').value, true);
         req.onerror = function(e) {
             console.log(e);
         };
@@ -72,11 +73,15 @@ function get_available_transports() {
                 if (req.status == 200) {
                     var responseObject = JSON.parse(req.responseText);
                     if (responseObject.code == "Ok") {
-                        if(!responseObject.transports_list.sms){
+                        if (!responseObject.transports_list.sms) {
                             $('.sms').remove();
+                        }else{
+                            $('.sms').text('sms to '+responseObject.transports_list.sms)
                         }
-                        if(!responseObject.transports_list.mail){
+                        if (!responseObject.transports_list.mail) {
                             $('.mail').remove();
+                        }else{
+                            $('.mail').text('mail to '+responseObject.transports_list.mail)
                         }
                         $('#list-methods').show();
                         var username = document.getElementById('username').value;
