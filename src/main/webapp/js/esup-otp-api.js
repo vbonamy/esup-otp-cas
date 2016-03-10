@@ -35,6 +35,22 @@ function send_code(transport) {
     }
 };
 
+function get_methods() {
+        if (document.getElementById('username').value != '') {
+            alert("request api get get_methods");
+            $('#list-methods').show();
+            var username = document.getElementById('username').value;
+            $('#username').remove();
+            $('#buttonMethods').remove();
+            $('#usernameRow').append("<label id='username'>"+username+"</label>")
+        } else alert("Veuillez entrer votre login");
+};
+
+function init(){
+    $('#auth').hide();
+    $('#list-methods').hide();
+};
+
 // <div id="list-transports">
 //   <div class="list-transports">
 //   <h3>Veuillez choisir le moyen par lequel vous souhaitez recevoir votre code temporaire</h3>

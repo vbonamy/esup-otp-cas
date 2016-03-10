@@ -33,7 +33,7 @@
     <form:errors path="*" id="msg" cssClass="errors" element="div" htmlEscape="false" />
     <h2><spring:message code="screen.welcome.instructions" /></h2>
   
-    <section class="row">
+    <section class="row" id="usernameRow">
       <label for="username"><spring:message code="screen.welcome.label.netid" /></label>
       <c:choose>
         <c:when test="${not empty sessionScope.openIdLocalId}">
@@ -45,6 +45,7 @@
           <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="off" htmlEscape="true" />
         </c:otherwise>
       </c:choose>
+      <p id="buttonMethods" class="button" onclick="get_methods();">Valider</p>
     </section>
     <div id="list-methods">
       <h3>Google Authenticator</h3>
