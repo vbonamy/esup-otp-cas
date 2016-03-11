@@ -14,8 +14,12 @@ p.sms {
     background-color: #2196f3;
 }
 
-p.app {
+p.success {
     background-color: #8bc34a;
+}
+
+p.error {
+    background-color: #DD2C00;
 }
 
 p.button:hover {
@@ -25,6 +29,11 @@ p.button:hover {
 p.button:active {
     background-color: lightgray;
 }
+
+#msg2 {
+    padding: 25px;
+}
+
 
 div#list-methods{
 

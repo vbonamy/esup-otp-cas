@@ -1,15 +1,17 @@
 var code_send = false;
 var last_transport = '';
+var auth_div;
+var methods_requested = false;
 
 function send_code(transport) {
     if (!code_send) {
-        if (document.getElementById('username').value != '') {
+        if (document.getElementById('usernameLabel').innerHTML != '') {
             code_send = true;
             last_transport = transport;
             var req = new XMLHttpRequest();
-            req.open('GET', 'https://tequila:3443/send_code/google_authenticator/' + transport + '/' + document.getElementById('username').innerHTML, true);
+            req.open('GET', 'https://tequila:3443/send_code/google_authenticator/' + transport + '/' + document.getElementById('usernameLabel').innerHTML, true);
             req.onerror = function(e) {
-                alert("Erreur :" + e.target.status);
+                errors_message("Erreur :" + e.target.status);
                 code_send = false;
             };
             req.onreadystatechange = function(aEvt) {
@@ -17,48 +19,52 @@ function send_code(transport) {
                     if (req.status == 200) {
                         var responseObject = JSON.parse(req.responseText);
                         if (responseObject.code == "Ok") {
-                            console.log('Envoi du code via ' + transport);
-                            $('#auth').show();
-                            $('#list-methods').hide();
+                            success_message('Envoi du code via ' + transport);
+                            hide_methods();
                         } else {
-                            console.log('Erreur ' + responseObject.message);
+                            errors_message('Erreur ' + responseObject.message);
                         }
                         code_send = false;
                     }
                 }
             };
             req.send(null);
-        } else alert("Veuillez entrer votre login");
+        } else errors_message('Veuillez entrer votre login');
     } else {
-        alert("Vous devez attendre l'envoi du code via " + last_transport);
+        errors_message("Vous devez attendre l'envoi du code via " + last_transport);
     }
 };
 
 function get_available_methods() {
-    var req = new XMLHttpRequest();
-    req.open('GET', 'https://tequila:3443/get_available_methods', true);
-    req.onerror = function(e) {
-        console.log(e);
-    };
-    req.onreadystatechange = function(aEvt) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseObject = JSON.parse(req.responseText);
-                if (responseObject.code == "Ok") {
-                    for (method in responseObject.methods_list) {
-                        $('#list-methods').append("<div id='" + responseObject.methods_list[method].method + "'></div>");
-                        $('#' + responseObject.methods_list[method].method).append("<h3>" + responseObject.methods_list[method].method + "</h3>");
-                        for (transport in responseObject.methods_list[method].transports) {
-                            $('#' + responseObject.methods_list[method].method).append("<p class='button " + responseObject.methods_list[method].transports[transport] + "' onclick='send_code(\"" + responseObject.methods_list[method].transports[transport] + "\");'>" + responseObject.methods_list[method].transports[transport] + "</p>");
+    if(!methods_requested){
+        var req = new XMLHttpRequest();
+        req.open('GET', 'https://tequila:3443/get_available_methods', true);
+        req.onerror = function(e) {
+            console.log(e);
+        };
+        req.onreadystatechange = function(aEvt) {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    var responseObject = JSON.parse(req.responseText);
+                    if (responseObject.code == "Ok") {
+                        $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>"+"J'ai déjà un code"+"</p>");
+                        for (method in responseObject.methods) {
+                            $('#list-methods').append("<div id='" + responseObject.methods[method] + "'></div>");
+                            $('#' + responseObject.methods[method]).append("<h3>" + responseObject.methods[method] + "</h3>");
+                            $('#' + responseObject.methods[method]).append("<p class='button sms' onclick='send_code(\"sms\");'></p>");
+                            $('#' + responseObject.methods[method]).append("<p class='button mail' onclick='send_code(\"mail\");'></p>");
+                            methods_requested = true;
                         }
+                    } else {
+                        errors_message('Erreur ' + responseObject.message);
                     }
-                } else {
-                    alert('Erreur ' + responseObject.message);
                 }
             }
-        }
-    };
-    req.send(null);
+        };
+        req.send(null);
+    }else{
+        $('#list-methods').show();
+    }
 };
 
 function get_available_transports() {
@@ -85,25 +91,79 @@ function get_available_transports() {
                         }
                         $('#list-methods').show();
                         var username = document.getElementById('username').value;
-                        $('#username').remove();
-                        $('#buttonMethods').remove();
-                        $('#usernameRow').append("<label id='username'>" + username + "</label>");
+                        $('#username').hide();
+                        $('#buttonMethods').hide();
+                        $('#usernameLabel').html(username);
+                        $('#resetUsername').show();
+                        reset_message();
+                    }else{
+                        errors_message('Error :'+responseObject.message);
                     }
                 }
             }
         };
         req.send(null);
-    } else alert("Veuillez entrer votre login");
+    } else errors_message("Veuillez entrer votre login");
 };
 
 
 
 function init() {
-    $('#auth').hide();
+    $('#login').prepend('<div id="msg2" class="errors"></div>');
+    $('#msg2').hide();
+    $('#resetUsername').hide();
+    auth_div = $('#auth');
+    $('#auth-option').hide();
+    $('#auth').remove();
     $('#list-methods').hide();
     get_available_methods();
 };
 
+function success_message(message){
+    $('#msg2').attr('class', 'success');
+    $('#msg2').attr('style', 'background-color: rgb(221, 255, 170); color: #33691E;');
+    $('#msg2').html(message);
+    $('#msg2').show();
+}
+
+function errors_message(message){
+    $('#msg2').attr('class', 'errors');
+    $('#msg2').attr('style', 'background-color: rgb(255, 238, 221); color: #DD2C00;');
+    $('#msg2').html(message);
+    $('#msg2').show();
+}
+
+function reset_message(){
+    $('#msg2').html('');
+    $('#msg2').hide();
+}
+
+function reset_username(){
+    $('#list-methods').hide();
+    $('#auth').hide();
+    $('#msg2').hide();
+    $('#submit').attr('type', '');
+    $('#resetUsername').hide();
+    $('#usernameLabel').html('');
+    $('#username').show();
+    $('#buttonMethods').show();
+
+}
+
+function hide_methods() {
+    $('#auth-option').show();
+    auth_div.insertBefore('#auth-option');
+    $('#auth').show();
+    $('#submit').attr('type', 'submit');
+    $('#list-methods').hide();
+}
+
+
+// <div style="background-color: rgb(221, 255, 170);" id="msg" class="success">
+//     <h2>Logout successful</h2>
+//     <p>You have successfully logged out of the Central Authentication Service.</p>
+//     <p>For security reasons, exit your web browser.</p>
+//   </div>
 
 // <div id="list-transports">
 //   <div class="list-transports">

@@ -34,7 +34,9 @@
     <h2><spring:message code="screen.welcome.instructions" /></h2>
   
     <section class="row" id="usernameRow">
-      <label for="username"><spring:message code="screen.welcome.label.netid" /></label>
+      <label for="username" style="display: inline-block;"><spring:message code="screen.welcome.label.netid" /></label>
+      <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;"></label>
+      <p id="resetUsername" class='button' onclick="reset_username();">Modifier</p>
       <c:choose>
         <c:when test="${not empty sessionScope.openIdLocalId}">
           <strong>${sessionScope.openIdLocalId}</strong>
@@ -61,22 +63,24 @@
             <spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
             <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
           </section>
-          
-          <section class="row check">
-            <input id="warn" name="warn" value="true" tabindex="3" accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />" type="checkbox" />
-            <label for="warn"><spring:message code="screen.welcome.label.warn" /></label>
-           <input type="checkbox" name="rememberMe" id="rememberMe" value="true" />
-      <label for="rememberMe">Remember Me</label>
-          </section>
-          
-          <section class="row btn-row">
-            <input type="hidden" name="lt" value="${loginTicket}" />
-            <input type="hidden" name="execution" value="${flowExecutionKey}" />
-            <input type="hidden" name="_eventId" value="submit" />
+    </div>
+    <div id="auth-option">
+      <section class="row check">
+        <input id="warn" name="warn" value="true" tabindex="3" accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />" type="checkbox" />
+        <label for="warn"><spring:message code="screen.welcome.label.warn" /></label>
+        <input type="checkbox" name="rememberMe" id="rememberMe" value="true" />
+        <label for="rememberMe">Remember Me</label>
+      </section>
 
-            <input class="btn-submit" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="submit" />
-            <input class="btn-reset" name="reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="5" type="reset" />
-          </section>
+      <section class="row btn-row">
+        <input type="hidden" name="lt" value="${loginTicket}" />
+        <input type="hidden" name="execution" value="${flowExecutionKey}" />
+        <input type="hidden" name="_eventId" value="submit" />
+
+        <input id="submit" class="btn-submit" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="" />
+        <input class="btn-reset" name="reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="5" type="reset" />
+      </section>
+      <p class='button error' onclick="$('#list-methods').show();$('#auth-option').hide();$('#auth').hide();">Je n'ai pas de code</p>
     </div>
   </form:form>
 </div>
