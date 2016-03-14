@@ -1,25 +1,47 @@
+#login {
+    min-width: 50%;
+}
+
 p.button {
+    display: inline-block;
     background-color: #210F7A;
     color: white;
-    margin: 5px;
+    margin: 0;
+    width: calc(40% - 12px);
+    /*minus padding*2*/
     text-align: center;
     border-radius: 5px;
+    padding: 4px;
+    overflow: hidden;
 }
 
-p.mail {
-    background-color: #ff5252;
-}
-
-p.sms {
+p.transport {
     background-color: #2196f3;
+    width: calc(40% - 8px);
 }
 
 p.success {
     background-color: #8bc34a;
+    width: calc(100% - 8px);
 }
 
 p.error {
     background-color: #DD2C00;
+}
+
+p.label,
+p.label:hover,
+p.label:active {
+    text-align: left;
+    background-color: transparent;
+    color: inherit;
+    display: inline-block;
+    margin: 0;
+    border-radius: 5px;
+    padding: 4px;
+    overflow: hidden;
+    width: calc(60% - 8px);
+    /*minus padding*2*/
 }
 
 p.button:hover {
@@ -30,16 +52,24 @@ p.button:active {
     background-color: lightgray;
 }
 
+#username, #password {
+    padding: 0 !important;
+    margin: 0;
+}
+
 #msg2 {
     padding: 25px;
 }
 
-
-div#list-methods{
-
+div.method-row{
+    background-color: rgba(255, 255, 255, 0.55);
+    border-radius: 5px;
+    padding-top: 3px;
+    padding-right: 3px;
+    margin-bottom: 3px;
+    margin-top: 2px;
 }
 
-div.list-transports{
+div#list-methods {}
 
-}
-
+div.list-transports {}

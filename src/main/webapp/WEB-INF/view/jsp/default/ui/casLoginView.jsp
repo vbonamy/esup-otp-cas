@@ -34,25 +34,29 @@
     <h2><spring:message code="screen.welcome.instructions" /></h2>
   
     <section class="row" id="usernameRow">
-      <label for="username" style="display: inline-block;"><spring:message code="screen.welcome.label.netid" /></label>
-      <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;"></label>
-      <p id="resetUsername" class='button' onclick="reset_username();">Modifier</p>
-      <c:choose>
-        <c:when test="${not empty sessionScope.openIdLocalId}">
-          <strong>${sessionScope.openIdLocalId}</strong>
-          <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
-        </c:when>
-        <c:otherwise>
-          <spring:message code="screen.welcome.label.netid.accesskey" var="userNameAccessKey" />
-          <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="off" htmlEscape="true" />
+        <p class="label">
+          <label for="username" style="display: inline-block;"><spring:message code="screen.welcome.label.netid" /></label>
+          <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;"></label>
+        
+        <c:choose>
+          <c:when test="${not empty sessionScope.openIdLocalId}">
+            <strong>${sessionScope.openIdLocalId}</strong>
+            <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
+          </c:when>
+          <c:otherwise>
+            <spring:message code="screen.welcome.label.netid.accesskey" var="userNameAccessKey" />
+            <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="off" htmlEscape="true" />
         </c:otherwise>
-      </c:choose>
-      <p id="buttonMethods" class="button" onclick="get_available_transports();">Valider</p>
+        </c:choose>
+      </p>
+      <p id="resetUsername" class='button' onclick="reset_username();">Modifier <i class="fa fa-pencil-square-o"></i></p>
+      <p id="buttonMethods" class="button" onclick="get_available_transports();">Ok <i class="fa fa-check-circle"></i></p>
     </section>
-    <div id="list-methods">
-    </div>
+<div id="list-methods">
+</div>
     <div id="auth">
           <section class="row">
+            <p class="label">
             <label for="password"><spring:message code="screen.welcome.label.password" /></label>
             <%--
             NOTE: Certain browsers will offer the option of caching passwords for a user.  There is a non-standard attribute,
@@ -62,6 +66,8 @@
             --%>
             <spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
             <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
+            </p>
+            <p class='button error' onclick="$('#list-methods').show();$('#auth-option').hide();$('#auth').hide();">Je n'ai pas de code <i class="fa fa-question-circle"></i></p>
           </section>
     </div>
     <div id="auth-option">
@@ -80,7 +86,6 @@
         <input id="submit" class="btn-submit" name="submit" accesskey="l" value="<spring:message code="screen.welcome.button.login" />" tabindex="4" type="" />
         <input class="btn-reset" name="reset" accesskey="c" value="<spring:message code="screen.welcome.button.clear" />" tabindex="5" type="reset" />
       </section>
-      <p class='button error' onclick="$('#list-methods').show();$('#auth-option').hide();$('#auth').hide();">Je n'ai pas de code</p>
     </div>
   </form:form>
 </div>

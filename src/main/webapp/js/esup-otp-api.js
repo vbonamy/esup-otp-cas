@@ -47,12 +47,12 @@ function get_available_methods() {
                 if (req.status == 200) {
                     var responseObject = JSON.parse(req.responseText);
                     if (responseObject.code == "Ok") {
-                        $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>"+"J'ai déjà un code"+"</p>");
+                        $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>"+"J'ai déjà un code <i class='fa fa-key'></i>"+"</p>");
                         for (method in responseObject.methods) {
                             $('#list-methods').append("<div id='" + responseObject.methods[method] + "'></div>");
                             $('#' + responseObject.methods[method]).append("<h3>" + responseObject.methods[method] + "</h3>");
-                            $('#' + responseObject.methods[method]).append("<p class='button sms' onclick='send_code(\"sms\");'></p>");
-                            $('#' + responseObject.methods[method]).append("<p class='button mail' onclick='send_code(\"mail\");'></p>");
+                            $('#' + responseObject.methods[method]).append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\");'>Sms <i class='fa fa-mobile'></i></p></div>");
+                            $('#' + responseObject.methods[method]).append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\");'>Mail <i class='fa fa-envelope'></i></p></div>");
                             methods_requested = true;
                         }
                     } else {
@@ -68,6 +68,7 @@ function get_available_methods() {
 };
 
 function get_available_transports() {
+    $('#auth-option').hide();
     if (document.getElementById('username').value != '') {
         var req = new XMLHttpRequest();
         req.open('GET', 'https://tequila:3443/get_available_transports/' + document.getElementById('username').value, true);
@@ -82,12 +83,12 @@ function get_available_transports() {
                         if (!responseObject.transports_list.sms) {
                             $('.sms').remove();
                         }else{
-                            $('.sms').text('sms to '+responseObject.transports_list.sms)
+                            $('.label-sms').html("Sms to "+responseObject.transports_list.sms);
                         }
                         if (!responseObject.transports_list.mail) {
                             $('.mail').remove();
                         }else{
-                            $('.mail').text('mail to '+responseObject.transports_list.mail)
+                            $('.label-mail').html("Mail to "+responseObject.transports_list.mail);
                         }
                         $('#list-methods').show();
                         var username = document.getElementById('username').value;
@@ -141,6 +142,7 @@ function reset_message(){
 function reset_username(){
     $('#list-methods').hide();
     $('#auth').hide();
+    $('#auth-option').hide();
     $('#msg2').hide();
     $('#submit').attr('type', '');
     $('#resetUsername').hide();
