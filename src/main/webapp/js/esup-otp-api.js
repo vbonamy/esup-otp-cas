@@ -11,7 +11,7 @@ function send_code(transport) {
             var req = new XMLHttpRequest();
             req.open('GET', 'https://tequila:3443/send_code/google_authenticator/' + transport + '/' + document.getElementById('usernameLabel').innerHTML, true);
             req.onerror = function(e) {
-                errors_message("Erreur :" + e.target.status);
+                errors_message(strings.error.message+ e.target.status);
                 code_send = false;
             };
             req.onreadystatechange = function(aEvt) {
@@ -19,19 +19,19 @@ function send_code(transport) {
                     if (req.status == 200) {
                         var responseObject = JSON.parse(req.responseText);
                         if (responseObject.code == "Ok") {
-                            success_message('Envoi du code via ' + transport);
+                            success_message(strings.success.transport  + transport);
                             hide_methods();
                         } else {
-                            errors_message('Erreur ' + responseObject.message);
+                            errors_message(strings.error.message+ responseObject.message);
                         }
                         code_send = false;
                     }
                 }
             };
             req.send(null);
-        } else errors_message('Veuillez entrer votre login');
+        } else errors_message(strings.error.login_needed);
     } else {
-        errors_message("Vous devez attendre l'envoi du code via " + last_transport);
+        errors_message(strings.error.transport_wait+' '+ last_transport);
     }
 };
 
@@ -47,16 +47,16 @@ function get_available_methods() {
                 if (req.status == 200) {
                     var responseObject = JSON.parse(req.responseText);
                     if (responseObject.code == "Ok") {
-                        $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>"+"J'ai déjà un code <i class='fa fa-key'></i>"+"</p>");
+                        $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>"+strings.button.code.owned+"<i class='fa fa-key'></i>"+"</p>");
                         for (method in responseObject.methods) {
                             $('#list-methods').append("<div id='" + responseObject.methods[method] + "'></div>");
-                            $('#' + responseObject.methods[method]).append("<h3>" + responseObject.methods[method] + "</h3>");
-                            $('#' + responseObject.methods[method]).append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\");'>Sms <i class='fa fa-mobile'></i></p></div>");
-                            $('#' + responseObject.methods[method]).append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\");'>Mail <i class='fa fa-envelope'></i></p></div>");
+                            $('#' + responseObject.methods[method]).append("<h3>" + strings.method[responseObject.methods[method]] + "</h3>");
+                            $('#' + responseObject.methods[method]).append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\");'>"+strings.button.send.sms+"<i class='fa fa-mobile'></i></p></div>");
+                            $('#' + responseObject.methods[method]).append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\");'>"+strings.button.send.mail+" <i class='fa fa-envelope'></i></p></div>");
                             methods_requested = true;
                         }
                     } else {
-                        errors_message('Erreur ' + responseObject.message);
+                        errors_message(strings.error.message+' '+ responseObject.message);
                     }
                 }
             }
@@ -83,12 +83,12 @@ function get_available_transports() {
                         if (!responseObject.transports_list.sms) {
                             $('.sms').remove();
                         }else{
-                            $('.label-sms').html("Sms to "+responseObject.transports_list.sms);
+                            $('.label-sms').html(strings.label.sms+responseObject.transports_list.sms);
                         }
                         if (!responseObject.transports_list.mail) {
                             $('.mail').remove();
                         }else{
-                            $('.label-mail').html("Mail to "+responseObject.transports_list.mail);
+                            $('.label-mail').html(strings.label.mail+responseObject.transports_list.mail);
                         }
                         $('#list-methods').show();
                         var username = document.getElementById('username').value;
@@ -98,13 +98,13 @@ function get_available_transports() {
                         $('#resetUsername').show();
                         reset_message();
                     }else{
-                        errors_message('Error :'+responseObject.message);
+                        errors_message(strings.error.message+responseObject.message);
                     }
                 }
             }
         };
         req.send(null);
-    } else errors_message("Veuillez entrer votre login");
+    } else errors_message(strings.error.login_needed);
 };
 
 

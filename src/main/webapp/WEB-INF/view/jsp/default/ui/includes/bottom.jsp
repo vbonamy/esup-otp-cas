@@ -47,8 +47,32 @@
     <script type="text/javascript" src="<c:url value="${casJavascriptFile}" />"></script>
 
     <script type="text/javascript">
-       window.onload = init;
+      var strings = {};
+      strings.success = {};
+      strings.error = {};
+      strings.button = {};
+      strings.button.send = {};
+      strings.button.code = {};
+      strings.label = {};
+      strings.method = {};
+      strings.success.transport = "<spring:message code='success.transport' javaScriptEscape='true' />";
+      strings.error.transport_wait = "<spring:message code='error.transport_wait' javaScriptEscape='true' />";
+      strings.error.login_needed = "<spring:message code='error.login_needed' javaScriptEscape='true' />";
+      strings.error.message = "<spring:message code='error.message' javaScriptEscape='true' />";
+      strings.button.validate = "<spring:message code='button.validate' javaScriptEscape='true' />";
+      strings.button.change = "<spring:message code='button.change' javaScriptEscape='true' />";
+      strings.button.send.sms = "<spring:message code='button.send.sms' javaScriptEscape='true' />";
+      strings.button.send.mail = "<spring:message code='button.send.mail' javaScriptEscape='true' />";
+      strings.button.code.owned = "<spring:message code='button.code.owned' javaScriptEscape='true' />";
+      strings.button.code.lost = "<spring:message code='button.code.lost' javaScriptEscape='true' />";
+      strings.label.sms = "<spring:message code='label.sms' javaScriptEscape='true' />";
+      strings.label.mail = "<spring:message code='label.mail' javaScriptEscape='true' />";
+      strings.method.google_authenticator = "<spring:message code='method.google_authenticator' javaScriptEscape='true' />";
+      strings.method.simple_generator = "<spring:message code='method.simple_generator' javaScriptEscape='true' />";
+      strings.method.bypass = "<spring:message code='method.bypass' javaScriptEscape='true' />";
+      window.onload = init;
     </script>
+
   </body>
 </html>
 

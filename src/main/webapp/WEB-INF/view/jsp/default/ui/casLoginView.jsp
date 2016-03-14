@@ -49,8 +49,8 @@
         </c:otherwise>
         </c:choose>
       </p>
-      <p id="resetUsername" class='button' onclick="reset_username();">Modifier <i class="fa fa-pencil-square-o"></i></p>
-      <p id="buttonMethods" class="button" onclick="get_available_transports();">Ok <i class="fa fa-check-circle"></i></p>
+      <p id="resetUsername" class='button' onclick="reset_username();"><spring:message code='button.change'/> <i class="fa fa-pencil-square-o"></i></p>
+      <p id="buttonMethods" class="button" onclick="get_available_transports();"><spring:message code='button.validate'/> <i class="fa fa-check-circle"></i></p>
     </section>
 <div id="list-methods">
 </div>
@@ -67,7 +67,7 @@
             <spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
             <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
             </p>
-            <p class='button error' onclick="$('#list-methods').show();$('#auth-option').hide();$('#auth').hide();">Je n'ai pas de code <i class="fa fa-question-circle"></i></p>
+            <p class='button error' onclick="$('#list-methods').show();$('#auth-option').hide();$('#auth').hide();"><spring:message code='button.code.lost'/> <i class="fa fa-question-circle"></i></p>
           </section>
     </div>
     <div id="auth-option">
