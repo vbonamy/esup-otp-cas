@@ -113,9 +113,12 @@
     <bean id="proxyPrincipalResolver"
           class="org.jasig.cas.authentication.principal.BasicPrincipalResolver" />
 
-    <!-- Esup Otp Api Handler -->
-    <bean id="esupOtpApiAuthenticationHandler"
-          class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler" />
+          <!-- Esup Otp Api Handler -->
+          <bean id="esupOtpApiAuthenticationHandler"
+            class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler">
+            <property name="httpUrlApi" value="${api.server.http.url}" />
+            <property name="httpsUrlApi" value="${api.server.https.url}" />
+          </bean>
 
           <bean id="usernamePasswordCredentialsResolver"
           class="org.jasig.cas.authentication.principal.BasicPrincipalResolver" />

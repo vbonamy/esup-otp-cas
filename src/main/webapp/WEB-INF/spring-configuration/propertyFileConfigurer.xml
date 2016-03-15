@@ -35,5 +35,5 @@
 	</description>
 	
 <context:property-placeholder location="/WEB-INF/cas.properties" order="1" ignore-unresolvable="true"/>
-<context:property-placeholder location="/WEB-INF/ldap.properties" order="2" ignore-unresolvable="true"/>
+<context:property-placeholder location="/WEB-INF/esup-otp.properties" order="2" ignore-unresolvable="true"/>
 </beans>

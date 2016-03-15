@@ -9,7 +9,7 @@ function send_code(transport, method) {
             code_send = true;
             last_transport = transport;
             var req = new XMLHttpRequest();
-            req.open('GET', 'https://tequila:3443/send_code/'+method+'/' + transport + '/' + document.getElementById('usernameLabel').innerHTML, true);
+            req.open('GET', url_esup_otp+'/send_code/'+method+'/' + transport + '/' + document.getElementById('usernameLabel').innerHTML, true);
             req.onerror = function(e) {
                 errors_message(strings.error.message+ e.target.status);
                 code_send = false;
@@ -38,7 +38,7 @@ function send_code(transport, method) {
 function get_available_methods() {
     if(!methods_requested){
         var req = new XMLHttpRequest();
-        req.open('GET', 'https://tequila:3443/get_available_methods', true);
+        req.open('GET', url_esup_otp+'/get_available_methods', true);
         req.onerror = function(e) {
             console.log(e);
         };
@@ -71,7 +71,7 @@ function get_available_transports() {
     $('#auth-option').hide();
     if (document.getElementById('username').value != '') {
         var req = new XMLHttpRequest();
-        req.open('GET', 'https://tequila:3443/get_available_transports/' + document.getElementById('username').value, true);
+        req.open('GET', url_esup_otp+'/get_available_transports/' + document.getElementById('username').value, true);
         req.onerror = function(e) {
             console.log(e);
         };
@@ -159,20 +159,3 @@ function hide_methods() {
     $('#submit').attr('type', 'submit');
     $('#list-methods').hide();
 }
-
-
-// <div style="background-color: rgb(221, 255, 170);" id="msg" class="success">
-//     <h2>Logout successful</h2>
-//     <p>You have successfully logged out of the Central Authentication Service.</p>
-//     <p>For security reasons, exit your web browser.</p>
-//   </div>
-
-// <div id="list-transports">
-//   <div class="list-transports">
-//   <h3>Veuillez choisir le moyen par lequel vous souhaitez recevoir votre code temporaire</h3>
-//   Votre login <input type="text" id="loginUser" name="LastName">
-//   <p id="buttonMail" onclick="send_code('mail')" class="button">Mail</p> <p id="buttonSms" onclick="send_code('sms')" class="button" >Sms</p> <p id="buttonApp" onclick="send_code('app')" class="button">Application smartphone</p>
-// </div>
-// </div>
-
-//    <p onclick="$('#list-transports').show();" class="button">Renvoyer code</p>

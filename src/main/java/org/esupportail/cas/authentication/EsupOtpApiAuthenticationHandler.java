@@ -13,7 +13,6 @@ import org.jasig.cas.authentication.PreventedException;
 import java.security.GeneralSecurityException;
 import java.io.IOException;
 
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -22,6 +21,10 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
+
+	public static String httpUrlApi;
+
+	public static String httpsUrlApi;
 
 	@Override
 	protected final HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential credential)throws GeneralSecurityException, PreventedException{
@@ -38,7 +41,8 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	}
 
 	private JSONObject verifyOtp(String uid, String otp) throws IOException {
-			String url = "http://localhost:3000/verify_code/"+uid+"/"+otp;
+			String url = httpUrlApi+"/verify_code/"+uid+"/"+otp;
+			System.out.println(url);
 
 			URL obj = new URL(url);
 			int responseCode;
@@ -72,4 +76,20 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
     protected Principal createPrincipal(final String username){
         return new SimplePrincipal(username);
     }
+
+    public String getHttpUrlApi() {
+    	return httpUrlApi; 
+    }
+
+    public void setHttpUrlApi(String httpUrlApi) {
+    	this.httpUrlApi = httpUrlApi; 
+ 	}
+
+ 	public String getHttpsUrlApi() {
+    	return httpsUrlApi; 
+    }
+
+    public void setHttpsUrlApi(String httpsUrlApi) {
+     	this.httpsUrlApi = httpsUrlApi; 
+ 	}	
 }

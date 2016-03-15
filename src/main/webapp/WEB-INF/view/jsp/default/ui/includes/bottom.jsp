@@ -46,7 +46,10 @@
     <spring:theme code="cas.javascript.file" var="casJavascriptFile" text="" />
     <script type="text/javascript" src="<c:url value="${casJavascriptFile}" />"></script>
 
+    <jsp:useBean id="esupOtpApiAuthenticationHandler" class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler"/>
+
     <script type="text/javascript">
+      var url_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandler' property='httpsUrlApi' />";
       var strings = {};
       strings.success = {};
       strings.error = {};
