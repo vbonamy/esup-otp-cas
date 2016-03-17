@@ -52,7 +52,7 @@ function get_available_methods() {
                             $('#list-methods').append("<div id='" + responseObject.methods[method] + "'></div>");
                             $('#' + responseObject.methods[method]).append("<h3>" + strings.method[responseObject.methods[method]] + "</h3>");
                             $('#' + responseObject.methods[method]).append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \""+responseObject.methods[method]+"\");'>"+strings.button.send.sms+"<i class='fa fa-mobile'></i></p></div>");
-                            $('#' + responseObject.methods[method]).append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"strings.method[responseObject.methods[method]]\");'>"+strings.button.send.mail+" <i class='fa fa-envelope'></i></p></div>");
+                            $('#' + responseObject.methods[method]).append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \""+responseObject.methods[method]+"\");'>"+strings.button.send.mail+" <i class='fa fa-envelope'></i></p></div>");
                             methods_requested = true;
                         }
                     } else {
