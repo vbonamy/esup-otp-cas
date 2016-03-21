@@ -118,13 +118,12 @@ function get_available_transports() {
 
 function init() {
     auth_div = $('#auth');
+    $('#auth').remove();
     $('#auth-option').hide();
     $('#list-methods').hide();
     $('#resetUsername').hide();
     $('#login').prepend('<div id="msg2" class="errors"></div>');
     $('#msg2').hide();
-    $('#auth').remove();
-
 };
 
 function success_message(message) {
