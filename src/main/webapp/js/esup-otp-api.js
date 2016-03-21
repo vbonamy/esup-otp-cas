@@ -38,7 +38,7 @@ function send_code(transport, method) {
 function get_available_methods() {
     if(!methods_requested){
         var req = new XMLHttpRequest();
-        req.open('GET', url_esup_otp+'/get_available_methods', true);
+        req.open('GET', url_esup_otp+'/get_methods', true);
         req.onerror = function(e) {
             console.log(e);
         };
