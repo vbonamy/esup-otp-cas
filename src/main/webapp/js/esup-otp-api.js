@@ -9,9 +9,9 @@ function send_code(transport, method) {
             code_send = true;
             last_transport = transport;
             var req = new XMLHttpRequest();
-            req.open('GET', url_esup_otp+'/send_code/'+method+'/' + transport + '/' + document.getElementById('usernameLabel').innerHTML, true);
+            req.open('GET', url_esup_otp + '/send_code/' + method + '/' + transport + '/' + document.getElementById('usernameLabel').innerHTML, true);
             req.onerror = function(e) {
-                errors_message(strings.error.message+ e.target.status);
+                errors_message(strings.error.message + e.target.status);
                 code_send = false;
             };
             req.onreadystatechange = function(aEvt) {
@@ -19,10 +19,10 @@ function send_code(transport, method) {
                     if (req.status == 200) {
                         var responseObject = JSON.parse(req.responseText);
                         if (responseObject.code == "Ok") {
-                            success_message(strings.success.transport  + transport);
+                            success_message(strings.success.transport + transport);
                             hide_methods();
                         } else {
-                            errors_message(strings.error.message+ responseObject.message);
+                            errors_message(strings.error.message + responseObject.message);
                         }
                         code_send = false;
                     }
@@ -31,14 +31,21 @@ function send_code(transport, method) {
             req.send(null);
         } else errors_message(strings.error.login_needed);
     } else {
-        errors_message(strings.error.transport_wait+' '+ last_transport);
+        errors_message(strings.error.transport_wait + ' ' + last_transport);
     }
 };
 
+function get_user_auth() {
+    if (document.getElementById('username').value != '') {
+        get_available_methods();
+        get_available_transports();
+    } else errors_message(strings.error.login_needed);
+}
+
 function get_available_methods() {
-    if(!methods_requested){
+    if (!methods_requested) {
         var req = new XMLHttpRequest();
-        req.open('GET', url_esup_otp+'/get_methods', true);
+        req.open('GET', url_esup_otp + '/get_activate_methods/' + document.getElementById('username').value, true);
         req.onerror = function(e) {
             console.log(e);
         };
@@ -47,99 +54,99 @@ function get_available_methods() {
                 if (req.status == 200) {
                     var responseObject = JSON.parse(req.responseText);
                     if (responseObject.code == "Ok") {
-                        $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>"+strings.button.code.owned+"<i class='fa fa-key'></i>"+"</p>");
+                        $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>" + strings.button.code.owned + "<i class='fa fa-key'></i>" + "</p>");
                         for (method in responseObject.methods) {
-                            $('#list-methods').append("<div id='" + responseObject.methods[method] + "'></div>");
-                            $('#' + responseObject.methods[method]).append("<h3>" + strings.method[responseObject.methods[method]] + "</h3>");
-                            $('#' + responseObject.methods[method]).append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \""+responseObject.methods[method]+"\");'>"+strings.button.send.sms+"<i class='fa fa-mobile'></i></p></div>");
-                            $('#' + responseObject.methods[method]).append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \""+responseObject.methods[method]+"\");'>"+strings.button.send.mail+" <i class='fa fa-envelope'></i></p></div>");
-                            methods_requested = true;
+                            if (responseObject.methods[method]) {
+                                $('#list-methods').append("<h3>" + strings.method[method] + "</h3>");
+                                $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
+                                $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
+                                methods_requested = true;
+                            }
                         }
                     } else {
-                        errors_message(strings.error.message+' '+ responseObject.message);
+                        errors_message(strings.error.message + ' ' + responseObject.message);
                     }
                 }
             }
         };
         req.send(null);
-    }else{
+    } else {
         $('#list-methods').show();
     }
 };
 
 function get_available_transports() {
     $('#auth-option').hide();
-    if (document.getElementById('username').value != '') {
-        var req = new XMLHttpRequest();
-        req.open('GET', url_esup_otp+'/get_available_transports/' + document.getElementById('username').value, true);
-        req.onerror = function(e) {
-            console.log(e);
-        };
-        req.onreadystatechange = function(aEvt) {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    var responseObject = JSON.parse(req.responseText);
-                    if (responseObject.code == "Ok") {
-                        if (!responseObject.transports_list.sms) {
-                            $('.sms').remove();
-                        }else{
-                            $('.label-sms').html(strings.label.sms+responseObject.transports_list.sms);
-                        }
-                        if (!responseObject.transports_list.mail) {
-                            $('.mail').remove();
-                        }else{
-                            $('.label-mail').html(strings.label.mail+responseObject.transports_list.mail);
-                        }
-                        $('#list-methods').show();
-                        var username = document.getElementById('username').value;
-                        $('#username').hide();
-                        $('#buttonMethods').hide();
-                        $('#usernameLabel').html(username);
-                        $('#resetUsername').show();
-                        reset_message();
-                    }else{
-                        errors_message(strings.error.message+responseObject.message);
+    var req = new XMLHttpRequest();
+    req.open('GET', url_esup_otp + '/get_available_transports/' + document.getElementById('username').value, true);
+    req.onerror = function(e) {
+        console.log(e);
+    };
+    req.onreadystatechange = function(aEvt) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var responseObject = JSON.parse(req.responseText);
+                if (responseObject.code == "Ok") {
+                    if (!responseObject.transports_list.sms) {
+                        $('.sms').remove();
+                    } else {
+                        $('.label-sms').html(strings.label.sms + responseObject.transports_list.sms);
                     }
+                    if (!responseObject.transports_list.mail) {
+                        $('.mail').remove();
+                    } else {
+                        $('.label-mail').html(strings.label.mail + responseObject.transports_list.mail);
+                    }
+                    $('#list-methods').show();
+                    var username = document.getElementById('username').value;
+                    $('#username').hide();
+                    $('#buttonMethods').hide();
+                    $('#usernameLabel').html(username);
+                    $('#resetUsername').show();
+                    reset_message();
+                } else {
+                    errors_message(strings.error.message + responseObject.message);
                 }
             }
-        };
-        req.send(null);
-    } else errors_message(strings.error.login_needed);
+        }
+    };
+    req.send(null);
+
 };
 
 
 
 function init() {
-    $('#login').prepend('<div id="msg2" class="errors"></div>');
-    $('#msg2').hide();
-    $('#resetUsername').hide();
     auth_div = $('#auth');
     $('#auth-option').hide();
-    $('#auth').remove();
     $('#list-methods').hide();
-    get_available_methods();
+    $('#resetUsername').hide();
+    $('#login').prepend('<div id="msg2" class="errors"></div>');
+    $('#msg2').hide();
+    $('#auth').remove();
+
 };
 
-function success_message(message){
+function success_message(message) {
     $('#msg2').attr('class', 'success');
     $('#msg2').attr('style', 'background-color: rgb(221, 255, 170); color: #33691E;');
     $('#msg2').html(message);
     $('#msg2').show();
 }
 
-function errors_message(message){
+function errors_message(message) {
     $('#msg2').attr('class', 'errors');
     $('#msg2').attr('style', 'background-color: rgb(255, 238, 221); color: #DD2C00;');
     $('#msg2').html(message);
     $('#msg2').show();
 }
 
-function reset_message(){
+function reset_message() {
     $('#msg2').html('');
     $('#msg2').hide();
 }
 
-function reset_username(){
+function reset_username() {
     $('#list-methods').hide();
     $('#auth').hide();
     $('#auth-option').hide();

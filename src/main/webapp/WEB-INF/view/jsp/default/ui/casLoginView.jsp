@@ -50,7 +50,7 @@
         </c:choose>
       </p>
       <p id="resetUsername" class='button' onclick="reset_username();"><spring:message code='button.change'/> <i class="fa fa-pencil-square-o"></i></p>
-      <p id="buttonMethods" class="button" onclick="get_available_transports();"><spring:message code='button.validate'/> <i class="fa fa-check-circle"></i></p>
+      <p id="buttonMethods" class="button" onclick="get_user_auth();"><spring:message code='button.validate'/> <i class="fa fa-check-circle"></i></p>
     </section>
 <div id="list-methods">
 </div>
