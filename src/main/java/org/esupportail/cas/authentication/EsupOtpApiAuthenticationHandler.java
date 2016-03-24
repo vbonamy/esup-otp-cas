@@ -47,7 +47,7 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 			int responseCode;
 			HttpURLConnection con;
 			con = (HttpURLConnection) obj.openConnection();
-			con.setRequestMethod("GET");
+			con.setRequestMethod("POST");
 			responseCode = con.getResponseCode();
 
 			BufferedReader in = new BufferedReader(
