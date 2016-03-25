@@ -45,7 +45,7 @@ function get_user_auth() {
 function get_available_methods() {
     if (!methods_requested) {
         var req = new XMLHttpRequest();
-        req.open('GET', url_esup_otp + '/get_activate_methods/' + document.getElementById('username').value, true);
+        req.open('GET', url_esup_otp + '/activate_methods/' + document.getElementById('username').value, true);
         req.onerror = function(e) {
             console.log(e);
         };
@@ -78,7 +78,7 @@ function get_available_methods() {
 function get_available_transports() {
     $('#auth-option').hide();
     var req = new XMLHttpRequest();
-    req.open('GET', url_esup_otp + '/get_available_transports/' + document.getElementById('username').value, true);
+    req.open('GET', url_esup_otp + '/available_transports/' + document.getElementById('username').value, true);
     req.onerror = function(e) {
         console.log(e);
     };
