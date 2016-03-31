@@ -2,6 +2,7 @@ var code_send = false;
 var last_transport = '';
 var auth_div;
 var methods_requested = false;
+var hash;
 
 function send_code(transport, method) {
     if (!code_send) {
@@ -9,7 +10,7 @@ function send_code(transport, method) {
             code_send = true;
             last_transport = transport;
             var req = new XMLHttpRequest();
-            req.open('GET', url_esup_otp + '/send_code/' + method + '/' + transport + '/' + document.getElementById('usernameLabel').innerHTML, true);
+            req.open('GET', url_esup_otp + '/send_code/' + method + '/' + transport + '/' + document.getElementById('usernameLabel').innerHTML+'/'+hash, true);
             req.onerror = function(e) {
                 errors_message(strings.error.message + e.target.status);
                 code_send = false;
@@ -37,6 +38,8 @@ function send_code(transport, method) {
 
 function get_user_auth() {
     if (document.getElementById('username').value != '') {
+        hash = TwinBcrypt.hashSync(document.getElementById('username').value+salt_esup_otp, TwinBcrypt.genSalt(12));
+        hash = hash.replace(/\//g, "%2F");
         get_available_methods();
         get_available_transports();
     } else errors_message(strings.error.login_needed);
@@ -45,7 +48,7 @@ function get_user_auth() {
 function get_available_methods() {
     if (!methods_requested) {
         var req = new XMLHttpRequest();
-        req.open('GET', url_esup_otp + '/activate_methods/' + document.getElementById('username').value, true);
+        req.open('GET', url_esup_otp + '/activate_methods/' + document.getElementById('username').value+'/'+hash, true);
         req.onerror = function(e) {
             console.log(e);
         };
@@ -78,7 +81,7 @@ function get_available_methods() {
 function get_available_transports() {
     $('#auth-option').hide();
     var req = new XMLHttpRequest();
-    req.open('GET', url_esup_otp + '/available_transports/' + document.getElementById('username').value, true);
+    req.open('GET', url_esup_otp + '/available_transports/' + document.getElementById('username').value+'/'+hash, true);
     req.onerror = function(e) {
         console.log(e);
     };

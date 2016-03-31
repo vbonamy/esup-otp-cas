@@ -40,7 +40,7 @@
         See this link for more info: http://benalman.com/projects/javascript-debug-console-log/
     --%>
     <script type="text/javascript" src="<c:url value="/js/ba-debug.min.js" />"></script>
-
+    <script type="text/javascript" src="<c:url value="/js/twin-bcrypt.min.js" />"></script>   
     <script type="text/javascript" src="<c:url value="/js/esup-otp-api.js" />"></script>    
     
     <spring:theme code="cas.javascript.file" var="casJavascriptFile" text="" />
@@ -50,6 +50,7 @@
 
     <script type="text/javascript">
       var url_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='httpsUrlApi' />";
+      var salt_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='salt' />";
       var strings = {};
       strings.success = {};
       strings.error = {};
