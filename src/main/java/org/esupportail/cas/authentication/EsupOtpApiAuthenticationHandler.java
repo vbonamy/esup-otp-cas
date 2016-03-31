@@ -26,6 +26,8 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 
 	public static String httpsUrlApi;
 
+	public static String salt;
+
 	@Override
 	protected final HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential credential)throws GeneralSecurityException, PreventedException{
 		try{
@@ -90,5 +92,13 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 
     public void setHttpsUrlApi(String httpsUrlApi) {
      	this.httpsUrlApi = httpsUrlApi; 
+ 	}	
+
+ 	public String getSalt() {
+    	return salt; 
+    }
+
+    public void setSalt(String salt) {
+     	this.salt = salt; 
  	}	
 }
