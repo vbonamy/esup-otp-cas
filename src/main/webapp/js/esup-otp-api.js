@@ -2,7 +2,7 @@ var code_send = false;
 var last_transport = '';
 var auth_div;
 var methods_requested = false;
-var hash;
+var user_hash;
 
 function send_code(transport, method) {
     if (!code_send) {
@@ -10,7 +10,7 @@ function send_code(transport, method) {
             code_send = true;
             last_transport = transport;
             var req = new XMLHttpRequest();
-            req.open('GET', url_esup_otp + '/send_code/' + method + '/' + transport + '/' + document.getElementById('usernameLabel').innerHTML+'/'+hash, true);
+            req.open('GET', url_esup_otp + '/send_code/' + method + '/' + transport + '/' + document.getElementById('usernameLabel').innerHTML + '/' + user_hash, true);
             req.onerror = function(e) {
                 errors_message(strings.error.message + e.target.status);
                 code_send = false;
@@ -38,17 +38,20 @@ function send_code(transport, method) {
 
 function get_user_auth() {
     if (document.getElementById('username').value != '') {
-        hash = TwinBcrypt.hashSync(document.getElementById('username').value+salt_esup_otp, TwinBcrypt.genSalt(12));
-        hash = hash.replace(/\//g, "%2F");
-        get_available_methods();
-        get_available_transports();
+        TwinBcrypt.hash(document.getElementById('username').value + salt_esup_otp, TwinBcrypt.genSalt(4), function(hash) {
+            hash = hash.replace(/\//g, "%2F");
+            user_hash = hash;
+            get_available_methods();
+            get_available_transports();
+
+        })
     } else errors_message(strings.error.login_needed);
 }
 
 function get_available_methods() {
     if (!methods_requested) {
         var req = new XMLHttpRequest();
-        req.open('GET', url_esup_otp + '/activate_methods/' + document.getElementById('username').value+'/'+hash, true);
+        req.open('GET', url_esup_otp + '/activate_methods/' + document.getElementById('username').value + '/' + user_hash, true);
         req.onerror = function(e) {
             console.log(e);
         };
@@ -61,8 +64,8 @@ function get_available_methods() {
                         for (method in responseObject.methods) {
                             if (responseObject.methods[method]) {
                                 $('#list-methods').append("<h3>" + strings.method[method] + "</h3>");
-                                if(responseObject.methods[method].sms)$('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
-                                if(responseObject.methods[method].mail)$('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
+                                if (responseObject.methods[method].sms) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
+                                if (responseObject.methods[method].mail) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
                                 methods_requested = true;
                             }
                         }
@@ -81,7 +84,7 @@ function get_available_methods() {
 function get_available_transports() {
     $('#auth-option').hide();
     var req = new XMLHttpRequest();
-    req.open('GET', url_esup_otp + '/available_transports/' + document.getElementById('username').value+'/'+hash, true);
+    req.open('GET', url_esup_otp + '/available_transports/' + document.getElementById('username').value + '/' + user_hash, true);
     req.onerror = function(e) {
         console.log(e);
     };
