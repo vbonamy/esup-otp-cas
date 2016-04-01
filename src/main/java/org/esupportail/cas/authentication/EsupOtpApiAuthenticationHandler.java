@@ -20,6 +20,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
 
 	public static String httpUrlApi;
@@ -27,6 +29,8 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	public static String httpsUrlApi;
 
 	public static String salt;
+
+	private static String secretSalt;
 
 	@Override
 	protected final HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential credential)throws GeneralSecurityException, PreventedException{
@@ -43,7 +47,7 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	}
 
 	private JSONObject verifyOtp(String uid, String otp) throws IOException {
-			String url = httpUrlApi+"/verify_code/"+uid+"/"+otp;
+			String url = httpUrlApi+"/verify_code/"+uid+"/"+otp+"/"+BCrypt.hashpw(secretSalt, BCrypt.gensalt(12));
 
 			URL obj = new URL(url);
 			int responseCode;
@@ -100,5 +104,9 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 
     public void setSalt(String salt) {
      	this.salt = salt; 
- 	}	
+ 	}
+
+ 	public void setSecretSalt(String secretSalt) {
+    	this.secretSalt = secretSalt;
+    }	
 }

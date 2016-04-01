@@ -119,6 +119,7 @@
             <property name="httpUrlApi" value="${api.server.http.url}" />
             <property name="httpsUrlApi" value="${api.server.https.url}" />
             <property name="salt" value="${api.salt}" />
+            <property name="secretSalt" value="${api.secret_salt}" />
           </bean>
 
           <bean id="usernamePasswordCredentialsResolver"
