@@ -38,7 +38,7 @@ function send_code(transport, method) {
 
 function get_user_auth() {
     if (document.getElementById('username').value != '') {
-            user_hash = hash;
+            user_hash = CryptoJS.SHA256(CryptoJS.MD5(users_secret).toString()+document.getElementById('username').value).toString();
             get_available_methods();
             get_available_transports();
     } else errors_message(strings.error.login_needed);

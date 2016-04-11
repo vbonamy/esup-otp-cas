@@ -42,6 +42,10 @@
     <script type="text/javascript" src="<c:url value="/js/ba-debug.min.js" />"></script>
     <script type="text/javascript" src="<c:url value="/js/twin-bcrypt.min.js" />"></script>   
     <script type="text/javascript" src="<c:url value="/js/esup-otp-api.js" />"></script>    
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core-min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/sha256-min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/md5-min.js"></script>
     
     <spring:theme code="cas.javascript.file" var="casJavascriptFile" text="" />
     <script type="text/javascript" src="<c:url value="${casJavascriptFile}" />"></script>
@@ -50,7 +54,7 @@
 
     <script type="text/javascript">
       var url_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='httpsUrlApi' />";
-      var salt_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='salt' />";
+      var users_secret = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='usersSecret' />";
       var strings = {};
       strings.success = {};
       strings.error = {};

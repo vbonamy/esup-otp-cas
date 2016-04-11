@@ -26,9 +26,9 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 
 	public static String httpsUrlApi;
 
-	public static String salt;
+	public static String usersSecret;
 
-	private static String secretSalt;
+	private static String apiPassword;
 
 	@Override
 	protected final HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential credential)throws GeneralSecurityException, PreventedException{
@@ -45,9 +45,7 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	}
 
 	private JSONObject verifyOtp(String uid, String otp) throws IOException {
-			String hash = "changeit";
-			hash = hash.replaceAll("/", "%2F");
-			String url = httpUrlApi+"/verify_code/"+uid+"/"+otp+"/"+hash;
+			String url = httpUrlApi+"/verify_code/"+uid+"/"+otp+"/"+apiPassword;
 
 			URL obj = new URL(url);
 			int responseCode;
@@ -98,15 +96,15 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
      	this.httpsUrlApi = httpsUrlApi; 
  	}	
 
- 	public String getSalt() {
-    	return salt; 
+ 	public String getUsersSecret() {
+    	return usersSecret; 
     }
 
-    public void setSalt(String salt) {
-     	this.salt = salt; 
+    public void setUsersSecret(String usersSecret) {
+     	this.usersSecret = usersSecret; 
  	}
 
- 	public void setSecretSalt(String secretSalt) {
-    	this.secretSalt = secretSalt;
+ 	public void setApiPassword(String apiPassword) {
+    	this.apiPassword = apiPassword;
     }	
 }

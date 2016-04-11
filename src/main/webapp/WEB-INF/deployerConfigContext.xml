@@ -118,8 +118,8 @@
             class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler">
             <property name="httpUrlApi" value="${api.server.http.url}" />
             <property name="httpsUrlApi" value="${api.server.https.url}" />
-            <property name="salt" value="${api.salt}" />
-            <property name="secretSalt" value="${api.secret_salt}" />
+            <property name="usersSecret" value="${api.users_secret}" />
+            <property name="apiPassword" value="${api.api_password}" />
           </bean>
 
           <bean id="usernamePasswordCredentialsResolver"
