@@ -20,8 +20,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
 
 	public static String httpUrlApi;
@@ -47,7 +45,7 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	}
 
 	private JSONObject verifyOtp(String uid, String otp) throws IOException {
-			String hash = BCrypt.hashpw(secretSalt, BCrypt.gensalt(4));
+			String hash = "changeit";
 			hash = hash.replaceAll("/", "%2F");
 			String url = httpUrlApi+"/verify_code/"+uid+"/"+otp+"/"+hash;
 

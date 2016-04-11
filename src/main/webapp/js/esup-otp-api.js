@@ -2,7 +2,7 @@ var code_send = false;
 var last_transport = '';
 var auth_div;
 var methods_requested = false;
-var user_hash;
+var user_hash='changeit';
 
 function send_code(transport, method) {
     if (!code_send) {
@@ -38,13 +38,9 @@ function send_code(transport, method) {
 
 function get_user_auth() {
     if (document.getElementById('username').value != '') {
-        TwinBcrypt.hash(document.getElementById('username').value + salt_esup_otp, TwinBcrypt.genSalt(4), function(hash) {
-            hash = hash.replace(/\//g, "%2F");
             user_hash = hash;
             get_available_methods();
             get_available_transports();
-
-        })
     } else errors_message(strings.error.login_needed);
 }
 
