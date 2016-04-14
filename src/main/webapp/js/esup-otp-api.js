@@ -48,7 +48,7 @@ function send_code(transport, method) {
 
 function get_user_auth() {
     if (document.getElementById('username').value != '') {
-            user_hash = CryptoJS.SHA256(CryptoJS.MD5(users_secret).toString()+document.getElementById('username').value).toString();
+            user_hash = generate_hash(document.getElementById('username').value);
             get_available_methods();
             get_available_transports();
     } else errors_message(strings.error.login_needed);
@@ -116,6 +116,12 @@ function init() {
     $('#login').prepend('<div id="msg2" class="errors"></div>');
     $('#msg2').hide();
 };
+
+function generate_hash(uid){
+    var d = new Date();
+    var salt = d.getDay().toString()+d.getHours().toString();
+    return CryptoJS.SHA256(CryptoJS.MD5(users_secret).toString()+uid+salt).toString();
+}
 
 function success_message(message) {
     $('#msg2').attr('class', 'success');
