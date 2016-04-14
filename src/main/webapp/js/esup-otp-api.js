@@ -1,7 +1,6 @@
 var code_send = false;
 var last_transport = '';
 var auth_div;
-var methods_requested = false;
 var user_hash='changeit';
 
 function request(opts, callback, next) {
@@ -55,25 +54,21 @@ function get_user_auth() {
 }
 
 function get_available_methods() {
-    if (!methods_requested) {
-        request({ method: 'GET', url: url_esup_otp + '/activate_methods/' + document.getElementById('username').value + '/' + user_hash }, function(response) {
-            if (response.code == "Ok") {
-                $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>" + strings.button.code.owned + "<i class='fa fa-key'></i>" + "</p>");
-                for (method in response.methods) {
-                    if (response.methods[method]) {
-                        $('#list-methods').append("<h3>" + strings.method[method] + "</h3>");
-                        if (response.methods[method].sms) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
-                        if (response.methods[method].mail) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
-                        methods_requested = true;
-                    }
+    request({ method: 'GET', url: url_esup_otp + '/activate_methods/' + document.getElementById('username').value + '/' + user_hash }, function(response) {
+        if (response.code == "Ok") {
+            $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>" + strings.button.code.owned + "<i class='fa fa-key'></i>" + "</p>");
+            for (method in response.methods) {
+                if (response.methods[method]) {
+                    $('#list-methods').append("<h3>" + strings.method[method] + "</h3>");
+                    if (response.methods[method].sms) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
+                    if (response.methods[method].mail) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
+                    $('#list-methods').show();
                 }
-            } else {
-                errors_message(strings.error.message + ' ' + response.message);
             }
-        });
-    } else {
-        $('#list-methods').show();
-    }
+        } else {
+            errors_message(strings.error.message + ' ' + response.message);
+        }
+    });
 };
 
 
@@ -144,6 +139,7 @@ function reset_message() {
 
 function reset_username() {
     $('#list-methods').hide();
+    $('#list-methods').empty();
     $('#auth').hide();
     $('#auth-option').hide();
     $('#msg2').hide();
