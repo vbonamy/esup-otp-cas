@@ -36,12 +36,33 @@
     <section class="row" id="usernameRow">
         <p class="label">
           <label for="username" style="display: inline-block;"><spring:message code="screen.welcome.label.netid" /></label>
-          <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;"></label>
+          <% final String firstLevelCASId = request.getRemoteUser(); %>
+          <c:set var='varFirstLevelCASId' value='<%=firstLevelCASId%>' />
+          <jsp:useBean id="esupOtpApiAuthenticationHandler" class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler"/>
+            <% 
+              String user_hash;
+            %>
         
         <c:choose>
           <c:when test="${not empty sessionScope.openIdLocalId}">
             <strong>${sessionScope.openIdLocalId}</strong>
             <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
+            <% 
+              user_hash = esupOtpApiAuthenticationHandler.getUserHash("${sessionScope.openIdLocalId}");
+            %>
+            <c:set var='sessionId' value='<%=user_hash%>' />
+            <input type="hidden" id="user_hash" name="user_hash" value="${sessionId}" />
+            <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;">${sessionScope.openIdLocalId}</label>
+          </c:when>
+          <c:when test="${not empty varFirstLevelCASId}">
+            <strong>${sessionScope.openIdLocalId}</strong>
+            <input type="hidden" id="username" name="username" value="${varFirstLevelCASId}" />
+            <% 
+              user_hash = esupOtpApiAuthenticationHandler.getUserHash(firstLevelCASId);
+            %>
+            <c:set var='remoteUid' value='<%=user_hash%>' />
+            <input type="hidden" id="user_hash" name="user_hash" value="${remoteUid}" />
+            <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;">${varFirstLevelCASId}</label>
           </c:when>
           <c:otherwise>
             <spring:message code="screen.welcome.label.netid.accesskey" var="userNameAccessKey" />

@@ -12,7 +12,12 @@ import javax.security.auth.login.FailedLoginException;
 import org.jasig.cas.authentication.PreventedException;
 import java.security.GeneralSecurityException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
+import java.security.MessageDigest;
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import java.util.Calendar;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -78,6 +83,21 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
      */
     protected Principal createPrincipal(final String username){
         return new SimplePrincipal(username);
+    }
+
+    public String getUserHash(String uid) throws NoSuchAlgorithmException, UnsupportedEncodingException{
+    	Calendar calendar = Calendar.getInstance();
+    	MessageDigest md5Md = MessageDigest.getInstance("MD5");
+		String md5 = (new HexBinaryAdapter()).marshal(md5Md.digest(usersSecret.getBytes()));
+		md5 = md5.toLowerCase();
+    	int day = calendar.get(Calendar.DAY_OF_WEEK)-1;
+    	if(day<1)day=7;
+    	int hour = calendar.get(Calendar.HOUR_OF_DAY);
+    	String salt = md5+uid+day+hour;
+    	MessageDigest sha256Md = MessageDigest.getInstance("SHA-256");
+		String userHash = (new HexBinaryAdapter()).marshal(sha256Md.digest(salt.getBytes()));
+		userHash = userHash.toLowerCase();
+    	return userHash; 
     }
 
     public String getHttpUrlApi() {

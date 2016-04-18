@@ -40,7 +40,6 @@
         See this link for more info: http://benalman.com/projects/javascript-debug-console-log/
     --%>
     <script type="text/javascript" src="<c:url value="/js/ba-debug.min.js" />"></script>
-    <script type="text/javascript" src="<c:url value="/js/twin-bcrypt.min.js" />"></script>   
     <script type="text/javascript" src="<c:url value="/js/esup-otp-api.js" />"></script>    
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/components/core-min.js"></script>
@@ -51,10 +50,27 @@
     <script type="text/javascript" src="<c:url value="${casJavascriptFile}" />"></script>
 
     <jsp:useBean id="esupOtpApiAuthenticationHandlerBottom" class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler"/>
-
+    <% final String _firstLevelCASId = request.getRemoteUser(); %>
+    <c:set var='_varFirstLevelCASId' value='<%=_firstLevelCASId%>' />
     <script type="text/javascript">
+    var mfa = false;
       var url_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='httpsUrlApi' />";
-      var users_secret = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='usersSecret' />";
+      <c:choose>
+          <c:when test="${not empty sessionScope.openIdLocalId}">
+            mfa = true;
+          </c:when>
+          <c:when test="${not empty _varFirstLevelCASId}">
+            mfa = true;
+          </c:when>
+          <c:otherwise>
+                var users_secret = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='usersSecret' />";
+                function generate_hash(uid){
+                    var d = new Date();
+                    var salt = d.getDay().toString()+d.getHours().toString();
+                    return CryptoJS.SHA256(CryptoJS.MD5(users_secret).toString()+uid+salt).toString();
+                }
+          </c:otherwise>
+      </c:choose>
       var strings = {};
       strings.success = {};
       strings.error = {};
