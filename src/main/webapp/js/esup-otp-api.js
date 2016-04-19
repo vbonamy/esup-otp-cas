@@ -57,14 +57,17 @@ function get_user_auth() {
 function get_available_methods() {
     request({ method: 'GET', url: url_esup_otp + '/activate_methods/' + document.getElementById('username').value + '/' + user_hash }, function(response) {
         if (response.code == "Ok") {
+            var methods_exist = false;
             $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>" + strings.button.code.owned + "<i class='fa fa-key'></i>" + "</p>");
             for (method in response.methods) {
                 if (response.methods[method]) {
+                    methods_exist = true;
                     $('#list-methods').append("<h3>" + strings.method[method] + "</h3>");
                     if (response.methods[method].sms) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
                     if (response.methods[method].mail) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
                     $('#list-methods').show();
                 }
+                if(!methods_exist)document.getElementById("fm1").submit();
             }
         } else {
             errors_message(strings.error.message + ' ' + response.message);
