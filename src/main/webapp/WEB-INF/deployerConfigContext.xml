@@ -63,6 +63,7 @@
                 <!-- <entry key-ref="proxyAuthenticationHandler" value-ref="proxyPrincipalResolver" /> -->
                 <!-- <entry key-ref="primaryAuthenticationHandler" value-ref="primaryPrincipalResolver" /> -->
                 <entry key-ref="esupOtpApiAuthenticationHandler" value-ref="usernamePasswordCredentialsResolver" />
+                <entry key-ref="bypassEsupOtpApiAuthenticationHandler" value-ref="usernamePasswordCredentialsResolver" />
             </map>
         </constructor-arg>
 
@@ -119,6 +120,14 @@
             <property name="httpUrlApi" value="${api.server.http.url}" />
             <property name="httpsUrlApi" value="${api.server.https.url}" />
             <property name="usersSecret" value="${api.users_secret}" />
+            <property name="apiPassword" value="${api.api_password}" />
+          </bean>
+
+          <!-- Bypass Esup Otp Api Handler -->
+          <bean id="bypassEsupOtpApiAuthenticationHandler"
+            class="org.esupportail.cas.authentication.BypassEsupOtpApiAuthenticationHandler">
+            <property name="httpUrlApi" value="${api.server.http.url}" />
+            <property name="httpsUrlApi" value="${api.server.https.url}" />
             <property name="apiPassword" value="${api.api_password}" />
           </bean>
 
