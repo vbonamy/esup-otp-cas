@@ -91,6 +91,7 @@ function get_available_transports() {
             var username = document.getElementById('username').value;
             $('#username').hide();
             $('#buttonMethods').hide();
+            $('#usernameLabel').empty();
             $('#usernameLabel').html(username);
             $('#resetUsername').show();
             reset_message();

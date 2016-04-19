@@ -66,6 +66,7 @@
           </c:when>
           <c:otherwise>
             <spring:message code="screen.welcome.label.netid.accesskey" var="userNameAccessKey" />
+            <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;"></label>
             <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="off" htmlEscape="true" />
         </c:otherwise>
         </c:choose>
