@@ -67,7 +67,10 @@ function get_available_methods() {
                     if (response.methods[method].mail) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
                     $('#list-methods').show();
                 }
-                if(!methods_exist)document.getElementById("fm1").submit();
+                if(!methods_exist){
+                    hide_methods();
+                    document.getElementById("submit").click();
+                }
             }
         } else {
             errors_message(strings.error.message + ' ' + response.message);
