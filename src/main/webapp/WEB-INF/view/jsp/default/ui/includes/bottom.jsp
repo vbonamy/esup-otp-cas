@@ -91,7 +91,7 @@
       strings.button.code.lost = "<spring:message code='button.code.lost' javaScriptEscape='true' />";
       strings.label.sms = "<spring:message code='label.sms' javaScriptEscape='true' />";
       strings.label.mail = "<spring:message code='label.mail' javaScriptEscape='true' />";
-      strings.method.google_authenticator = "<spring:message code='method.google_authenticator' javaScriptEscape='true' />";
+      strings.method.totp = "<spring:message code='method.totp' javaScriptEscape='true' />";
       strings.method.simple_generator = "<spring:message code='method.simple_generator' javaScriptEscape='true' />";
       strings.method.bypass = "<spring:message code='method.bypass' javaScriptEscape='true' />";
       window.onload = init;
