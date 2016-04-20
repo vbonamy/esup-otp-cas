@@ -92,7 +92,7 @@
       strings.label.sms = "<spring:message code='label.sms' javaScriptEscape='true' />";
       strings.label.mail = "<spring:message code='label.mail' javaScriptEscape='true' />";
       strings.method.totp = "<spring:message code='method.totp' javaScriptEscape='true' />";
-      strings.method.simple_generator = "<spring:message code='method.simple_generator' javaScriptEscape='true' />";
+      strings.method.random_code = "<spring:message code='method.random_code' javaScriptEscape='true' />";
       strings.method.bypass = "<spring:message code='method.bypass' javaScriptEscape='true' />";
       window.onload = init;
     </script>
