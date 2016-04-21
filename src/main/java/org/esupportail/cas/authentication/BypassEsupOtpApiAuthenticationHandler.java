@@ -27,9 +27,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
 
-	public static String httpUrlApi;
-
-	public static String httpsUrlApi;
+	public static String urlApi;
 
 	private static String apiPassword;
 
@@ -57,6 +55,7 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
 			if(bypass){
 				return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
 			}else{
+				System.out.println("coucou");
 				throw new FailedLoginException();
 			}
 		}catch(IOException e){
@@ -65,7 +64,7 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
 	}
 
 	private JSONObject checkActivateMethods(String uid, String otp) throws IOException {
-			String url = httpUrlApi+"/admin/activate_methods/"+uid+"/"+apiPassword;
+			String url = urlApi+"/admin/activate_methods/"+uid+"/"+apiPassword;
 
 			URL obj = new URL(url);
 			int responseCode;
@@ -100,13 +99,10 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
         return new SimplePrincipal(username);
     }
 
-    public void setHttpUrlApi(String httpUrlApi) {
-    	this.httpUrlApi = httpUrlApi; 
+    public void setUrlApi(String urlApi) {
+    	this.urlApi = urlApi; 
  	}
 
-    public void setHttpsUrlApi(String httpsUrlApi) {
-     	this.httpsUrlApi = httpsUrlApi; 
- 	}
  	public void setApiPassword(String apiPassword) {
     	this.apiPassword = apiPassword;
     }	

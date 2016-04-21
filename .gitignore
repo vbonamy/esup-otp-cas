@@ -4,3 +4,6 @@ target
 *./.DS_Store
 *.log
 etc
+.classpath
+.project
+.settings/

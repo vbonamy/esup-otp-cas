@@ -19,7 +19,7 @@
 
 --%>
 <jsp:directive.include file="includes/top.jsp" />
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:if test="${not pageContext.request.secure}">
   <div id="msg" class="errors">
     <h2>Non-secure Connection</h2>

@@ -27,9 +27,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
 
-	public static String httpUrlApi;
-
-	public static String httpsUrlApi;
+	public static String urlApi;
 
 	public static String usersSecret;
 
@@ -40,8 +38,10 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 		try{
 			JSONObject response = verifyOtp(credential.getUsername(), credential.getPassword());
 			if(response.getString("code").equals("Ok")){
+				System.out.println(response.toString());
 				return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
 			}else{
+				System.out.println(response.toString());
 				throw new FailedLoginException();
 			}
 		}catch(IOException e){
@@ -50,15 +50,17 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	}
 
 	private JSONObject verifyOtp(String uid, String otp) throws IOException {
-			String url = httpUrlApi+"/verify_code/"+uid+"/"+otp+"/"+apiPassword;
+			String url = urlApi+"/verify_code/"+uid+"/"+otp+"/"+apiPassword;
 
 			URL obj = new URL(url);
 			int responseCode;
-			HttpURLConnection con;
+			HttpURLConnection con=null;
+			System.out.println(con);
 			con = (HttpURLConnection) obj.openConnection();
 			con.setRequestMethod("POST");
+			System.out.println(con);
 			responseCode = con.getResponseCode();
-
+			System.out.println("<<"+responseCode);
 			BufferedReader in = new BufferedReader(
 				new InputStreamReader(con.getInputStream()));
 			String inputLine;
@@ -100,21 +102,13 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
     	return userHash; 
     }
 
-    public String getHttpUrlApi() {
-    	return httpUrlApi; 
+    public String getUrlApi() {
+    	return urlApi; 
     }
 
-    public void setHttpUrlApi(String httpUrlApi) {
-    	this.httpUrlApi = httpUrlApi; 
+    public void setUrlApi(String urlApi) {
+    	this.urlApi = urlApi; 
  	}
-
- 	public String getHttpsUrlApi() {
-    	return httpsUrlApi; 
-    }
-
-    public void setHttpsUrlApi(String httpsUrlApi) {
-     	this.httpsUrlApi = httpsUrlApi; 
- 	}	
 
  	public String getUsersSecret() {
     	return usersSecret; 

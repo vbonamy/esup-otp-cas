@@ -69,7 +69,6 @@ function get_available_methods() {
                 }
                 if(!methods_exist){
                     hide_methods();
-                    document.getElementById("submit").click();
                 }
             }
         } else {

@@ -54,7 +54,7 @@
     <c:set var='_varFirstLevelCASId' value='<%=_firstLevelCASId%>' />
     <script type="text/javascript">
     var mfa = false;
-      var url_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='httpsUrlApi' />";
+      var url_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='urlApi' />";
       <c:choose>
           <c:when test="${not empty sessionScope.openIdLocalId}">
             mfa = true;
