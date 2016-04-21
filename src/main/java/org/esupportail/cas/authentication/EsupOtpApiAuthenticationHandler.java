@@ -41,7 +41,6 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 				System.out.println(response.toString());
 				return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
 			}else{
-				System.out.println(response.toString());
 				throw new FailedLoginException();
 			}
 		}catch(IOException e){
@@ -55,12 +54,9 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 			URL obj = new URL(url);
 			int responseCode;
 			HttpURLConnection con=null;
-			System.out.println(con);
 			con = (HttpURLConnection) obj.openConnection();
 			con.setRequestMethod("POST");
-			System.out.println(con);
 			responseCode = con.getResponseCode();
-			System.out.println("<<"+responseCode);
 			BufferedReader in = new BufferedReader(
 				new InputStreamReader(con.getInputStream()));
 			String inputLine;

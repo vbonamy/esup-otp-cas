@@ -55,7 +55,6 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
 			if(bypass){
 				return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
 			}else{
-				System.out.println("coucou");
 				throw new FailedLoginException();
 			}
 		}catch(IOException e){
