@@ -49,8 +49,7 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	}
 
 	private JSONObject verifyOtp(String uid, String otp) throws IOException {
-			String url = urlApi+"/verify_code/"+uid+"/"+otp+"/"+apiPassword;
-
+			String url = urlApi+"/protected/user/"+uid+"/code/verify/"+otp+"/"+apiPassword;
 			URL obj = new URL(url);
 			int responseCode;
 			HttpURLConnection con=null;
@@ -84,18 +83,22 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
     }
 
     public String getUserHash(String uid) throws NoSuchAlgorithmException, UnsupportedEncodingException{
-    	Calendar calendar = Calendar.getInstance();
     	MessageDigest md5Md = MessageDigest.getInstance("MD5");
 		String md5 = (new HexBinaryAdapter()).marshal(md5Md.digest(usersSecret.getBytes()));
 		md5 = md5.toLowerCase();
-    	int day = calendar.get(Calendar.DAY_OF_WEEK)-1;
-    	if(day<1)day=7;
-    	int hour = calendar.get(Calendar.HOUR_OF_DAY);
-    	String salt = md5+uid+day+hour;
+    	String salt = md5+getSalt(uid);
     	MessageDigest sha256Md = MessageDigest.getInstance("SHA-256");
 		String userHash = (new HexBinaryAdapter()).marshal(sha256Md.digest(salt.getBytes()));
 		userHash = userHash.toLowerCase();
     	return userHash; 
+    }
+    
+    public String getSalt(String uid){
+    	Calendar calendar = Calendar.getInstance();
+    	int day = calendar.get(Calendar.DAY_OF_MONTH);
+    	int hour = calendar.get(Calendar.HOUR_OF_DAY);
+    	String salt = uid+day+hour;
+    	return salt; 
     }
 
     public String getUrlApi() {

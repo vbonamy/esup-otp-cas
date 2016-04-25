@@ -42,7 +42,6 @@
             <% 
               String user_hash;
             %>
-        
         <c:choose>
           <c:when test="${not empty sessionScope.openIdLocalId}">
             <strong>${sessionScope.openIdLocalId}</strong>
