@@ -49,64 +49,61 @@ function get_user_auth() {
     if (document.getElementById('username').value != '') {
             if(!mfa)user_hash = generate_hash(document.getElementById('username').value);
             else user_hash = document.getElementById('user_hash').value;
-            get_available_methods();
-            get_available_transports();
+            /*get_available_methods();
+            get_available_transports();*/
+            get_user_infos();
     } else errors_message(strings.error.login_needed);
 }
 
-function get_available_methods() {
-    request({ method: 'GET', url: url_esup_otp + '/activate_methods/' + document.getElementById('username').value + '/' + user_hash }, function(response) {
-        if (response.code == "Ok") {
-            var methods_exist = false;
-            for (method in response.methods) {
-                if (response.methods[method]) {
-                	if(!methods_exist)$('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>" + strings.button.code.owned + "<i class='fa fa-key'></i>" + "</p>");
-                	methods_exist = true;
-                	if (response.methods[method].sms || response.methods[method].mail){
-                		$('#list-methods').append("<h3>" + strings.method[method] + "</h3>");
-                		if (response.methods[method].sms) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
-                        if (response.methods[method].mail) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
-                	}
-                    $('#list-methods').show();
-                }
-                if(!methods_exist)show_auth_option();
-            }
-        } else {
-            errors_message(strings.error.message + ' ' + response.message);
-        }
-    });
-};
-
-
-function get_available_transports() {
+function get_user_infos() {
     $('#auth-option').hide();
-    request({ method: 'GET', url: url_esup_otp + '/available_transports/' + document.getElementById('username').value + '/' + user_hash }, function(response) {
+    request({ method: 'GET', url: url_esup_otp + '/user/' + document.getElementById('username').value + '/' + user_hash }, function(response) {
         if (response.code == "Ok") {
-            if (!response.transports_list.sms) {
-                $('.sms').remove();
-            } else {
-                $('.label-sms').html(strings.label.sms + response.transports_list.sms);
-            }
-            if (!response.transports_list.mail) {
-                $('.mail').remove();
-            } else {
-                $('.label-mail').html(strings.label.mail + response.transports_list.mail);
-            }
-            $('#list-methods').show();
-            var username = document.getElementById('username').value;
-            $('#username').hide();
-            $('#buttonMethods').hide();
-            $('#usernameLabel').empty();
-            $('#usernameLabel').html(username);
-            $('#resetUsername').show();
-            reset_message();
+        	methods_labels(response);
+        	transports_labels(response);
         } else {
             errors_message(strings.error.message + response.message);
         }
     });
 };
 
+function transports_labels(data){
+	if (!data.user.transports.sms) {
+        $('.sms').remove();
+    } else {
+        $('.label-sms').html(strings.label.sms + data.user.transports.sms);
+    }
+    if (!data.user.transports.mail) {
+        $('.mail').remove();
+    } else {
+        $('.label-mail').html(strings.label.mail + data.user.transports.mail);
+    }
+    $('#list-methods').show();
+    var username = document.getElementById('username').value;
+    $('#username').hide();
+    $('#buttonMethods').hide();
+    $('#usernameLabel').empty();
+    $('#usernameLabel').html(username);
+    $('#resetUsername').show();
+    reset_message();
+}
 
+function methods_labels(data) {
+    var methods_exist = false;
+    for (method in data.user.methods) {
+        if (data.user.methods[method]) {
+            if (!methods_exist) $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>" + strings.button.code.owned + "<i class='fa fa-key'></i>" + "</p>");
+            methods_exist = true;
+            if (data.user.methods[method].transports.indexOf('sms') < 0 || data.user.methods[method].transports.indexOf('mail') < 0) {
+                $('#list-methods').append("<h3>" + strings.method[method] + "</h3>");
+                if (data.user.methods[method].transports.indexOf('sms') < 0) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
+                if (data.user.methods[method].transports.indexOf('mail') < 0) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
+            }
+            $('#list-methods').show();
+        }
+        if (!methods_exist) show_auth_option();
+    }
+}
 
 
 function init() {
