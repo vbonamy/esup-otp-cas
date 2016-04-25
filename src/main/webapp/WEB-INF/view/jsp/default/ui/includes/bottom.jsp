@@ -66,7 +66,7 @@
                 var users_secret = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='usersSecret' />";
                 function generate_hash(uid){
                     var d = new Date();
-                    var salt = d.getDay().toString()+d.getHours().toString();
+                    var salt = d.getUTCDate().toString()+d.getHours().toString();
                     return CryptoJS.SHA256(CryptoJS.MD5(users_secret).toString()+uid+salt).toString();
                 }
           </c:otherwise>

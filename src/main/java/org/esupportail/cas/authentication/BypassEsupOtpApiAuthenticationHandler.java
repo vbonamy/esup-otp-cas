@@ -63,7 +63,7 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
 	}
 
 	private JSONObject checkActivateMethods(String uid, String otp) throws IOException {
-			String url = urlApi+"/admin/activate_methods/"+uid+"/"+apiPassword;
+			String url = urlApi+"/protected/admin/user/"+uid+"/method/"+apiPassword;
 
 			URL obj = new URL(url);
 			int responseCode;
