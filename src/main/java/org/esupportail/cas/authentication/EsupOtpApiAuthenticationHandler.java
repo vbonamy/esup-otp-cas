@@ -38,7 +38,6 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 		try{
 			JSONObject response = verifyOtp(credential.getUsername(), credential.getPassword());
 			if(response.getString("code").equals("Ok")){
-				System.out.println(response.toString());
 				return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
 			}else{
 				throw new FailedLoginException();
