@@ -28,7 +28,7 @@ function send_code(transport, method) {
         if (document.getElementById('usernameLabel').innerHTML != '') {
             code_send = true;
             last_transport = transport;
-            request({ method: 'GET', url: url_esup_otp + '/send_code/' + method + '/' + transport + '/' + document.getElementById('usernameLabel').innerHTML + '/' + user_hash }, function(response) {
+            request({ method: 'GET', url: url_esup_otp + '/user/'+ document.getElementById('usernameLabel').innerHTML +'/method/'+ method +'/transport/'+ transport +'/code/send/'+ user_hash }, function(response) {
                 if (response.code == "Ok") {
                     success_message(strings.success.transport + transport);
                     hide_methods();
@@ -94,10 +94,10 @@ function methods_labels(data) {
         if (data.user.methods[method]) {
             if (!methods_exist) $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>" + strings.button.code.owned + "<i class='fa fa-key'></i>" + "</p>");
             methods_exist = true;
-            if (data.user.methods[method].transports.indexOf('sms') < 0 || data.user.methods[method].transports.indexOf('mail') < 0) {
+            if (data.user.methods[method].transports.indexOf('sms') >= 0 || data.user.methods[method].transports.indexOf('mail') >= 0) {
                 $('#list-methods').append("<h3>" + strings.method[method] + "</h3>");
-                if (data.user.methods[method].transports.indexOf('sms') < 0) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
-                if (data.user.methods[method].transports.indexOf('mail') < 0) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
+                if (data.user.methods[method].transports.indexOf('sms') >= 0) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
+                if (data.user.methods[method].transports.indexOf('mail') >= 0) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
             }
             $('#list-methods').show();
         }
