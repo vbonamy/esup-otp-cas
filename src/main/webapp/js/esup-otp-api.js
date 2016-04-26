@@ -91,7 +91,7 @@ function transports_labels(data){
 function methods_labels(data) {
     var methods_exist = false;
     for (method in data.user.methods) {
-        if (data.user.methods[method]) {
+        if (data.user.methods[method].active) {
             if (!methods_exist) $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>" + strings.button.code.owned + "<i class='fa fa-key'></i>" + "</p>");
             methods_exist = true;
             if (data.user.methods[method].transports.indexOf('sms') >= 0 || data.user.methods[method].transports.indexOf('mail') >= 0) {
