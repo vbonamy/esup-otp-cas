@@ -91,12 +91,14 @@ function methods_labels(data) {
     var methods_exist = false;
     for (method in data.user.methods) {
         if (data.user.methods[method].active) {
-            if (!methods_exist) $('#list-methods').prepend("<p class='button success' onclick='hide_methods();'>" + strings.button.code.owned + "<i class='fa fa-key'></i>" + "</p>");
+            if (!methods_exist) {
+            	$('#list-methods').prepend("<input class='button success' type='button' value='"+strings.button.code.owned+" &#xf084;' onclick='hide_methods();'>");
+            }
             methods_exist = true;
             if (data.user.methods[method].transports.indexOf('sms') >= 0 || data.user.methods[method].transports.indexOf('mail') >= 0) {
                 $('#list-methods').append("<h3>" + strings.method[method] + "</h3>");
-                if (data.user.methods[method].transports.indexOf('sms') >= 0) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><p class='button transport' onclick='send_code(\"sms\", \"" + method + "\");'>" + strings.button.send.sms + "<i class='fa fa-mobile'></i></p></div>");
-                if (data.user.methods[method].transports.indexOf('mail') >= 0) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><p class='button transport' onclick='send_code(\"mail\", \"" + method + "\");'>" + strings.button.send.mail + " <i class='fa fa-envelope'></i></p></div>");
+                if (data.user.methods[method].transports.indexOf('sms') >= 0) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><input class='button transport' type='button' value='"+strings.button.send.sms+" &#xf10b;' onclick='send_code(\"sms\", \"" + method + "\");'></div>");
+                if (data.user.methods[method].transports.indexOf('mail') >= 0) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><input class='button transport' type='button' value='"+strings.button.send.mail+" &#xf0e0;' onclick='send_code(\"mail\", \"" + method + "\");'></div>");
             }
             $('#list-methods').show();
         }

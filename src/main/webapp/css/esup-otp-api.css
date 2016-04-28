@@ -2,7 +2,8 @@
     min-width: 50%;
 }
 
-p.button {
+.button {
+	font-family: FontAwesome, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
     display: inline-block;
     background-color: #210F7A;
     color: white;
@@ -15,17 +16,17 @@ p.button {
     overflow: hidden;
 }
 
-p.transport {
+.transport {
     background-color: #2196f3;
     width: calc(40% - 8px);
 }
 
-p.success {
+.success {
     background-color: #8bc34a;
     width: calc(100% - 8px);
 }
 
-p.error {
+.error {
     background-color: #DD2C00;
 }
 

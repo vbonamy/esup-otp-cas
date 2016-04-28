@@ -70,8 +70,6 @@
             <spring:message code="screen.welcome.label.netid.accesskey" var="userNameAccessKey" />
             <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;"></label>
             <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="off" htmlEscape="true" />
-			<p id="resetUsername" class='button' onclick="reset_username();"><spring:message code='button.change'/> <i class="fa fa-pencil-square-o"></i></p>
-			<p id="buttonMethods" class="button" onclick="get_user_auth();"><spring:message code='button.validate'/> <i class="fa fa-check-circle"></i></p>
 			<script type="text/javascript">
 				var users_secret = "<jsp:getProperty name='esupOtpApiAuthenticationHandler' property='usersSecret' />";
 				function getUserHash(){
@@ -84,6 +82,8 @@
         </c:otherwise>
         </c:choose>
       </p>
+      <input type="button" class="button" value="<spring:message code='button.change'/>   &#xf044;" id="resetUsername"  onclick="reset_username();">
+	  <input type="button" class="button" value="<spring:message code='button.validate'/>  &#xf058;" id="buttonMethods"  onclick="get_user_auth();">
     </section>
 <div id="list-methods">
 </div>
@@ -100,7 +100,7 @@
             <spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
             <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
             </p>
-            <p class='button error' onclick="$('#list-methods').show();$('#auth-option').hide();$('#auth').hide();"><spring:message code='button.code.lost'/> <i class="fa fa-question-circle"></i></p>
+            <input type='button' class="button error" value="<spring:message code='button.code.lost'/>  &#xf128;" onclick="$('#list-methods').show();$('#auth-option').hide();$('#auth').hide();">
           </section>
     </div>
     <div id="auth-option">
