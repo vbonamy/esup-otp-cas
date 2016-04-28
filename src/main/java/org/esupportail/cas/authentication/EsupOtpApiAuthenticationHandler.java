@@ -25,7 +25,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public static String urlApi;
 
@@ -40,9 +45,11 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 			if(response.getString("code").equals("Ok")){
 				return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
 			}else{
+				logger.info("Error : "+response.getString("message"));
 				throw new FailedLoginException();
 			}
 		}catch(IOException e){
+			logger.info("HTTP Request error", e);
 			throw new PreventedException("HTTP Request error", e);
 		}
 	}

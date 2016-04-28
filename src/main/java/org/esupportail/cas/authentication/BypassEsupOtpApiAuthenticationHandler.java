@@ -25,8 +25,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
-public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAuthenticationHandler {
+	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	public static String urlApi;
 
 	private static String apiPassword;
@@ -55,9 +60,11 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
 			if(bypass){
 				return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
 			}else{
+				logger.info("Error : "+response.getString("message"));
 				throw new FailedLoginException();
 			}
 		}catch(IOException e){
+			logger.info("HTTP Request error", e);
 			throw new PreventedException("HTTP Request error", e);
 		}
 	}
