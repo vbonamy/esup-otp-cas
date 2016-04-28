@@ -46,10 +46,12 @@ function send_code(transport, method) {
 
 
 function get_user_auth() {
+	if(document.getElementById('username')){
     if (document.getElementById('username').value != '') {
     		user_hash = getUserHash();
             get_user_infos();
     } else errors_message(strings.error.login_needed);
+    }
 }
 
 function get_user_infos() {
