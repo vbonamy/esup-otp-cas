@@ -47,10 +47,7 @@ function send_code(transport, method) {
 
 function get_user_auth() {
     if (document.getElementById('username').value != '') {
-            if(!mfa)user_hash = generate_hash(document.getElementById('username').value);
-            else user_hash = document.getElementById('user_hash').value;
-            /*get_available_methods();
-            get_available_transports();*/
+    		user_hash = getUserHash();
             get_user_infos();
     } else errors_message(strings.error.login_needed);
 }
@@ -114,7 +111,7 @@ function init() {
     $('#resetUsername').hide();
     $('#login').prepend('<div id="msg2" class="errors"></div>');
     $('#msg2').hide();
-    if(mfa)get_user_auth();
+    get_user_auth();
 };
 
 function success_message(message) {

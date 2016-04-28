@@ -36,42 +36,54 @@
     <section class="row" id="usernameRow">
         <p class="label">
           <label for="username" style="display: inline-block;"><spring:message code="screen.welcome.label.netid" /></label>
-          <% final String firstLevelCASId = request.getRemoteUser(); %>
-          <c:set var='varFirstLevelCASId' value='<%=firstLevelCASId%>' />
+			<c:if test="${not empty pageContext.request.remoteUser}">
+				<c:set var='varRemoteUser' value="${pageContext.request.remoteUser}" />                
+			</c:if>
+			<c:if test="${not empty header['REMOTE_USER']}">
+				<c:set var='varRemoteUser' value="${header['REMOTE_USER']}" />             
+			</c:if>
           <jsp:useBean id="esupOtpApiAuthenticationHandler" class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler"/>
-            <% 
-              String user_hash;
-            %>
         <c:choose>
           <c:when test="${not empty sessionScope.openIdLocalId}">
             <strong>${sessionScope.openIdLocalId}</strong>
             <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
-            <% 
-              user_hash = esupOtpApiAuthenticationHandler.getUserHash("${sessionScope.openIdLocalId}");
-            %>
-            <c:set var='sessionId' value='<%=user_hash%>' />
-            <input type="hidden" id="user_hash" name="user_hash" value="${sessionId}" />
+			 <input type="hidden" id="userhash" value='<%=esupOtpApiAuthenticationHandler.getUserHash("${sessionScope.openIdLocalId}")%>' />
             <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;">${sessionScope.openIdLocalId}</label>
+			<script type="text/javascript">
+			 function getUserHash(){
+			           return document.getElementById('userhash').value;
+			   }
+			</script>
           </c:when>
-          <c:when test="${not empty varFirstLevelCASId}">
+          <c:when test="${not empty varRemoteUser}">
             <strong>${sessionScope.openIdLocalId}</strong>
-            <input type="hidden" id="username" name="username" value="${varFirstLevelCASId}" />
-            <% 
-              user_hash = esupOtpApiAuthenticationHandler.getUserHash(firstLevelCASId);
-            %>
-            <c:set var='remoteUid' value='<%=user_hash%>' />
-            <input type="hidden" id="user_hash" name="user_hash" value="${remoteUid}" />
-            <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;">${varFirstLevelCASId}</label>
+            <input type="hidden" id="username" name="username" value="${varRemoteUser}" />
+            <input type="hidden" id="userhash" value='<%=esupOtpApiAuthenticationHandler.getUserHash("${varRemoteUser}")%>' />
+            <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;">${varRemoteUser}</label>
+			<script type="text/javascript">
+			 function getUserHash(){
+			           return document.getElementById('userhash').value;
+			   }
+			</script>
           </c:when>
           <c:otherwise>
             <spring:message code="screen.welcome.label.netid.accesskey" var="userNameAccessKey" />
             <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;"></label>
             <form:input cssClass="required" cssErrorClass="error" id="username" size="25" tabindex="1" accesskey="${userNameAccessKey}" path="username" autocomplete="off" htmlEscape="true" />
+			<p id="resetUsername" class='button' onclick="reset_username();"><spring:message code='button.change'/> <i class="fa fa-pencil-square-o"></i></p>
+			<p id="buttonMethods" class="button" onclick="get_user_auth();"><spring:message code='button.validate'/> <i class="fa fa-check-circle"></i></p>
+			<script type="text/javascript">
+				var users_secret = "<jsp:getProperty name='esupOtpApiAuthenticationHandler' property='usersSecret' />";
+				function getUserHash(){
+					var d = new Date();
+					var uid= document.getElementById('username').value;                    
+					var salt = d.getUTCDate().toString()+d.getHours().toString();
+					return CryptoJS.SHA256(CryptoJS.MD5(users_secret).toString()+uid+salt).toString();
+				}
+			</script>
         </c:otherwise>
         </c:choose>
       </p>
-      <p id="resetUsername" class='button' onclick="reset_username();"><spring:message code='button.change'/> <i class="fa fa-pencil-square-o"></i></p>
-      <p id="buttonMethods" class="button" onclick="get_user_auth();"><spring:message code='button.validate'/> <i class="fa fa-check-circle"></i></p>
     </section>
 <div id="list-methods">
 </div>

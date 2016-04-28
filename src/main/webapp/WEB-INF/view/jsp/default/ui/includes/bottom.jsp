@@ -50,27 +50,8 @@
     <script type="text/javascript" src="<c:url value="${casJavascriptFile}" />"></script>
 
     <jsp:useBean id="esupOtpApiAuthenticationHandlerBottom" class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler"/>
-    <% final String _firstLevelCASId = request.getRemoteUser(); %>
-    <c:set var='_varFirstLevelCASId' value='<%=_firstLevelCASId%>' />
     <script type="text/javascript">
-    var mfa = false;
       var url_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='urlApi' />";
-      <c:choose>
-          <c:when test="${not empty sessionScope.openIdLocalId}">
-            mfa = true;
-          </c:when>
-          <c:when test="${not empty _varFirstLevelCASId}">
-            mfa = true;
-          </c:when>
-          <c:otherwise>
-                var users_secret = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='usersSecret' />";
-                function generate_hash(uid){
-                    var d = new Date();
-                    var salt = d.getUTCDate().toString()+d.getHours().toString();
-                    return CryptoJS.SHA256(CryptoJS.MD5(users_secret).toString()+uid+salt).toString();
-                }
-          </c:otherwise>
-      </c:choose>
       var strings = {};
       strings.success = {};
       strings.error = {};
