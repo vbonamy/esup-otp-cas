@@ -80,10 +80,10 @@ function transports_labels(data){
     $('#list-methods').show();
     var username = document.getElementById('username').value;
     $('#username').hide();
-    $('#buttonMethods').hide();
+    document.getElementById("buttonMethods").style.display="none";
     $('#usernameLabel').empty();
     $('#usernameLabel').html(username);
-    $('#resetUsername').show();
+    document.getElementById("resetUsername").style.display="inline-block";
     reset_message();
 }
 
@@ -92,7 +92,7 @@ function methods_labels(data) {
     for (method in data.user.methods) {
         if (data.user.methods[method].active) {
             if (!methods_exist) {
-            	$('#list-methods').prepend("<input class='button success' type='button' value='"+strings.button.code.owned+" &#xf084;' onclick='hide_methods();'>");
+            	$('#list-methods').prepend("<input class='button ok' style='position:relative !important;' type='button' value='"+strings.button.code.owned+" &#xf084;' onclick='hide_methods();'>");
             }
             methods_exist = true;
             if (data.user.methods[method].transports.indexOf('sms') >= 0 || data.user.methods[method].transports.indexOf('mail') >= 0) {
@@ -144,11 +144,10 @@ function reset_username() {
     $('#auth-option').hide();
     $('#msg2').hide();
     $('#submit').attr('type', '');
-    $('#resetUsername').hide();
+    document.getElementById("resetUsername").style.display="none";
     $('#usernameLabel').html('');
     $('#username').show();
-    $('#buttonMethods').show();
-
+    document.getElementById("buttonMethods").style.display="inline-block";
 }
 
 function hide_methods() {

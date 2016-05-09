@@ -33,7 +33,7 @@
     <form:errors path="*" id="msg" cssClass="errors" element="div" htmlEscape="false" />
     <h2><spring:message code="screen.welcome.instructions" /></h2>
   
-    <section class="row" id="usernameRow">
+    <section class="row" id="usernameRow" style="position:relative;">
         <p class="label">
           <label for="username" style="display: inline-block;"><spring:message code="screen.welcome.label.netid" /></label>
 			<c:if test="${not empty pageContext.request.remoteUser}">
@@ -100,7 +100,6 @@
             <spring:message code="screen.welcome.label.password.accesskey" var="passwordAccessKey" />
             <form:password cssClass="required" cssErrorClass="error" id="password" size="25" tabindex="2" path="password"  accesskey="${passwordAccessKey}" htmlEscape="true" autocomplete="off" />
             </p>
-            <input type='button' class="button error" value="<spring:message code='button.code.lost'/>  &#xf128;" onclick="$('#list-methods').show();$('#auth-option').hide();$('#auth').hide();">
           </section>
     </div>
     <div id="auth-option">
@@ -110,7 +109,9 @@
         <input type="checkbox" name="rememberMe" id="rememberMe" value="true" />
         <label for="rememberMe">Remember Me</label>
       </section>
-
+	<section class="row btn-row">
+		<input type='button' class="error-button" value="<spring:message code='button.code.lost'/>  &#xf128;" onclick="$('#list-methods').show();$('#auth-option').hide();$('#auth').hide();">
+	</section>
       <section class="row btn-row">
         <input type="hidden" name="lt" value="${loginTicket}" />
         <input type="hidden" name="execution" value="${flowExecutionKey}" />

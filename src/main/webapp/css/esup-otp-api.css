@@ -3,6 +3,7 @@
 }
 
 .button {
+	position:absolute;
 	font-family: FontAwesome, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
     display: inline-block;
     background-color: #210F7A;
@@ -17,12 +18,32 @@
     overflow: hidden;
 }
 
+.error-button {
+	background-color: #DD2C00 !important;
+	font-family: FontAwesome, 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+    display: inline-block;
+    background-color: #210F7A;
+    color: white;
+    margin: 0;
+    width: 100%;
+    /*minus padding*2*/
+    text-align: center;
+    border-radius: 5px;
+    border-style: none;
+    padding: 4px;
+    overflow: hidden;
+}
+
 .transport {
     background-color: #2196f3;
     width: calc(40% - 8px);
 }
 
 .success {
+    background-color: #8bc34a;
+}
+
+.ok {
     background-color: #8bc34a;
     width: calc(100% - 8px);
 }
@@ -64,6 +85,7 @@ p.button:active {
 }
 
 div.method-row{
+	position:relative !important;
     background-color: rgba(255, 255, 255, 0.55);
     border-radius: 5px;
     padding-top: 3px;
@@ -72,6 +94,8 @@ div.method-row{
     margin-top: 2px;
 }
 
-div#list-methods {}
+div#list-methods {
+	position:relative !important;
+}
 
 div.list-transports {}
