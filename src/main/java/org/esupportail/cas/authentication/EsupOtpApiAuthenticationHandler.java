@@ -41,6 +41,7 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	@Override
 	protected final HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential credential)throws GeneralSecurityException, PreventedException{
 		try{
+			if(credential.getPassword() == "")throw new FailedLoginException();
 			JSONObject response = verifyOtp(credential.getUsername(), credential.getPassword());
 			if(response.getString("code").equals("Ok")){
 				return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
