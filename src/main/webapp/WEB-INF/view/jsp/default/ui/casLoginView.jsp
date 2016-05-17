@@ -47,7 +47,8 @@
           <c:when test="${not empty sessionScope.openIdLocalId}">
             <strong>${sessionScope.openIdLocalId}</strong>
             <input type="hidden" id="username" name="username" value="${sessionScope.openIdLocalId}" />
-			 <input type="hidden" id="userhash" value='<%=esupOtpApiAuthenticationHandler.getUserHash("${sessionScope.openIdLocalId}")%>' />
+			  <% String openIdLocalId=session.getAttribute("openIdLocalId").toString(); %>
+              <input type="hidden" id="userhash" value='<%=esupOtpApiAuthenticationHandler.getUserHash(openIdLocalId)%>' />
             <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;">${sessionScope.openIdLocalId}</label>
 			<script type="text/javascript">
 			 function getUserHash(){
@@ -58,7 +59,7 @@
           <c:when test="${not empty varRemoteUser}">
             <strong>${sessionScope.openIdLocalId}</strong>
             <input type="hidden" id="username" name="username" value="${varRemoteUser}" />
-            <input type="hidden" id="userhash" value='<%=esupOtpApiAuthenticationHandler.getUserHash("${varRemoteUser}")%>' />
+            <input type="hidden" id="userhash" value="<%=esupOtpApiAuthenticationHandler.getUserHash(request.getRemoteUser())%>" />
             <label id='usernameLabel' style="display: inline-block; color: black; font-weight: bold;">${varRemoteUser}</label>
 			<script type="text/javascript">
 			 function getUserHash(){
