@@ -96,7 +96,7 @@ function methods_labels(data) {
             }
             methods_exist = true;
             if (data.user.methods[method].transports.indexOf('sms') >= 0 || data.user.methods[method].transports.indexOf('mail') >= 0) {
-                $('#list-methods').append("<h3>" + strings.method[method] + "</h3>");
+                $('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
                 if (data.user.methods[method].transports.indexOf('sms') >= 0) $('#list-methods').append("<div class='method-row sms'><p class='label label-sms'></p><input class='button transport' type='button' value='"+strings.button.send.sms+" &#xf10b;' onclick='send_code(\"sms\", \"" + method + "\");'></div>");
                 if (data.user.methods[method].transports.indexOf('mail') >= 0) $('#list-methods').append("<div class='method-row mail'><p class='label label-mail'></p><input class='button transport' type='button' value='"+strings.button.send.mail+" &#xf0e0;' onclick='send_code(\"mail\", \"" + method + "\");'></div>");
             }
