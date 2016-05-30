@@ -28,7 +28,7 @@ function send_code(transport, method) {
         if (document.getElementById('usernameLabel').innerHTML != '') {
             code_send = true;
             last_transport = transport;
-            request({ method: 'GET', url: url_esup_otp + '/user/'+ document.getElementById('usernameLabel').innerHTML +'/method/'+ method +'/transport/'+ transport +'/code/send/'+ user_hash }, function(response) {
+            request({ method: 'POST', url: url_esup_otp + '/users/'+ document.getElementById('usernameLabel').innerHTML +'/methods/'+ method +'/transports/'+ transport +'/'+ user_hash }, function(response) {
                 if (response.code == "Ok") {
                     success_message(strings.success.transport + transport);
                     hide_methods();
@@ -56,7 +56,7 @@ function get_user_auth() {
 
 function get_user_infos() {
     $('#auth-option').hide();
-    request({ method: 'GET', url: url_esup_otp + '/user/' + document.getElementById('username').value + '/' + user_hash }, function(response) {
+    request({ method: 'GET', url: url_esup_otp + '/users/' + document.getElementById('username').value + '/' + user_hash }, function(response) {
         if (response.code == "Ok") {
         	methods_labels(response);
         	transports_labels(response);

@@ -56,7 +56,7 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	}
 
 	private JSONObject verifyOtp(String uid, String otp) throws IOException {
-			String url = urlApi+"/protected/user/"+uid+"/code/verify/"+otp+"/"+apiPassword;
+			String url = urlApi+"/protected/users/"+uid+"/"+otp+"/"+apiPassword;
 			URL obj = new URL(url);
 			int responseCode;
 			HttpURLConnection con=null;
