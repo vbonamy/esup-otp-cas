@@ -18,39 +18,66 @@
     under the License.
 
 --%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-      </div> <!-- END #content -->
-      
-      <footer id="footer">
-        <a id="logo" href="http://www.apereo.org" title="<spring:message code="logo.title"/>"></a>
-        <div id="copyright">
-          <p><spring:message code="copyright" /></p>
-          <p>Powered by <a href="http://www.apereo.org/cas">Apereo Central Authentication Service <%=org.jasig.cas.CasVersion.getVersion()%></a></p>
-        </div>
-      </footer>
+</div>
+<!-- END main row -->
 
-    </div> <!-- END #container -->
-    
-    <script type="text/javascript" src="<c:url value="/js/jquery.min.js" />"></script>
-    <script type="text/javascript" src="<c:url value="/js/jquery-ui.min.js" />"></script>
-    
-    <%-- 
+<footer id="footer"> </footer>
+
+<!-- Footer -->
+<footer>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
+				<div class="footer-border"></div>
+				<a id="logo" href="http://www.apereo.org"
+					title="<spring:message code="logo.title"/>"></a>
+				<div id="copyright">
+					<p>
+						<spring:message code="copyright" />
+					</p>
+					<p>
+						Powered by <a href="http://www.apereo.org/cas">Apereo Central
+							Authentication Service <%=org.jasig.cas.CasVersion.getVersion()%></a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Design Used by Alex Bouskine and Made by Anli Zaimi at http://azmind.com" -->
+</footer>
+</div>
+</div>
+</div>
+
+<script type="text/javascript" src="<c:url value="/js/jquery.min.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/js/jquery-ui.min.js" />"></script>
+
+<%-- 
         JavaScript Debug: A simple wrapper for console.log 
         See this link for more info: http://benalman.com/projects/javascript-debug-console-log/
     --%>
-    <script type="text/javascript" src="<c:url value="/js/ba-debug.min.js" />"></script>
-    <script type="text/javascript" src="<c:url value="/js/esup-otp-api.js" />"></script>    
+<script type="text/javascript"
+	src="<c:url value="/js/ba-debug.min.js" />"></script>
+<script type="text/javascript"
+	src="<c:url value="/js/esup-otp-api.js" />"></script>
 
-    <script type="text/javascript" src="<c:url value="/js/core-min.js" />"></script>
-    <script type="text/javascript" src="<c:url value="/js/sha256-min.js" />"></script>
-    <script type="text/javascript" src="<c:url value="/js/md5-min.js" />"></script>
-    
-    <spring:theme code="cas.javascript.file" var="casJavascriptFile" text="" />
-    <script type="text/javascript" src="<c:url value="${casJavascriptFile}" />"></script>
+<script type="text/javascript" src="<c:url value="/js/core-min.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/sha256-min.js" />"></script>
+<script type="text/javascript" src="<c:url value="/js/md5-min.js" />"></script>
 
-    <jsp:useBean id="esupOtpApiAuthenticationHandlerBottom" class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler"/>
-    <script type="text/javascript">
+<script type="text/javascript"
+	src="<c:url value="/js/bootstrap.min.js" />"></script>
+
+<spring:theme code="cas.javascript.file" var="casJavascriptFile" text="" />
+<script type="text/javascript"
+	src="<c:url value="${casJavascriptFile}" />"></script>
+
+<jsp:useBean id="esupOtpApiAuthenticationHandlerBottom"
+	class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler" />
+<script type="text/javascript">
       var url_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='urlApi' />";
       var strings = {};
       strings.success = {};
@@ -78,6 +105,6 @@
       window.onload = init;
     </script>
 
-  </body>
+</body>
 </html>
 
