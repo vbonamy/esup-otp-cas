@@ -32,7 +32,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=" UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>CAS &#8211; Central Authentication Service</title> <spring:theme
+	<title><spring:message code="screen.appname" /></title> <spring:theme
 		code="standard.custom.css.file" var="customCssFile" />
 	<link type="text/css" rel="stylesheet"
 		href="<c:url value="${customCssFile}" />" />
@@ -57,7 +57,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-8 col-sm-offset-2 text">
-						<h1 id="app-name">Central Authentication Service (CAS)</h1>
+						<h1 id="app-name"><spring:message code="screen.appname" /></h1>
 					</div>
 				</div>
 				<div class="row">

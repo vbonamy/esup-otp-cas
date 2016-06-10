@@ -59,6 +59,8 @@ function get_user_infos() {
     request({ method: 'GET', url: url_esup_otp + '/users/' + document.getElementById('username').value + '/' + user_hash }, function(response) {
         if (response.code == "Ok") {
         	$('#own-code').show();
+        	$('#instructions_username').hide();
+        	$('#instructions_transport').show();
         	methods_labels(response);
         	transports_labels(response);
         } else {
@@ -162,12 +164,16 @@ function show_methods() {
 	$('#auth').hide();
 	$('#lost-code').hide();
 	$('#own-code').show();
+    $('#instructions_transport').show();
+    $('#instructions_code').hide();
 }
 
 function show_auth_form(){
 	show_auth_option();
     $('#auth').show();
     $('#lost-code').show();
+    $('#instructions_transport').hide();
+    $('#instructions_code').show();
 }
 
 function show_auth_option(){
