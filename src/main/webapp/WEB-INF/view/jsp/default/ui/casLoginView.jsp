@@ -29,7 +29,7 @@
 	</div>
 </c:if>
 <div id="msg2" hidden="true"></div>
-<div class="col-sm-5">
+<div class="col-sm-6">
 	<div class="form-box" id="login">
 		<form:form method="post" id="fm1" commandName="${commandName}"
 			htmlEscape="true">
@@ -40,8 +40,14 @@
 						<a href="#" class="close" data-dismiss="alert" aria-label="close"
 							title="close">×</a>
 					</form:errors>
-					<h3>
-						<spring:message code="screen.welcome.instructions" />
+					<h3 id="instructions_username">
+						<spring:message code="screen.instructions.username" />
+					</h3>
+					<h3 id="instructions_transport" hidden="true">
+						<spring:message code="screen.instructions.transport" />
+					</h3>
+					<h3 id="instructions_code" hidden="true">
+						<spring:message code="screen.instructions.code" />
 					</h3>
 				</div>
 				<div class="form-top-right">
@@ -154,19 +160,16 @@
 					onclick='hide_methods();'>
 			</div>
 			<div id="auth-option">
-				<p>
 					<input id="warn" name="warn" value="true" tabindex="3"
 						accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />"
 						type="checkbox" /> <label for="warn"><spring:message
 							code="screen.welcome.label.warn" /></label>
-				</p>
-				<p>
+							<br>
 					<input type="checkbox" name="rememberMe" id="rememberMe"
 						value="true" /> <label for="rememberMe">Remember Me</label> <input
 						type="hidden" name="lt" value="${loginTicket}" /> <input
 						type="hidden" name="execution" value="${flowExecutionKey}" /> <input
 						type="hidden" name="_eventId" value="submit" />
-				</p>
 				<p>
 					<input id="submit" class="btn-submit button" name="submit"
 						accesskey="l"
@@ -186,9 +189,7 @@
 		<div class="social-login-buttons"></div>
 	</div>
 </div>
-<div class="col-sm-1 middle-border"></div>
-<div class="col-sm-1"></div>
-<div class="col-sm-5">
+<div class="col-sm-6">
 	<div class="form-box">
 		<div class="form-top">
 			<div class="form-top-left">

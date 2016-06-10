@@ -42,7 +42,7 @@ body {
 
 .transport {
     background-color: #1d71b8;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
 }
 
 .success {
@@ -100,6 +100,12 @@ div.list-transports {}
 input{
 	height: 50px !important;
 	font-size: 16px !important;
+}
+
+input[type="checkbox"]{
+	margin : 0 !important;
+	height: initial !important;
+	vertical-align: inherit !important;
 }
 
 /* =========================== */
@@ -363,7 +369,7 @@ img { max-width: 100%; }
 }
 
 .social-login {
-	margin-top: 35px;
+	margin-top: 20px;
 }
 
 .social-login-buttons {
@@ -390,7 +396,7 @@ footer .footer-border {
 	margin: 0 auto;
 	padding-bottom: 30px;
 	border-top: 1px solid #fff;
-	border-top: 1px solid rgba(255, 255, 255, 0.6);
+	border-top: 1px solid rgb(29,113,184);
 }
 
 footer p { opacity: 0.8; color: #1d71b8;}
