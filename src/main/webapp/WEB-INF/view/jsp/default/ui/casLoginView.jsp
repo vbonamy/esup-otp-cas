@@ -107,7 +107,7 @@
 							<label id='usernameLabel'></label>
 						</div>
 						<div class="form-group">
-							<input type="text" name="form-username"
+							<input type="text" name="username"
 								placeholder="<spring:message
 								code='error.login_needed'/>..."
 								class="form-username form-control" id="username" size="25"
