@@ -126,6 +126,7 @@
           <bean id="bypassEsupOtpApiAuthenticationHandler"
             class="org.esupportail.cas.authentication.BypassEsupOtpApiAuthenticationHandler">
             <property name="urlApi" value="${esup-otp-api.url}" />
+            <property name="usersSecret" value="${esup-otp-api.users_secret}" />
             <property name="apiPassword" value="${esup-otp-api.api_password}" />
           </bean>
 

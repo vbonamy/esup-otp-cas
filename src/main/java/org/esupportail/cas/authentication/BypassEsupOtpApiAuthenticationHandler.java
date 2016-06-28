@@ -35,61 +35,43 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
 	public static String urlApi;
 
 	private static String apiPassword;
+	
+	public static String usersSecret;
 
 	@Override
 	protected final HandlerResult authenticateUsernamePasswordInternal(final UsernamePasswordCredential credential)throws GeneralSecurityException, PreventedException{
 		try{
-			Boolean bypass = true;
-			JSONObject response = checkActivateMethods(credential.getUsername(), credential.getPassword());
-			for (Object key : response.keySet()) {
-				String keyStr = (String)key;
-				if(keyStr.equals("methods")){
-					Object buff_methods = response.get(keyStr);
-					if (buff_methods instanceof JSONObject){
-						JSONObject methods = (JSONObject)buff_methods;
-						for (Object method : methods.keySet()) {
-							String strMethod = (String)method;
-							Object methodObj = methods.get(strMethod);
-							if(methodObj instanceof JSONObject){
-								bypass = false;
-							}
-						}
-					}
+			JSONObject methods = (JSONObject) ((JSONObject) getUserInfos(credential.getUsername()).get("user")).get("methods");
+			for (Object method : methods.keySet()) {
+				if(methods.get(method.toString()) instanceof JSONObject){
+					if((boolean) (((JSONObject)methods.get(method.toString())).get("active")))throw new FailedLoginException();
 				}
 			}
-			if(bypass){
-				return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
-			}else{
-				logger.info("Error : "+response.getString("message"));
-				throw new FailedLoginException();
-			}
+			return createHandlerResult(credential, createPrincipal(credential.getUsername()), null);
 		}catch(IOException e){
 			logger.info("HTTP Request error", e);
 			throw new PreventedException("HTTP Request error", e);
 		}
 	}
 
-	private JSONObject checkActivateMethods(String uid, String otp) throws IOException {
-			String url = urlApi+"/admin/users/"+uid+"/methods/"+apiPassword;
+	private JSONObject getUserInfos(String uid) throws IOException, NoSuchAlgorithmException {
+		String url = urlApi + "/users/" + uid + "/" + getUserHash(uid);
+		URL obj = new URL(url);
+		int responseCode;
+		HttpURLConnection con = null;
+		con = (HttpURLConnection) obj.openConnection();
+		con.setRequestMethod("GET");
+		responseCode = con.getResponseCode();
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
 
-			URL obj = new URL(url);
-			int responseCode;
-			HttpURLConnection con;
-			con = (HttpURLConnection) obj.openConnection();
-			con.setRequestMethod("GET");
-			responseCode = con.getResponseCode();
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
 
-			BufferedReader in = new BufferedReader(
-				new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-
-			return new JSONObject(response.toString());
+		return new JSONObject(response.toString());
 	}
 
 	/**
@@ -104,6 +86,25 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
     protected Principal createPrincipal(final String username){
         return new SimplePrincipal(username);
     }
+    
+    public String getUserHash(String uid) throws NoSuchAlgorithmException, UnsupportedEncodingException{
+    	MessageDigest md5Md = MessageDigest.getInstance("MD5");
+		String md5 = (new HexBinaryAdapter()).marshal(md5Md.digest(usersSecret.getBytes()));
+		md5 = md5.toLowerCase();
+    	String salt = md5+getSalt(uid);
+    	MessageDigest sha256Md = MessageDigest.getInstance("SHA-256");
+		String userHash = (new HexBinaryAdapter()).marshal(sha256Md.digest(salt.getBytes()));
+		userHash = userHash.toLowerCase();
+    	return userHash; 
+    }
+    
+    public String getSalt(String uid){
+    	Calendar calendar = Calendar.getInstance();
+    	int day = calendar.get(Calendar.DAY_OF_MONTH);
+    	int hour = calendar.get(Calendar.HOUR_OF_DAY);
+    	String salt = uid+day+hour;
+    	return salt; 
+    }
 
     public void setUrlApi(String urlApi) {
     	this.urlApi = urlApi; 
@@ -112,4 +113,12 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
  	public void setApiPassword(String apiPassword) {
     	this.apiPassword = apiPassword;
     }	
+ 	
+ 	public String getUsersSecret() {
+    	return usersSecret; 
+    }
+
+    public void setUsersSecret(String usersSecret) {
+     	this.usersSecret = usersSecret; 
+ 	}
 }
