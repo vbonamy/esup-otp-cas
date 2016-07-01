@@ -17,7 +17,7 @@
 # under the License.
 #
 
-server.name=http://tequila:8443
+server.name=https://localhost:8443
 server.prefix=${server.name}/cas
 
 # Spring Security's EL-based access rules for the /status URI of CAS that exposes health check information
@@ -39,7 +39,7 @@ cas.viewResolver.basename=default_views
 # Unique CAS node name
 # host.name is used to generate unique Service Ticket IDs and SAMLArtifacts.  This is usually set to the specific
 # hostname of the machine running the CAS node, but it could be any label so long as it is unique in the cluster.
-host.name=tequila
+host.name=localhost
 
 ##
 # Database flavors for Hibernate
@@ -221,6 +221,6 @@ log4j.refresh.interval=60000
 
 #ESUP OTP API
 
-esup-otp-api.url 				=https://tequila:3443
+esup-otp-api.url 				=https://localhost:3443
 esup-otp-api.users_secret		=HFYXQ22FGVACGYTEFJST4TDVJ4
 esup-otp-api.api_password		=TRFXQ22FGVACGYTEFJST4TDTRF
