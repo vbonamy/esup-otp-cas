@@ -10,3 +10,4 @@ etc
 .idea/
 cas4-overlay.iml
 overlays/
+cas.properties
