@@ -3,7 +3,6 @@ target
 *.DS_Store
 *./.DS_Store
 *.log
-etc/cas
 .classpath
 .project
 .settings/

@@ -31,7 +31,7 @@
                             </excludes>
                         </overlay>
                     </overlays>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>  
+                     <failOnMissingWebXml>false</failOnMissingWebXml>  
                 </configuration>
             </plugin>
             <plugin>
@@ -70,6 +70,16 @@
     </build>
 
     <dependencies>
+    	<dependency>
+            <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-core</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jasig.cas</groupId>
+            <artifactId>cas-server-core-authentication</artifactId>
+            <version>${cas.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.jasig.cas</groupId>
             <artifactId>cas-server-webapp</artifactId>
@@ -77,10 +87,15 @@
             <type>war</type>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160212</version>
+        </dependency>
     </dependencies>
 
     <properties>
-        <cas.version>4.2.2</cas.version>
+        <cas.version>4.2.1</cas.version>
         <maven-jetty-plugin.version>9.3.6.v20151106</maven-jetty-plugin.version>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>

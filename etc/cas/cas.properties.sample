@@ -17,18 +17,24 @@
 # under the License.
 #
 
-server.name=http://localhost:8080
+server.name=http://localhost:8443
 server.prefix=${server.name}/cas
 
+# Spring Security's EL-based access rules for the /status URI of CAS that exposes health check information
+cas.securityContext.status.access=hasIpAddress('127.0.0.1')
+
 # security configuration based on IP address to access the /status and /statistics pages
-# cas.securityContext.adminpages.ip=127\.0\.0\.1
+cas.securityContext.statistics.access=hasIpAddress('127.0.0.1')
+
+cas.themeResolver.defaultThemeName=cas-theme-default
+cas.viewResolver.basename=default_views
 
 
 ##
 # Unique CAS node name
 # host.name is used to generate unique Service Ticket IDs and SAMLArtifacts.  This is usually set to the specific
 # hostname of the machine running the CAS node, but it could be any label so long as it is unique in the cluster.
-host.name=cas01.example.org
+host.name=tequila
 
 ##
 # JPA Ticket Registry Database Configuration
@@ -79,10 +85,10 @@ host.name=cas01.example.org
 # Do note that the following settings MUST be generated per deployment.
 #
 # The encryption secret key. By default, must be a octet string of size 256.
-# tgc.encryption.key=
+tgc.encryption.key=1PbwSbnHeinpkZOSZjuSJ8yYpUrInm5aaV18J2Ar4rM
 
 # The signing secret key. By default, must be a octet string of size 512.
-# tgc.signing.key=
+tgc.signing.key=szxK-5_eJjs-aUj-64MpUZ-GPPzGLhYPLGl0wrYjYNVAGva2P0lLe6UGKGM7k8dWxsOVGutZWgvmY3l5oVPO3w##
 
 # Decides whether SSO cookie should be created only under secure connections.
 # tgc.secure=true
@@ -305,7 +311,7 @@ accept.authn.users=casuser::Mellon
 # Single Sign-On Session TGT Timeouts
 #
 # Inactivity Timeout Policy
-# tgt.timeout.maxTimeToLiveInSeconds=28800
+#tgt.timeout.maxTimeToLiveInSeconds=28800
 
 # Hard Timeout Policy
 # tgt.timeout.hard.maxTimeToLiveInSeconds
@@ -315,8 +321,8 @@ accept.authn.users=casuser::Mellon
 # tgt.throttled.timeInBetweenUsesInSeconds=5
 
 # Default Expiration Policy
-# tgt.maxTimeToLiveInSeconds=28800
-# tgt.timeToKillInSeconds=7200
+tgt.maxTimeToLiveInSeconds=28800
+tgt.timeToKillInSeconds=7200
 
 ##
 # Service Ticket Timeout
@@ -710,6 +716,8 @@ accept.authn.users=casuser::Mellon
 # cas.pac4j.oidc.customParamValue1=
 # cas.pac4j.oidc.customParamKey2=
 # cas.pac4j.oidc.customParamValue2=
+
+
 
 #ESUP OTP API
 
