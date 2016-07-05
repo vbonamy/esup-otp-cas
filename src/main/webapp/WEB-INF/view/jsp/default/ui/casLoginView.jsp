@@ -144,7 +144,7 @@
 				</div>
 			</div>
 			<div class="social-login" id="own-code" hidden="true">
-				<input class="button ok" style=""
+				<input id="ownCodeInput" class="button ok" style=""
 					position:relative !important;" type="button"
 					value="<spring:message code='button.code.owned'/>  &#xf084;"
 					onclick='hide_methods();'>

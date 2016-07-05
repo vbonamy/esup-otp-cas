@@ -3,6 +3,20 @@ var last_transport = '';
 var auth_div;
 var user_hash='changeit';
 
+var state = 0;
+$(document).keypress(function(event){
+	var keycode = (event.keyCode ? event.keyCode : event.which);
+	if(keycode == '13'){
+		switch(state){
+			case 0:$('#buttonMethods').click();break;
+			case 1:$('#ownCodeInput').click();break;
+			case 2:$('#submit').click();break;
+			default: console.log('You pressed a "enter" key but nothing happen');break;
+		}
+			
+	}
+});
+
 function request(opts, callback, next) {
     var req = new XMLHttpRequest();
     req.open(opts.method, opts.url, true);
@@ -61,6 +75,7 @@ function get_user_infos() {
         	$('#own-code').show();
         	$('#instructions_username').hide();
         	$('#instructions_transport').show();
+        	state =1;
         	methods_labels(response);
         	transports_labels(response);
         } else {
@@ -123,6 +138,7 @@ function success_message(message) {
     $("#msg2").fadeTo(3500, 500).slideUp(300, function(){
         $("#msg2").hide();
     });
+    $('.close').hide()
 }
 
 function errors_message(message) {
@@ -131,6 +147,7 @@ function errors_message(message) {
     $("#msg2").fadeTo(3500, 500).slideUp(300, function(){
         $("#msg2").hide();
     });
+    $('.close').hide()
 }
 
 function reset_message() {
@@ -159,6 +176,7 @@ function hide_methods() {
 }
 
 function show_methods() {
+	state =1;
 	$('#list-methods').show();
 	$('#auth-option').hide();
 	$('#auth').hide();
@@ -169,6 +187,7 @@ function show_methods() {
 }
 
 function show_auth_form(){
+	state =2;
 	show_auth_option();
     $('#auth').show();
     $('#lost-code').show();
