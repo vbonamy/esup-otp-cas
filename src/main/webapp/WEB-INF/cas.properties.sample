@@ -222,5 +222,5 @@ log4j.refresh.interval=60000
 #ESUP OTP API
 
 esup-otp-api.url 				=https://localhost:3443
-esup-otp-api.users_secret		=HFYXQ22FGVACGYTEFJST4TDVJ4
-esup-otp-api.api_password		=TRFXQ22FGVACGYTEFJST4TDTRF
+esup-otp-api.users_secret		=changeit
+esup-otp-api.api_password		=changeit
