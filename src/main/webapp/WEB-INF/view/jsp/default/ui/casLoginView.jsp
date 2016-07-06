@@ -149,7 +149,7 @@
 					value="<spring:message code='button.code.owned'/>  &#xf084;"
 					onclick='hide_methods();'>
 			</div>
-			<div id="auth-option">
+			<div id="auth-option" hidden="true">
 					<input id="warn" name="warn" value="true" tabindex="3"
 						accesskey="<spring:message code="screen.welcome.label.warn.accesskey" />"
 						type="checkbox" /> <label for="warn"><spring:message
