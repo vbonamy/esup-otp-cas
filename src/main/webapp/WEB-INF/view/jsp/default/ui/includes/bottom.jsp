@@ -23,7 +23,11 @@
 </div>
 <!-- END main row -->
 
-<footer id="footer"> </footer>
+<footer id="footer">
+<div class="row">
+<div class="logo"></div>
+</div> 
+</footer>
 
 <!-- Footer -->
 <footer>
