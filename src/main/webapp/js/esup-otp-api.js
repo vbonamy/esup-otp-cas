@@ -107,17 +107,19 @@ function transports_labels(data){
 
 function methods_labels(data) {
     var methods_exist = false;
+    var transports_exist = false;
     for (method in data.user.methods) {
         if (data.user.methods[method].active) {
             methods_exist = true;
             if (data.user.methods[method].transports.indexOf('sms') >= 0 || data.user.methods[method].transports.indexOf('mail') >= 0) {
-                $('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
+            	transports_exist = true;
+            	$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
                 if (data.user.methods[method].transports.indexOf('sms') >= 0) $('#list-methods').append("<div class='method-row sms'><input class='button transport label-sms' type='button' value='"+strings.button.send.sms+" &#xf10b;' onclick='send_code(\"sms\", \"" + method + "\");'></div>");
                 if (data.user.methods[method].transports.indexOf('mail') >= 0) $('#list-methods').append("<div class='method-row mail'><input class='button transport label-mail' type='button' value='"+strings.button.send.mail+" &#xf0e0;' onclick='send_code(\"mail\", \"" + method + "\");'></div>");
             }
             $('#list-methods').show();
         }
-        if (!methods_exist) show_auth_option();
+        if (!methods_exist || !transports_exist) show_auth_option();
     }
 }
 
