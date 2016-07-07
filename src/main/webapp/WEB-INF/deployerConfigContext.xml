@@ -44,6 +44,7 @@
     <bean id="esupOtpApiAuthenticationHandler"
       class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler">
       <property name="urlApi" value="${esup-otp-api.url}" />
+      <property name="urlApiSecure" value="${esup-otp-api.url.secure}" />
       <property name="usersSecret" value="${esup-otp-api.users_secret}" />
       <property name="apiPassword" value="${esup-otp-api.api_password}" />
     </bean>
@@ -52,6 +53,7 @@
     <bean id="bypassEsupOtpApiAuthenticationHandler"
       class="org.esupportail.cas.authentication.BypassEsupOtpApiAuthenticationHandler">
       <property name="urlApi" value="${esup-otp-api.url}" />
+      <property name="urlApiSecure" value="${esup-otp-api.url.secure}" />
       <property name="apiPassword" value="${esup-otp-api.api_password}" />
       <property name="usersSecret" value="${esup-otp-api.users_secret}" />
     </bean>
