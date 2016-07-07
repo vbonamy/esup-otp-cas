@@ -83,6 +83,9 @@
 	class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler" />
 <script type="text/javascript">
       var url_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='urlApi' />";
+      <c:if test="${pageContext.request.secure}">
+      	url_esup_otp = "<jsp:getProperty name='esupOtpApiAuthenticationHandlerBottom' property='urlApiSecure' />";
+  	  </c:if>
       var strings = {};
       strings.success = {};
       strings.error = {};

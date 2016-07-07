@@ -32,6 +32,8 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	public static String urlApiSecure;
+	
 	public static String urlApi;
 
 	private static String apiPassword;
@@ -105,7 +107,15 @@ public class BypassEsupOtpApiAuthenticationHandler extends AbstractUsernamePassw
     	String salt = uid+day+hour;
     	return salt; 
     }
+    
+    public String getUrlApiSecure() {
+    	return urlApiSecure; 
+    }
 
+    public void setUrlApiSecure(String urlApiSecure) {
+    	this.urlApiSecure = urlApiSecure; 
+ 	}
+    
     public void setUrlApi(String urlApi) {
     	this.urlApi = urlApi; 
  	}
