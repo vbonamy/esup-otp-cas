@@ -198,6 +198,7 @@ function show_auth_form(){
 }
 
 function show_auth_option(){
+	state =2;
 	$('#own-code').hide();
     $('#auth-option').show();
     auth_div.insertAfter('#list-methods');
