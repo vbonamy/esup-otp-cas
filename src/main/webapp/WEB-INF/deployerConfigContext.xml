@@ -117,7 +117,6 @@
           <!-- Esup Otp Api Handler -->
           <bean id="esupOtpApiAuthenticationHandler"
             class="org.esupportail.cas.authentication.EsupOtpApiAuthenticationHandler">
-            <property name="urlApiSecure" value="${esup-otp-api.url.secure}" />
             <property name="urlApi" value="${esup-otp-api.url}" />
             <property name="usersSecret" value="${esup-otp-api.users_secret}" />
             <property name="apiPassword" value="${esup-otp-api.api_password}" />
@@ -126,7 +125,6 @@
           <!-- Bypass Esup Otp Api Handler -->
           <bean id="bypassEsupOtpApiAuthenticationHandler"
             class="org.esupportail.cas.authentication.BypassEsupOtpApiAuthenticationHandler">
-            <property name="urlApiSecure" value="${esup-otp-api.url.secure}" />
             <property name="urlApi" value="${esup-otp-api.url}" />
             <property name="usersSecret" value="${esup-otp-api.users_secret}" />
             <property name="apiPassword" value="${esup-otp-api.api_password}" />
