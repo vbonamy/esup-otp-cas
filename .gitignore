@@ -9,5 +9,3 @@ target
 .idea/
 cas4-overlay.iml
 overlays/
-etc/cas/cas.properties
-src/main/webapp/WEB-INF/cas.properties
