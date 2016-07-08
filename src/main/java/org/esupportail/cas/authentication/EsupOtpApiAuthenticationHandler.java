@@ -32,7 +32,6 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public static String urlApiSecure;
 	
 	public static String urlApi;
 
@@ -109,14 +108,6 @@ public class EsupOtpApiAuthenticationHandler extends AbstractUsernamePasswordAut
     	String salt = uid+day+hour;
     	return salt; 
     }
-
-    public String getUrlApiSecure() {
-    	return urlApiSecure; 
-    }
-
-    public void setUrlApiSecure(String urlApiSecure) {
-    	this.urlApiSecure = urlApiSecure; 
- 	}
     
     public String getUrlApi() {
     	return urlApi; 
