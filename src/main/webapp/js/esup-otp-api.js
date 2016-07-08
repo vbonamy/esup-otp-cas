@@ -125,8 +125,8 @@ function methods_labels(data) {
             }
             $('#list-methods').show();
         }
-        if (!methods_exist || !transports_exist) show_auth_option();
     }
+    if (!methods_exist || !transports_exist) show_auth_option();
 }
 
 
