@@ -109,10 +109,13 @@ input[type="checkbox"]{
 }
 
 .logo{
-	width: 300px;
-	height: 130px;
+	width: 150px;
+	height: 75px;
 	margin: auto;
 	background-image:url('../img/logo.png');
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* =========================== */
