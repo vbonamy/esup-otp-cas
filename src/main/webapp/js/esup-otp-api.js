@@ -3,6 +3,13 @@ var last_transport = '';
 var auth_div;
 var user_hash='changeit';
 
+var font_awesome ={
+		transport:{
+			sms:"&#xf10b;",
+			mail:"&#xf0e0;"
+		}
+};
+
 var state = 0;
 $(document).keypress(function(event){
 	var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -111,11 +118,10 @@ function methods_labels(data) {
     for (method in data.user.methods) {
         if (data.user.methods[method].active) {
             methods_exist = true;
-            if (data.user.methods[method].transports.indexOf('sms') >= 0 || data.user.methods[method].transports.indexOf('mail') >= 0) {
+            for(transport in data.user.methods[method].transports){
+            	if(!transports_exist)$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
             	transports_exist = true;
-            	$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
-                if (data.user.methods[method].transports.indexOf('sms') >= 0) $('#list-methods').append("<div class='method-row sms'><input class='button transport label-sms' type='button' value='"+strings.button.send.sms+" &#xf10b;' onclick='send_code(\"sms\", \"" + method + "\");'></div>");
-                if (data.user.methods[method].transports.indexOf('mail') >= 0) $('#list-methods').append("<div class='method-row mail'><input class='button transport label-mail' type='button' value='"+strings.button.send.mail+" &#xf0e0;' onclick='send_code(\"mail\", \"" + method + "\");'></div>");
+            	$('#list-methods').append("<div class='method-row "+data.user.methods[method].transports[transport]+"'><input class='button transport label"+data.user.methods[method].transports[transport]+"' type='button' value='"+data.user.transports[data.user.methods[method].transports[transport]]+" "+font_awesome.transport[data.user.methods[method].transports[transport]]+"' onclick='send_code(\""+data.user.methods[method].transports[transport]+"\", \"" + method + "\");'></div>");
             }
             $('#list-methods').show();
         }
