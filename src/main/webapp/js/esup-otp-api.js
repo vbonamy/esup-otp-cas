@@ -116,16 +116,18 @@ function methods_labels(data) {
     var methods_exist = false;
     var transports_exist = false;
     for (method in data.user.methods) {
-        if (data.user.methods[method].active) {
+        if (data.user.methods[method].active && data.user.transports!={}) {
             methods_exist = true;
             for(transport in data.user.methods[method].transports){
-            	if(!transports_exist)$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
-            	transports_exist = true;
-            	$('#list-methods').append("<div class='method-row "+data.user.methods[method].transports[transport]+"'><input class='button transport label"+data.user.methods[method].transports[transport]+"' type='button' value='"+data.user.transports[data.user.methods[method].transports[transport]]+" "+font_awesome.transport[data.user.methods[method].transports[transport]]+"' onclick='send_code(\""+data.user.methods[method].transports[transport]+"\", \"" + method + "\");'></div>");
+            	if(!transports_exist && data.user.transports[data.user.methods[method].transports[transport]])$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
+            	if(data.user.transports[data.user.methods[method].transports[transport]]){
+            		transports_exist = true;
+            		$('#list-methods').append("<div class='method-row "+data.user.methods[method].transports[transport]+"'><input class='button transport label"+data.user.methods[method].transports[transport]+"' type='button' value='"+data.user.transports[data.user.methods[method].transports[transport]]+" "+font_awesome.transport[data.user.methods[method].transports[transport]]+"' onclick='send_code(\""+data.user.methods[method].transports[transport]+"\", \"" + method + "\");'></div>");
+            	}
             }
-            $('#list-methods').show();
         }
     }
+    $('#list-methods').show();
     if (!methods_exist || !transports_exist) show_auth_option();
 }
 
