@@ -2,6 +2,7 @@ var code_send = false;
 var last_transport = '';
 var auth_div;
 var user_hash='changeit';
+var getUserResponse;
 
 var font_awesome ={
 		transport:{
@@ -83,24 +84,25 @@ function get_user_infos() {
         	$('#instructions_username').hide();
         	$('#instructions_transport').show();
         	state =1;
-        	methods_labels(response);
-        	transports_labels(response);
+        	getUserResponse = response;
+        	methods_labels();
+        	transports_labels();
         } else {
             errors_message(strings.error.message + response.message);
         }
     });
 };
 
-function transports_labels(data){
-	if (!data.user.transports.sms) {
+function transports_labels(){
+	if (!getUserResponse.user.transports.sms) {
         $('.sms').remove();
     } else {
-        $('.label-sms').val(strings.label.sms + data.user.transports.sms+' '+'\uf10b');
+        $('.label-sms').val(strings.label.sms + getUserResponse.user.transports.sms+' '+'\uf10b');
     }
-    if (!data.user.transports.mail) {
+    if (!getUserResponse.user.transports.mail) {
         $('.mail').remove();
     } else {
-        $('.label-mail').val(strings.label.mail + data.user.transports.mail+' '+'\uf0e0');
+        $('.label-mail').val(strings.label.mail + getUserResponse.user.transports.mail+' '+'\uf0e0');
     }
     $('#list-methods').show();
     var username = document.getElementById('username').value;
@@ -112,23 +114,23 @@ function transports_labels(data){
     reset_message();
 }
 
-function methods_labels(data) {
+function methods_labels() {
     var methods_exist = false;
     var transports_exist = false;
-    for (method in data.user.methods) {
-        if (data.user.methods[method].active && data.user.transports!={}) {
+    for (method in getUserResponse.user.methods) {
+        if (getUserResponse.user.methods[method].active && getUserResponse.user.transports!={}) {
             methods_exist = true;
-            for(transport in data.user.methods[method].transports){
-            	if(!transports_exist && data.user.transports[data.user.methods[method].transports[transport]])$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
-            	if(data.user.transports[data.user.methods[method].transports[transport]]){
+            for(transport in getUserResponse.user.methods[method].transports){
+            	if(!transports_exist && getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]])$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
+            	if(getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]]){
             		transports_exist = true;
-            		$('#list-methods').append("<div class='method-row "+data.user.methods[method].transports[transport]+"'><input class='button transport label"+data.user.methods[method].transports[transport]+"' type='button' value='"+data.user.transports[data.user.methods[method].transports[transport]]+" "+font_awesome.transport[data.user.methods[method].transports[transport]]+"' onclick='send_code(\""+data.user.methods[method].transports[transport]+"\", \"" + method + "\");'></div>");
+            		$('#list-methods').append("<div class='method-row "+getUserResponse.user.methods[method].transports[transport]+"'><input class='button transport label"+getUserResponse.user.methods[method].transports[transport]+"' type='button' value='"+data.user.transports[getUserResponse.user.methods[method].transports[transport]]+" "+font_awesome.transport[getUserResponse.user.methods[method].transports[transport]]+"' onclick='send_code(\""+getUserResponse.user.methods[method].transports[transport]+"\", \"" + method + "\");'></div>");
             	}
             }
         }
     }
     $('#list-methods').show();
-    if (!methods_exist || !transports_exist) show_auth_option();
+    if (!methods_exist || !transports_exist) show_auth_form();
 }
 
 
@@ -200,6 +202,8 @@ function show_auth_form(){
 	state =2;
 	show_auth_option();
     $('#auth').show();
+    if(getUserResponse.user.methods.codeRequired)$('#password').show();
+    else $('#password').hide();
     $('#lost-code').show();
     $('#instructions_transport').hide();
     $('#instructions_code').show();
