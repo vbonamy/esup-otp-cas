@@ -130,7 +130,10 @@ function methods_labels() {
         }
     }
     $('#list-methods').show();
-    if (!methods_exist || !transports_exist) show_auth_form();
+    if (!methods_exist || !transports_exist) {
+    	$('#lost-code').hide();
+    	show_auth_form();
+    }
 }
 
 
