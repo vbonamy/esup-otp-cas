@@ -121,7 +121,7 @@ function methods_labels() {
         if (getUserResponse.user.methods[method].active && getUserResponse.user.transports!={}) {
             methods_exist = true;
             for(transport in getUserResponse.user.methods[method].transports){
-            	if(!transports_exist && getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]])$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
+            	if(transport==0 && getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]])$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
             	if(getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]]){
             		transports_exist = true;
             		$('#list-methods').append("<div class='method-row "+getUserResponse.user.methods[method].transports[transport]+"'><input class='button transport label"+getUserResponse.user.methods[method].transports[transport]+"' type='button' value='"+getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]]+" "+font_awesome.transport[getUserResponse.user.methods[method].transports[transport]]+"' onclick='send_code(\""+getUserResponse.user.methods[method].transports[transport]+"\", \"" + method + "\");'></div>");
