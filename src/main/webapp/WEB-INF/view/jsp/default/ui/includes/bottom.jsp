@@ -103,6 +103,7 @@
       strings.button.code.lost = "<spring:message code='button.code.lost' javaScriptEscape='true' />";
       strings.label.sms = "<spring:message code='label.sms' javaScriptEscape='true' />";
       strings.label.mail = "<spring:message code='label.mail' javaScriptEscape='true' />";
+      strings.method.push = "<spring:message code='method.push' javaScriptEscape='true' />";
       strings.method.totp = "<spring:message code='method.totp' javaScriptEscape='true' />";
       strings.method.random_code = "<spring:message code='method.random_code' javaScriptEscape='true' />";
       strings.method.bypass = "<spring:message code='method.bypass' javaScriptEscape='true' />";
@@ -111,4 +112,3 @@
 
 </body>
 </html>
-
