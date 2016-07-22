@@ -3,10 +3,15 @@ var last_transport = '';
 var auth_div;
 var user_hash='changeit';
 var getUserResponse;
+var sendCodeResponse = {
+		codeRequired : true,
+		waitingFor : false
+};
 
 var font_awesome ={
 		transport:{
 			sms:"&#xf10b;",
+			push:"&#xf09e;",
 			mail:"&#xf0e0;"
 		}
 };
@@ -103,6 +108,11 @@ function transports_labels(){
         $('.mail').remove();
     } else {
         $('.label-mail').val(strings.label.mail + getUserResponse.user.transports.mail+' '+'\uf0e0');
+    }
+    if (!getUserResponse.user.transports.push) {
+        $('.push').remove();
+    } else {
+        $('.label-push').val(strings.label.push + getUserResponse.user.transports.push+' '+'\uf10b');
     }
     $('#list-methods').show();
     var username = document.getElementById('username').value;
@@ -205,7 +215,8 @@ function show_auth_form(){
 	state =2;
 	show_auth_option();
     $('#auth').show();
-    if(getUserResponse.user.methods.codeRequired)$('#password').show();
+    if(sendCodeResponse.waitingFor)$('#submit').hide();
+    if(sendCodeResponse.codeRequired != false)$('#password').show();
     else $('#password').hide();
     $('#lost-code').show();
     $('#instructions_transport').hide();
