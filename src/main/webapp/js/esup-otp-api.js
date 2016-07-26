@@ -3,37 +3,33 @@ var last_transport = '';
 var auth_div;
 var user_hash='changeit';
 var getUserResponse;
-var sendCodeResponse = {
-		codeRequired : true,
-		waitingFor : false
-};
 
 var font_awesome ={
-		transport:{
-			sms:"&#xf10b;",
-			push:"&#xf09e;",
-			mail:"&#xf0e0;"
-		}
+    transport:{
+        sms:"&#xf10b;",
+        push:"&#xf09e;",
+        mail:"&#xf0e0;"
+    }
 };
 
 var state = 0;
 $(document).keypress(function(event){
-	var keycode = (event.keyCode ? event.keyCode : event.which);
-	if(keycode == '13'){
-		switch(state){
-			case 0:$('#buttonMethods').click();break;
-			case 1:$('#ownCodeInput').click();break;
-			case 2:$('#submit').click();break;
-			default: console.log('You pressed a "enter" key but nothing happen');break;
-		}
-			
-	}
+    var keycode = (event.keyCode ? event.keyCode : event.which);
+    if(keycode == '13'){
+        switch(state){
+            case 0:$('#buttonMethods').click();break;
+            case 1:$('#ownCodeInput').click();break;
+            case 2:$('#submit').click();break;
+            default: console.log('You pressed a "enter" key but nothing happen');break;
+        }
+
+    }
 });
 
 function request(opts, callback, next) {
     var req = new XMLHttpRequest();
     req.open(opts.method, opts.url, true);
-    req.onerror = function(e) { 
+    req.onerror = function(e) {
         console.log(e);
         code_send = false;
     };
@@ -73,11 +69,11 @@ function send_code(transport, method) {
 
 
 function get_user_auth() {
-	if(document.getElementById('username')){
-    if (document.getElementById('username').value != '') {
-    		user_hash = getUserHash();
+    if(document.getElementById('username')){
+        if (document.getElementById('username').value != '') {
+            user_hash = getUserHash();
             get_user_infos();
-    } else errors_message(strings.error.login_needed);
+        } else errors_message(strings.error.login_needed);
     }
 }
 
@@ -85,13 +81,13 @@ function get_user_infos() {
     $('#auth-option').hide();
     request({ method: 'GET', url: url_esup_otp + '/users/' + document.getElementById('username').value + '/' + user_hash }, function(response) {
         if (response.code == "Ok") {
-        	$('#own-code').show();
-        	$('#instructions_username').hide();
-        	$('#instructions_transport').show();
-        	state =1;
-        	getUserResponse = response;
-        	methods_labels();
-        	transports_labels();
+            $('#own-code').show();
+            $('#instructions_username').hide();
+            $('#instructions_transport').show();
+            state =1;
+            getUserResponse = response;
+            methods_labels();
+            transports_labels();
         } else {
             errors_message(strings.error.message + response.message);
         }
@@ -99,7 +95,7 @@ function get_user_infos() {
 };
 
 function transports_labels(){
-	if (!getUserResponse.user.transports.sms) {
+    if (!getUserResponse.user.transports.sms) {
         $('.sms').remove();
     } else {
         $('.label-sms').val(strings.label.sms + getUserResponse.user.transports.sms+' '+'\uf10b');
@@ -131,18 +127,19 @@ function methods_labels() {
         if (getUserResponse.user.methods[method].active && getUserResponse.user.transports!={}) {
             methods_exist = true;
             for(transport in getUserResponse.user.methods[method].transports){
-            	if(transport==0 && getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]])$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
-            	if(getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]]){
-            		transports_exist = true;
-            		$('#list-methods').append("<div class='method-row "+getUserResponse.user.methods[method].transports[transport]+"'><input class='button transport label"+getUserResponse.user.methods[method].transports[transport]+"' type='button' value='"+getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]]+" "+font_awesome.transport[getUserResponse.user.methods[method].transports[transport]]+"' onclick='send_code(\""+getUserResponse.user.methods[method].transports[transport]+"\", \"" + method + "\");'></div>");
-            	}
+                if(transport==0 && getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]])$('#list-methods').append("<h3 style='margin-top:15px;'>" + strings.method[method] + "</h3>");
+                if(getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]]){
+                    transports_exist = true;
+                    $('#list-methods').append("<div class='method-row "+getUserResponse.user.methods[method].transports[transport]+"'><input class='button transport label"+getUserResponse.user.methods[method].transports[transport]+"' type='button' value='"+getUserResponse.user.transports[getUserResponse.user.methods[method].transports[transport]]+" "+font_awesome.transport[getUserResponse.user.methods[method].transports[transport]]+"' onclick='send_code(\""+getUserResponse.user.methods[method].transports[transport]+"\", \"" + method + "\");'></div>");
+                }
             }
         }
     }
     $('#list-methods').show();
     if (!methods_exist || !transports_exist) {
-    	show_auth_form();
-    	$('#lost-code').hide();
+
+        show_auth_form();
+        $('#lost-code').hide();
     }
 }
 
@@ -181,7 +178,7 @@ function reset_message() {
 }
 
 function reset_username() {
-	$('#lost-code').hide();
+    $('#lost-code').hide();
     $('#list-methods').hide();
     $('#list-methods').empty();
     $('#auth').hide();
@@ -195,37 +192,40 @@ function reset_username() {
 }
 
 function hide_methods() {
-	show_auth_form();
+    show_auth_form();
     $('#list-methods').hide();
     $('#own-code').hide();
 }
 
 function show_methods() {
-	state =1;
-	$('#list-methods').show();
-	$('#auth-option').hide();
-	$('#auth').hide();
-	$('#lost-code').hide();
-	$('#own-code').show();
+    state =1;
+    $('#list-methods').show();
+    $('#auth-option').hide();
+    $('#auth').hide();
+    $('#lost-code').hide();
+    $('#own-code').show();
     $('#instructions_transport').show();
     $('#instructions_code').hide();
 }
 
 function show_auth_form(){
-	state =2;
-	show_auth_option();
+    state =2;
+    show_auth_option();
     $('#auth').show();
-    if(sendCodeResponse.waitingFor)$('#submit').hide();
-    if(sendCodeResponse.codeRequired != false)$('#password').show();
-    else $('#password').hide();
+    if(getUserResponse.user.methods.waitingFor)$('#submit').hide();
+    if(getUserResponse.user.methods.codeRequired)$('#password').show();
+    else {
+        $('#password').hide();
+        if(!getUserResponse.user.methods.waitingFor && !getUserResponse.user.methods.codeRequired)$('#password').val("bypass");
+    }
     $('#lost-code').show();
     $('#instructions_transport').hide();
     $('#instructions_code').show();
 }
 
 function show_auth_option(){
-	state =2;
-	$('#own-code').hide();
+    state =2;
+    $('#own-code').hide();
     $('#auth-option').show();
     auth_div.insertAfter('#list-methods');
     $('#auth').hide();
