@@ -3,10 +3,6 @@ var last_transport = '';
 var auth_div;
 var user_hash='changeit';
 var getUserResponse;
-var sendCodeResponse = {
-		codeRequired : true,
-		waitingFor : false
-};
 
 var font_awesome ={
 		transport:{
@@ -141,6 +137,7 @@ function methods_labels() {
     }
     $('#list-methods').show();
     if (!methods_exist || !transports_exist) {
+        
     	show_auth_form();
     	$('#lost-code').hide();
     }
@@ -215,9 +212,12 @@ function show_auth_form(){
 	state =2;
 	show_auth_option();
     $('#auth').show();
-    if(sendCodeResponse.waitingFor)$('#submit').hide();
-    if(sendCodeResponse.codeRequired != false)$('#password').show();
-    else $('#password').hide();
+    if(getUserResponse.user.methods.waitingFor)$('#submit').hide();
+    if(getUserResponse.user.methods.codeRequired)$('#password').show();
+    else {
+        $('#password').hide();
+        if(!getUserResponse.user.methods.waitingFor && !getUserResponse.user.methods.codeRequired)$('#password').val("bypass");
+    }
     $('#lost-code').show();
     $('#instructions_transport').hide();
     $('#instructions_code').show();
