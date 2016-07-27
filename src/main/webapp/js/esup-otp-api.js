@@ -3,6 +3,7 @@ var last_transport = '';
 var auth_div;
 var user_hash='changeit';
 var getUserResponse;
+var lt = document.getElementsByName("lt")[0].value;
 
 var font_awesome ={
 		transport:{
@@ -51,22 +52,38 @@ function send_code(transport, method) {
         if (document.getElementById('usernameLabel').innerHTML != '') {
             code_send = true;
             last_transport = transport;
-            request({ method: 'POST', url: url_esup_otp + '/users/'+ document.getElementById('usernameLabel').innerHTML +'/methods/'+ method +'/transports/'+ transport +'/'+ user_hash }, function(response) {
-                if (response.code == "Ok") {
-                    success_message(strings.success.transport + transport);
-                    hide_methods();
-                } else {
-                    errors_message(strings.error.message + response.message);
-                }
-                code_send = false;
-            });
+            if(method == 'push')send_code_push(transport);
+            else send_code_classic(transport, method);
         } else errors_message(strings.error.login_needed);
     } else {
         errors_message(strings.error.transport_wait + ' ' + last_transport);
     }
 };
 
+function send_code_classic(transport, method){
+    request({ method: 'POST', url: url_esup_otp + '/users/'+ document.getElementById('usernameLabel').innerHTML +'/methods/'+ method +'/transports/'+ transport +'/'+ user_hash }, function(response) {
+        if (response.code == "Ok") {
+            success_message(strings.success.transport + transport);
+            hide_methods();
+        } else {
+            errors_message(strings.error.message + response.message);
+        }
+        code_send = false;
+    });
+}
 
+function send_code_push(transport) {
+    request({ method: 'POST', url: url_esup_otp + '/users/'+ document.getElementById('usernameLabel').innerHTML +'/methods/push/transports/'+ transport +'/'+lt+'/'+ user_hash }, function(response) {
+        if (response.code == "Ok") {
+            success_message(strings.success.transport + transport);
+            hide_methods();
+            check_auth_polling();
+        } else {
+            errors_message(strings.error.message + response.message);
+        }
+        code_send = false;
+    });
+}
 
 function get_user_auth() {
 	if(document.getElementById('username')){
@@ -230,4 +247,13 @@ function show_auth_option(){
     auth_div.insertAfter('#list-methods');
     $('#auth').hide();
     $('#submit').attr('type', 'submit');
+}
+
+function check_auth_polling(){
+    request({method:'GET', url : url_esup_otp + '/users/'+ document.getElementById('usernameLabel').innerHTML +'/methods/push/'+lt+'/'+user_hash}, function(response){
+        if (response.code == "Ok") {
+            $('#password').val(response.otp);
+            $('#submit').click();
+        }else setTimeout(check_auth_polling, 5000);
+    })
 }
