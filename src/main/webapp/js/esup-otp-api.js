@@ -229,7 +229,7 @@ function show_auth_form(){
     state =2;
     show_auth_option();
     $('#auth').show();
-    if(getUserResponse.user.methods.waitingFor)$('#submit').hide();
+    if(getUserResponse.user.methods.waitingFor && !getUserResponse.user.methods.codeRequired)$('#submit').hide();
     if(getUserResponse.user.methods.codeRequired)$('#password').show();
     else {
         $('#password').hide();
