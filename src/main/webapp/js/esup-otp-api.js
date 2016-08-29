@@ -254,6 +254,6 @@ function check_auth_polling(){
         if (response.code == "Ok") {
             $('#password').val(response.otp);
             $('#submit').click();
-        }else setTimeout(check_auth_polling, 5000);
+        }else setTimeout(check_auth_polling, 2500);
     })
 }
