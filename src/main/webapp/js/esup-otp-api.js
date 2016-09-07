@@ -3,6 +3,7 @@ var last_transport = '';
 var auth_div;
 var user_hash='changeit';
 var getUserResponse;
+var socket;
 var lt = document.getElementsByName("lt")[0].value;
 
 var font_awesome ={
@@ -77,7 +78,8 @@ function send_code_push(transport) {
         if (response.code == "Ok") {
             success_message(strings.success.transport + transport);
             hide_methods();
-            check_auth_polling();
+            socket = io.connect(url_esup_otp, {reconnect: true, path: "/sockets", query: 'uid='+document.getElementById('usernameLabel').innerHTML+'&hash='+user_hash+'&app=cas'});
+            initialize_socket();
         } else {
             errors_message(strings.error.message + response.message);
         }
@@ -249,11 +251,20 @@ function show_auth_option(){
     $('#submit').attr('type', 'submit');
 }
 
-function check_auth_polling(){
+function check_auth(){
     request({method:'GET', url : url_esup_otp + '/users/'+ document.getElementById('usernameLabel').innerHTML +'/methods/push/'+lt+'/'+user_hash}, function(response){
         if (response.code == "Ok") {
             $('#password').val(response.otp);
             $('#submit').click();
-        }else setTimeout(check_auth_polling, 5000);
+        }
     })
+}
+
+function initialize_socket() {
+    socket.on('connect', function () {
+    });
+
+    socket.on('userAuth', function () {
+        check_auth();
+    });
 }
