@@ -66,6 +66,8 @@
 <script type="text/javascript"
 	src="<c:url value="/js/ba-debug.min.js" />"></script>
 <script type="text/javascript"
+        src="<c:url value="/js/socket.io.min.js" />"></script>
+<script type="text/javascript"
 	src="<c:url value="/js/esup-otp-api.js" />"></script>
 
 <script type="text/javascript" src="<c:url value="/js/core-min.js" />"></script>
