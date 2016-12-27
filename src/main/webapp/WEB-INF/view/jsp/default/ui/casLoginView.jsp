@@ -53,10 +53,6 @@
 			<div class="form-bottom">
 				<!-- <label for="username" style="display: inline-block;"><spring:message
 								code="screen.welcome.label.netid" /></label> -->
-				<c:if test="${not empty pageContext.request.remoteUser}">
-					<c:set var='varRemoteUser'
-						value="${pageContext.request.remoteUser}" />
-				</c:if>
 				<c:if test="${not empty header['REMOTE_USER']}">
 					<c:set var='varRemoteUser' value="${header['REMOTE_USER']}" />
 				</c:if>
@@ -85,8 +81,11 @@
 						<strong>${sessionScope.openIdLocalId}</strong>
 						<input type="hidden" id="username" name="username"
 							value="${varRemoteUser}" />
+						<%
+							String remoteUser =request.getHeader("REMOTE_USER"); 
+						%>
 						<input type="hidden" id="userhash"
-							value="<%=esupOtpApiAuthenticationHandler.getUserHash(request.getRemoteUser())%>" />
+							value="<%=esupOtpApiAuthenticationHandler.getUserHash(remoteUser)%>" />
 						<div class="form-group">
 							<label id='usernameLabel'>${varRemoteUser}</label>
 						</div>
