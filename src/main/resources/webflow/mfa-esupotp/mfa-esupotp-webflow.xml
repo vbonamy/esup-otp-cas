@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow.xsd">
+
+    <var name="credential" class="org.apereo.cas.adaptors.esupotp.EsupOtpCredential" />
+    <var name="transportCredential" class="org.apereo.cas.adaptors.esupotp.EsupOtpTransportCredential" />
+    <on-start>
+        <evaluate expression="initialFlowSetupAction" />
+    </on-start>
+
+    <action-state id="initializeLoginForm">
+        <evaluate expression="initializeLoginAction" />
+        <transition on="success" to="getTransportsForm"/>
+    </action-state>
+
+    <action-state id="getTransportsForm">
+        <evaluate expression="esupotpGetTransportsAction" />
+        <transition on="transports" to="viewTransportEsupOtp"/>
+        <transition on="skip" to="viewLoginFormEsupOtp"/>
+        <transition on="bypass" to="bypassLoginForm"/>
+    </action-state>
+    
+    <action-state id="bypassLoginForm">
+    	<evaluate expression="credential.activeBypass()" />
+        <evaluate expression="esupotpAuthenticationWebflowAction" />
+        <transition on="success" to="success" />
+        <transition on="error" to="initializeLoginForm" />
+    </action-state>
+    
+    <view-state id="viewTransportEsupOtp" view="casEsupOtpTransportView" model="transportCredential">
+        <transition on="submit" to="submitTransportEsupOtp"/>
+    </view-state>
+
+    <action-state id="submitTransportEsupOtp">
+        <evaluate expression="esupotpTransportService.sendCode(transportCredential)" />
+        <transition on="success" to="viewLoginFormEsupOtp" />
+        <transition on="error" to="getTransportsForm" />
+    </action-state>
+
+    <view-state id="viewLoginFormEsupOtp" view="casEsupOtpLoginView" model="credential">
+        <binder>
+            <binding property="token" required="true"/>
+        </binder>
+        <on-entry>
+            <set name="viewScope.principal" value="conversationScope.authentication.principal" />
+        </on-entry>
+        <transition on="submit" bind="true" validate="false" to="realSubmitEsupOtp"/>
+
+    </view-state>
+
+    <action-state id="realSubmitEsupOtp">
+        <evaluate expression="esupotpAuthenticationWebflowAction" />
+        <transition on="success" to="success" />
+        <transition on="error" to="initializeLoginForm" />
+    </action-state>
+
+    <end-state id="success" />
+
+</flow>

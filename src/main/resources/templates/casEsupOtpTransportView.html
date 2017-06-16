@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html layout:decorator="layout">
+
+<head th:inline="text">
+    <title>[[#{cas.mfa.esupotp.pagetitle}]]</title>
+</head>
+<body id="cas">
+<div layout:fragment="content">
+    <div class="box fl-panel" id="login">
+    	<p th:utext="#{cas.mfa.esupotp.welcome}">
+    	</p>
+        <form method="post" id="fm1" class="fm-v clearfix">
+            <input type="hidden" name="uid" th:attr="value=${user.getUid()}" id="inputUid"/>
+            <input type="hidden" name="userHash" th:attr="value=${user.getHash()}" id="inputUserHash"/>
+            <input type="hidden" name="method" value="" id="inputMethod"/>
+            <input type="hidden" name="transport" value="" id="inputTransport"/>
+            <div class="row fl-controls-left" id="list-methods">
+                <div th:each="method : ${user.getMethods()}" th:if="${method.getActive() == true and method.getTransports().size() &gt; 0}">
+                    <div style="background-color: white; text-align: center; border-style: dotted; border-width: 1px; border-color: rgb(29, 113, 184); color: rgb(29, 113, 184);" class="alert" role="alert">
+					<th:block th:switch="${method.getName()}">
+						<div th:case="'totp'">
+						<strong th:utext="#{cas.mfa.esupotp.method.totp}"></strong>
+						</div>
+						<div th:case="'random_code'">
+						<strong th:utext="#{cas.mfa.esupotp.method.random_code}"></strong>
+						</div>
+						<div th:case="'bypass'">
+						<strong th:utext="#{cas.mfa.esupotp.method.bypass}"></strong>
+						</div>
+					</th:block>
+                    </div>
+                    <div th:each="transport : ${method.getTransports()}">
+	                    <th:block th:switch="${transport}">
+							<input th:case="'sms'" class="btn-submit btn-block" style="background-color: rgb(29, 113, 184);  margin-bottom:15px;" type="button" th:attr="value=${user.getSms()}" th:onclick="|document.getElementById('inputMethod').value='${method.getName()}';document.getElementById('inputTransport').value='${transport}';document.getElementById('submit').click();|"/>
+							<input th:case="'mail'" class="btn-submit btn-block" style="background-color: rgb(29, 113, 184);  margin-bottom:15px;" type="button" th:attr="value=${user.getMail()}" th:onclick="|document.getElementById('inputMethod').value='${method.getName()}';document.getElementById('inputTransport').value='${transport}';document.getElementById('submit').click();|"/>
+						</th:block>
+                    </div>
+                </div>
+                <input type="hidden" name="_eventId" value="submit"/>
+                <input hidden="true" class="btn-submit" name="submit" accesskey="l"
+                       th:value="#{screen.welcome.button.register}" tabindex="4" type="submit" id="submit" />
+            </div>
+            <div class="row btn-row">
+                <input type="hidden" name="execution" th:value="${flowExecutionKey}"/>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
