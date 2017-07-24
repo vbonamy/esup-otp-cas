@@ -33,17 +33,17 @@ public class EsupOtpTransportService {
 	private String urlApi;
 
 	public String sendCode(EsupOtpTransportCredential transportCredential) {
-		try {
-			JSONObject response = sendCodeRequest(transportCredential.getUid(), transportCredential.getUserHash(), transportCredential.getTransport(), transportCredential.getMethod());
-			if(response.getString("code").equals("Ok"))return "success";
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "error";
+            try {
+                    JSONObject response = sendCodeRequest(transportCredential.getUid(), transportCredential.getUserHash(), transportCredential.getTransport(), transportCredential.getMethod());
+                    if(response.getString("code").equals("Ok"))return "success";
+            } catch (NoSuchAlgorithmException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+            } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+            }
+            return "error";
 	}
 
 	private JSONObject sendCodeRequest(String uid, String userHash, String transport, String method) throws IOException, NoSuchAlgorithmException {

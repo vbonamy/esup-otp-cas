@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html layout:decorator="layout">
+
+    <head th:inline="text">
+        <title th:utext="#{cas.mfa.esupotp.pagetitle}"></title>
+    </head>
+    <body id="cas">
+        <div layout:fragment="content">
+            <label for="token" class="fl-label" th:utext="#{cas.mfa.esupotp.pushOption}"/>
+            	
+            <form method="post" id="fm1" class="fm-v clearfix" th:object="${credential}">
+                <input type="hidden" value="changeMethod"/>
+                <input 
+                    class="btn-submit btn-block" name="_eventId_submit" accesskey="l"
+                    th:value="#{cas.mfa.esupotp.changeMethod}" tabindex="4" type="submit" style="margin-top: 15px;"/>
+            </form>
+        </div>
+    </body>
+</html>
+

@@ -82,14 +82,14 @@ public class EsupOtpCredential implements Credential, Serializable {
     }
     
     public Boolean getBypass() {
-		return bypass;
-	}
+        return bypass;
+    }
 
-	public void setBypass(final Boolean bypass) {
-		this.bypass = bypass;
-	}
-	
-	public void activeBypass() {
-		this.bypass = true;
-	}
+    public void setBypass(final Boolean bypass) {
+        this.bypass = bypass;
+    }
+
+    public void activeBypass() {
+        this.bypass = true;
+    }
 }
