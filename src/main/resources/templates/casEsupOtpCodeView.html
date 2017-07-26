@@ -8,8 +8,8 @@
         <div layout:fragment="content">
             <div id="data" th:data-apiurl="${apiUrl}" th:data-userhash="${user.getHash()}" th:data-uid="${user.getUid()}" th:data-divnocodedisplay="${divNoCodeDisplay}" th:data-waitingformethod="${waitingForMethodName}">
             <div id="waiting" class="hide">
-                <center><h2><b>Waiting for phone notification</b></h2></center>
-                <center><div id="displayTransport" class="btn btn-info" onClick="switchDiv();return false;"><b>Display other methods</b></div></center>
+                <center><h2><b><label th:utext="#{cas.mfa.esupotp.waitingFor}"></label></b></h2></center>
+                <center><div id="displayTransport" class="btn btn-info" onClick="switchDiv();return false;"><b><label th:utext="#{cas.mfa.esupotp.displayOtherMethod}"></label></b></div></center>
             </div>
             <div id="login" class="box fl-panel hide">
                 <form method="post" id="fm1" class="fm-v clearfix" th:object="${credential}">
