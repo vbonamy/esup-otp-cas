@@ -15,7 +15,7 @@
             th:onclick="|document.getElementById('inputMethod').value='${transportMap.method}';document.getElementById('inputTransport').value='${transportMap.transport}';|"
         />
     </div>
-    <input class="btn-submit" name="submitCallTransport" accesskey="l"
+    <input class="btn-submit hide" name="submitCallTransport" accesskey="l"
        th:value="#{screen.welcome.button.register}" tabindex="4" type="submit" id="submit" />
 
     <input type="hidden" name="execution" th:value="${flowExecutionKey}"/>                    

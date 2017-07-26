@@ -56,9 +56,11 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
         final RequestContext context = RequestContextHolder.getRequestContext();
         final String uid = WebUtils.getAuthentication(context).getPrincipal().getId();
         String userHash = getUserHash(uid);
+        String waitingForMethodName = null;
 
         requestContext.getFlowScope().put("uid", uid);
         requestContext.getFlowScope().put("userHash", userHash);
+        requestContext.getFlowScope().put("divNoCodeDisplay", false);
 
         JSONObject userInfos = getUserInfos(uid);
         List<EsupOtpMethod> listMethods = new ArrayList<EsupOtpMethod>();
@@ -72,19 +74,22 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
             for (Object method : methods.keySet()) {
                 if (((String) method).equals("defaultWaitingFor")) {
                     defaultWaitingFor = true;
+                    waitingForMethodName = (String) methods.get((String) method);
                 } else {
                     listMethods.add(new EsupOtpMethod((String) method, (JSONObject) methods.get((String) method)));
                 }
             }
             
             //Uncomment for bypass users with no activated methods
-            if (bypass(listMethods)) {
+            /*if (bypass(listMethods)) {
                 return new EventFactorySupport().event(this, "bypass");
-            }
+            }*/
             if(skipTransports(listMethods))return new EventFactorySupport().event(this, "authWithoutCode");
-            if (defaultWaitingFor) {
-                return new EventFactorySupport().event(this, "authWithoutCode");
-            }
+            
+            // will give order to the page to display only WaitingFor block if needed
+            requestContext.getFlowScope().put("divNoCodeDisplay", defaultWaitingFor);
+            requestContext.getFlowScope().put("waitingForMethodName", waitingForMethodName);
+            
             user = new EsupOtpUser(uid, userHash, listMethods, transports);
         } catch (JSONException e) {
             System.out.println(e);
@@ -92,7 +97,7 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
         List listTransports = new ArrayList();
         listTransports = this.getTransports(listMethods);
 
-        //requestContext.getFlowScope().put("userInfos", userInfos.toString());
+        requestContext.getFlowScope().put("apiUrl", urlApi);
         requestContext.getFlowScope().put("listTransports", listTransports);
         requestContext.getFlowScope().put("user", user);
 
