@@ -14,9 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-
 import org.apereo.cas.web.support.WebUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,9 +28,10 @@ import org.springframework.webflow.action.EventFactorySupport;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
-
 import org.apereo.cas.adaptors.esupotp.EsupOtpMethod;
 import org.apereo.cas.adaptors.esupotp.EsupOtpUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is {@link EsupOtpGetTransportsAction}.
@@ -41,6 +40,7 @@ import org.apereo.cas.adaptors.esupotp.EsupOtpUser;
  * @since 5.0.0
  */
 public class EsupOtpGetTransportsAction extends AbstractAction {
+    protected final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${cas.mfa.esupotp.urlApi:CAS}")
     private String urlApi;
@@ -81,10 +81,10 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
             }
             
             //Uncomment for bypass users with no activated methods
-            /*if (bypass(listMethods)) {
+            if (bypass(listMethods)) {
+                logger.info("mfa-esupotp bypass");
                 return new EventFactorySupport().event(this, "bypass");
-            }*/
-            if(skipTransports(listMethods))return new EventFactorySupport().event(this, "authWithoutCode");
+            }
             
             // will give order to the page to display only WaitingFor block if needed
             requestContext.getFlowScope().put("divNoCodeDisplay", defaultWaitingFor);
@@ -119,18 +119,19 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
                 }
             }
         }
-        System.out.println("Size " + transports.size() + " " + transports.toString());
+        logger.info("Size [{}] [{}]",  + transports.size(), transports.toString());
+        
         return transports;
     }
 
     private JSONObject getUserInfos(String uid) throws IOException, NoSuchAlgorithmException {
         String url = urlApi + "/users/" + uid + "/" + getUserHash(uid);
         URL obj = new URL(url);
-        System.out.println("Url " + url);
         int responseCode;
         HttpURLConnection con = null;
         con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
+        logger.info("mfa-esupotp request send to [{}]", (String) url);
         responseCode = con.getResponseCode();
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
@@ -161,16 +162,6 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         String salt = uid + day + hour;
         return salt;
-    }
-
-    public Boolean skipTransports(List<EsupOtpMethod> methods) throws JSONException, IOException {
-        Boolean skip = true;
-        for (EsupOtpMethod method : methods) {
-            if (method.getActive() && method.getTransports().size() > 0) {
-                skip = false;
-            }
-        }
-        return skip;
     }
 
     public Boolean bypass(List<EsupOtpMethod> methods) throws JSONException, IOException {

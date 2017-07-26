@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-
 import org.apereo.cas.adaptors.esupotp.EsupOtpTransportCredential;
 import org.apereo.cas.web.support.WebUtils;
 import org.json.JSONObject;
@@ -18,6 +17,8 @@ import org.springframework.webflow.action.EventFactorySupport;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is {@link EsupOtpSencCodeAction}.
@@ -28,6 +29,7 @@ import org.springframework.webflow.execution.RequestContextHolder;
 @RefreshScope
 @Component("esupotpTransportService")
 public class EsupOtpTransportService {
+    protected final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Value("${cas.mfa.esupotp.urlApi:CAS}")
 	private String urlApi;
@@ -53,6 +55,7 @@ public class EsupOtpTransportService {
 		HttpURLConnection con = null;
 		con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("POST");
+        logger.info("mfa-esupotp request send to [{}]", (String) url);
 		responseCode = con.getResponseCode();
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
