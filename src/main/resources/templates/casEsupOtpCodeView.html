@@ -63,8 +63,6 @@
                 var apiUrl = $("#data").data('apiurl');
                 var divNoCodeDisplay = $("#data").data('divnocodedisplay');
                 var waitingForMethodName = $("#data").data('waitingformethod');
-                //new on each load, create a page id in case of multi window
-                var uniqId = generateID();
                 var uid = $('#data').data('uid');
                 var userHash = $('#data').data('userhash');
                 
@@ -100,7 +98,7 @@
                 function submitPushCodeRequest(methodName) {
                     $.ajax({
                         type: 'POST',
-                        url: apiUrl + '/users/'+ uid +'/methods/' + methodName + '/transports/push/' + uniqId + '/' + userHash
+                        url: apiUrl + '/users/'+ uid +'/methods/' + methodName + '/transports/push/' + userHash
                     }).done(function(data) {
                         if (data.code == "Ok") {
                             socket = io.connect(apiUrl, {
@@ -125,17 +123,6 @@
                             $('#submitCode').click();
                         }
                     });
-                }
-                
-                // generate random ID
-                function generateID() {
-                    // I generate the ID from two parts here
-                    // to ensure the random number provide enough bits.
-                    var firstPart = (Math.random() * 46656) | 0;
-                    var secondPart = (Math.random() * 46656) | 0;
-                    firstPart = ("000" + firstPart.toString(36)).slice(-3);
-                    secondPart = ("000" + secondPart.toString(36)).slice(-3);
-                    return firstPart + secondPart;
                 }
 
             </script>
