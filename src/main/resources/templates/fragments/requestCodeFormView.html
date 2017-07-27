@@ -11,7 +11,7 @@
     <div th:each="transportMap : ${listTransports}">
         <input 
             class="btn-submit btn-block transportInput" style="background-color: rgb(29, 113, 184);  margin-bottom:15px;" type="button" 
-            th:attr="value=${transportMap.transport}" 
+            th:attr="value=${transportMap.transport}"
             th:onclick="|document.getElementById('inputMethod').value='${transportMap.method}';document.getElementById('inputTransport').value='${transportMap.transport}';|"
         />
     </div>
