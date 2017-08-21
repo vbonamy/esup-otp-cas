@@ -27,7 +27,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * An authentication handler that uses the token provided to authenticator
- * against google authN for MFA.
  *
  * @author Alex Bouskine
  * @since 5.0.0

@@ -21,7 +21,5 @@ dependencies {
     compile 'org.json:json:20160810'
     compile "org.apereo.cas:cas-server-core-authentication:${project.'cas.version'}"
     compile "org.apereo.cas:cas-server-core-webflow:${project.'cas.version'}"
-    //compile "org.apereo.cas:cas-server-support-otp-mfa:${project.'cas.version'}"
-    //compileOnly "org.apereo.cas:cas-server-support-trusted-mfa:${project.'cas.version'}"
 }
 

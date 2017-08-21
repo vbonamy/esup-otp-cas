@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.webflow.execution.Event;
 
 /**
- * The authentication provider for google authenticator.
+ * The authentication provider
  *
  * @author Alex Bouskine
  * @since 5.0.0

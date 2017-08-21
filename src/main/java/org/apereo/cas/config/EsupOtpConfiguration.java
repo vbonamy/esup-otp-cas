@@ -39,7 +39,6 @@ import org.springframework.webflow.execution.Action;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
-import org.apereo.cas.configuration.model.support.mfa.MultifactorAuthenticationProperties;
 import org.apereo.cas.services.DefaultMultifactorAuthenticationProviderBypass;
 import org.apereo.cas.services.MultifactorAuthenticationProviderBypass;
 
@@ -128,19 +127,19 @@ public class EsupOtpConfiguration {
 		return pop;
 	}
 
-        @Bean
-        @RefreshScope
-        public MultifactorAuthenticationProviderBypass EsupOtpBypassEvaluator() {
-            return new DefaultMultifactorAuthenticationProviderBypass(
-                casProperties.getAuthn().getMfa().getEsupotp().getBypass()
-            );
-        }
+    @Bean
+    @RefreshScope
+    public MultifactorAuthenticationProviderBypass EsupOtpBypassEvaluator() {
+        return new DefaultMultifactorAuthenticationProviderBypass(
+            casProperties.getAuthn().getMfa().getEsupotp().getBypass()
+        );
+    }
         
 	@Bean
 	@RefreshScope
 	public MultifactorAuthenticationProvider esupotpAuthenticationProvider() {
-                final EsupOtpMultifactorAuthenticationProvider p = new EsupOtpMultifactorAuthenticationProvider();
-                p.setBypassEvaluator(EsupOtpBypassEvaluator());
+        final EsupOtpMultifactorAuthenticationProvider p = new EsupOtpMultifactorAuthenticationProvider();
+        p.setBypassEvaluator(EsupOtpBypassEvaluator());
 		return p;
 	}
 
@@ -151,11 +150,11 @@ public class EsupOtpConfiguration {
 		return a;
 	}
 
-	  @Bean
-	  @RefreshScope public Action esupotpGetTransportsAction() {
-		  final EsupOtpGetTransportsAction a = new EsupOtpGetTransportsAction();
-		  return a;
-	  }
+	@Bean
+	@RefreshScope public Action esupotpGetTransportsAction() {
+		final EsupOtpGetTransportsAction a = new EsupOtpGetTransportsAction();
+		return a;
+	}
 
 	@Bean
 	public CasWebflowEventResolver esupotpAuthenticationWebflowEventResolver() {
