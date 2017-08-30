@@ -26,15 +26,12 @@ In cas/build.gradle
 dependencies {
     compile("org.springframework.boot:spring-boot-devtools:${project.'springboot.version'}")
     compile "org.apereo.cas:cas-server-webapp:${project.'cas.version'}@war"
-    compile 'org.json:json:20160810'
-    providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
-    // VERSION is either commit#number or releases#version
     // Becareful: Conflict with gauth-mfa package
-    compile "com.github.cifren:CasEsupOtp:VERSION"
+    compile 'com.github.EsupPortail:cas-server-support-esupotp:v0.1'
 }
 ```
 
-    TIPS: Look for https://jitpack.io/#cifren/CasEsupOtp and check the available version you can use
+    TIPS: Look for https://jitpack.io/#EsupPortail/cas-server-support-esupotp and check the available version you can use
 
 In log4j2.xml
 ```
