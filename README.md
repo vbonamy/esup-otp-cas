@@ -26,6 +26,9 @@ In cas/build.gradle
 dependencies {
     compile("org.springframework.boot:spring-boot-devtools:${project.'springboot.version'}")
     compile "org.apereo.cas:cas-server-webapp:${project.'cas.version'}@war"
+    
+    // Somehow, you need to add it...
+    compile 'org.json:json:20160810'
     // Becareful: Conflict with gauth-mfa package
     compile 'com.github.EsupPortail:cas-server-support-esupotp:v0.1'
 }
