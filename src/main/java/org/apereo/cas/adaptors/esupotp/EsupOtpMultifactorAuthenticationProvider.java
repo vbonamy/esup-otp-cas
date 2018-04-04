@@ -1,10 +1,10 @@
 package org.apereo.cas.adaptors.esupotp;
 
-import org.apereo.cas.adaptors.esupotp.web.flow.EsupOtpMultifactorWebflowConfigurer;
+import org.apache.commons.lang3.StringUtils;
 import org.apereo.cas.authentication.Authentication;
 import org.apereo.cas.authentication.AuthenticationHandler;
-import org.apereo.cas.services.AbstractMultifactorAuthenticationProvider;
-import org.apereo.cas.services.MultifactorAuthenticationProviderBypass;
+import org.apereo.cas.authentication.AbstractMultifactorAuthenticationProvider;
+import org.apereo.cas.configuration.model.support.mfa.EsupOtpMultifactorProperties;
 import org.apereo.cas.services.RegisteredService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class EsupOtpMultifactorAuthenticationProvider extends AbstractMultifacto
         
     @Override
     public String getId() {
-        return EsupOtpMultifactorWebflowConfigurer.MFA_ESUPOTP_EVENT_ID;
+        return StringUtils.defaultIfBlank(super.getId(), EsupOtpMultifactorProperties.DEFAULT_IDENTIFIER);
     }
 
     @Override
@@ -43,5 +43,10 @@ public class EsupOtpMultifactorAuthenticationProvider extends AbstractMultifacto
     @Override
     protected boolean isAvailable() {
         return true;
+    }
+
+    @Override
+    public String getFriendlyName() {
+        return "Esup OTP MFA";
     }
 }

@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.apereo.cas.adaptors.authy.config.support.authentication.EsupOtpAuthenticationEventExecutionPlanConfiguration,\org.apereo.cas.config.EsupOtpConfiguration

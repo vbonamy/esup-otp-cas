@@ -4,6 +4,8 @@ import org.apereo.cas.authentication.Credential;
 import org.apereo.cas.authentication.HandlerResult;
 import org.apereo.cas.authentication.PreventedException;
 import org.apereo.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
+import org.apereo.cas.authentication.principal.PrincipalFactory;
+import org.apereo.cas.services.ServicesManager;
 import org.apereo.cas.web.support.WebUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +46,9 @@ public class EsupOtpAuthenticationHandler extends AbstractPreAndPostProcessingAu
 	/**
 	 * Instantiates a new Esup otp authentication handler.
 	 */
-	public EsupOtpAuthenticationHandler() {
-	}
+    public EsupOtpAuthenticationHandler(final String name, final ServicesManager servicesManager, final PrincipalFactory principalFactory) {
+        super(name, servicesManager, principalFactory, null);
+    }
 
 	/**
 	 * Init.
@@ -88,7 +91,7 @@ public class EsupOtpAuthenticationHandler extends AbstractPreAndPostProcessingAu
 		HttpURLConnection con = null;
 		con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("POST");
-        logger.info("mfa-esupotp request send to [{}]", (String) url);
+        logger.info("Mfa-esupotp request send to [{}]", (String) url);
 		responseCode = con.getResponseCode();
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
@@ -98,6 +101,7 @@ public class EsupOtpAuthenticationHandler extends AbstractPreAndPostProcessingAu
 			response.append(inputLine);
 		}
 		in.close();
+        logger.info("Connection success to [{}]", (String) url);
 
 		return new JSONObject(response.toString());
 	}
