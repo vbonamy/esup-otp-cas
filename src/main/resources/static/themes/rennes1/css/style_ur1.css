@@ -1,0 +1,135 @@
+/**
+ * disable right col
+ */
+
+#notices {
+    display: none !important;
+}
+
+/**
+ * global
+ */
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-image: url('https://dircom.univ-rennes1.fr/maintenance/img/maillage_blc.png');
+    background-position: bottom left;
+    background-repeat: no-repeat;
+    background-color: #f2f2f2;
+}
+
+a {
+        color: #e03c31;
+}
+
+a:hover {
+        color: #e03c31;
+}
+
+/**
+ * header UR1
+ */
+
+header > .navbar {
+    background-color: #e03c31;
+    height: 60px;
+    background-image: url('data:image/png;base64,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');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.logo {
+    display: none;
+}
+/**
+ * content
+ */
+
+ #content .card {
+    margin: 0 auto;
+    border: 0;
+    border-radius: 0;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.15);
+}
+
+@media (min-width: 992px){
+        #content .card {
+            width: 75%;
+        }
+}
+
+.card-header:first-child {
+        border-radius: 0;
+}
+
+.card-header.text-center {
+    background-color: #434241;
+    color: white;
+}
+
+.card-header.text-center h2 {
+    float: left;
+    margin-top: 5px;
+    font-size: 1.25rem;
+    margin-bottom: 0;
+}
+
+.card-header.text-center .fa-stack{
+        float: right;
+        height: 30px;
+        font-size: 1em;
+}
+
+.fa-2x {
+    font-size: 1.5em;
+}
+
+.fa-inverse {
+    color: #434241;
+}
+
+.card-body h3 {
+    text-align: center;
+    margin-bottom: 20px !important;
+    font-size: 1rem;
+}
+@media (min-width: 992px){
+        .card-body h3 {
+            width: 70%;
+            margin: 0 auto;
+        }
+}
+
+.btn-submit {
+    margin: 20px 0;
+    height: 50px;
+}
+
+.btn-submit[disabled],
+.btn-submit[disabled]:hover {
+        background-color: grey;
+}
+
+#sidebar {
+    text-align: center;
+}
+
+/**
+ * footer
+ */
+
+footer {
+    font-size: small;
+    text-align: center;
+    color: grey;
+    background-color: transparent;
+    line-height: initial;
+}
+
+footer a:link, footer a:visited {
+    color: grey;
+}
+
+

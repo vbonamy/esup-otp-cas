@@ -53,8 +53,13 @@
                         <overlay>
                             <groupId>org.apereo.cas</groupId>
                             <artifactId>cas-server-webapp${app.server}</artifactId>
+                            <excludes>
+                                <exclude>WEB-INF/cas.properties</exclude>
+                                <exclude>WEB-INF/classes/log4j2.xml</exclude>
+                            </excludes>
                         </overlay>
                     </overlays>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
             <plugin>
@@ -67,7 +72,7 @@
     </build>
 
     <properties>
-        <cas.version>5.3.12</cas.version>
+        <cas.version>5.3.14</cas.version>
         <springboot.version>1.5.18.RELEASE</springboot.version>
         <!-- app.server could be -jetty, -undertow, -tomcat, or blank if you plan to provide appserver -->
         <app.server>-tomcat</app.server>
@@ -102,10 +107,6 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
-        <repository>
-            <id>shibboleth-releases</id>
-            <url>https://build.shibboleth.net/nexus/content/repositories/releases</url>
-        </repository>
     </repositories>
 
     <profiles>
@@ -122,9 +123,77 @@
                     <type>war</type>
                     <scope>runtime</scope>
                 </dependency>
+                <!-- Additional dependencies -->
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-core</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-core-services</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-core-authentication-mfa</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-support-trusted-mfa</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-support-json-service-registry</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-core-web</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-core-webflow-api</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-core-authentication-api</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-support-reports</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-support-ldap</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <!-- Module requis pour utiliser la valeur 'mfa-gauth' dans la configuration key cas.authn.mfa : -->
                 <!--
-                ...Additional dependencies may be placed here...
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-support-gauth</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apereo.cas</groupId>
+                    <artifactId>cas-server-support-authy</artifactId>
+                    <version>${cas.version}</version>
+                </dependency>
                 -->
+                <dependency>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok</artifactId>
+                    <version>1.18.10</version>
+                    <scope>provided</scope>
+                </dependency>
+
             </dependencies>
         </profile>
 

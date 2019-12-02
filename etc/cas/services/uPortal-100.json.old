@@ -1,0 +1,17 @@
+{
+"@class" : "org.apereo.cas.services.RegexRegisteredService",
+"serviceId" : "^http://localhost:8080/uPortal",
+"name" : "MFA gauth",
+"id" : 100,
+"description" : "This service definition authorizes all application urls that support HTTP protocol.",
+"evaluationOrder" : 10000,
+"multifactorPolicy" : {
+"@class" :
+"org.apereo.cas.services.DefaultRegisteredServiceMultifactorPolicy",
+"multifactorAuthenticationProviders" : [ "java.util.LinkedHashSet",
+[ "mfa-gauth" ] ],
+"failureMode" : "CLOSED"
+}
+}
+
+

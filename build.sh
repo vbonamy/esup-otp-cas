@@ -11,7 +11,7 @@ function copy() {
 
 function help() {
 	echo "Usage: build.sh [copy|clean|package|run|debug|bootrun|gencert]"
-	echo "	copy: Copy config from ./etc/cas/config to /etc/cas/config"
+	echo "	copy: Copy config from .:q!/etc/cas/config to /etc/cas/config"
 	echo "	clean: Clean Maven build directory"
 	echo "	package: Clean and build CAS war"
 	echo "	run: Build and run cas.war via Java (i.e. java -jar target/cas.war)"
@@ -45,7 +45,7 @@ function debug() {
 }
 
 function run() {
-	package && java -jar target/cas.war
+	package && java -Dspring.config.location=/etc/cas/config/cas.properties -jar target/cas.war
 }
 
 function runalone() {

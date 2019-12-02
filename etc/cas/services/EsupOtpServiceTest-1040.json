@@ -1,0 +1,14 @@
+{
+  "@class" : "org.apereo.cas.services.RegexRegisteredService",
+  "serviceId" : "^http://localhost:8080/pluto-testsuite",
+  "name" : "MFA Esup-Otp",
+  "id" : 1040,
+  "description" : "HTTP Local 2FA esup-otp",
+  "evaluationOrder" : 104000,
+  "multifactorPolicy" : {
+    "@class" : "org.apereo.cas.services.DefaultRegisteredServiceMultifactorPolicy",
+    "multifactorAuthenticationProviders" : [ "java.util.LinkedHashSet", [ "mfa-esupotp" ] ],
+    "bypassEnabled" : "true",
+    "failureMode" : "CLOSED"
+  }
+}

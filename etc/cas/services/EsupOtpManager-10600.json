@@ -1,0 +1,10 @@
+{
+  "@class" : "org.jasig.cas.services.RegexRegisteredService",
+  "serviceId" : "^http://localhost:4000(/.*)?",
+  "name" : "esup-otp-manager",
+  "id" : 1060,
+  "description" : "HTTP esup-otp-manager",
+  "evaluationOrder" : 106000
+}
+
+

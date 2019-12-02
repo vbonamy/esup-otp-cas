@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.esupportail.cas.configuration.EsupOtpConf,\
+  org.esupportail.cas.authentication.EsupOtpMultifactorAuthenticationProvider
