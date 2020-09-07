@@ -1,8 +1,14 @@
 package org.apereo.cas.adaptors.esupotp.web.flow;
 
-import org.apereo.cas.web.flow.AbstractCasWebflowConfigurer;
-import org.springframework.stereotype.Component;
+import java.util.List;
+import java.util.Optional;
+
+import org.apereo.cas.configuration.CasConfigurationProperties;
+import org.apereo.cas.web.flow.configurer.AbstractCasMultifactorWebflowConfigurer;
+import org.apereo.cas.web.flow.configurer.CasMultifactorWebflowCustomizer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
+import org.springframework.webflow.engine.builder.support.FlowBuilderServices;
 
 /**
  * This is {@link EsupOtpMultifactorWebflowConfigurer}.
@@ -10,20 +16,22 @@ import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
  * @author Alex Bouskine
  * @since 5.0.0
  */
-public class EsupOtpMultifactorWebflowConfigurer extends AbstractCasWebflowConfigurer {
+public class EsupOtpMultifactorWebflowConfigurer extends AbstractCasMultifactorWebflowConfigurer {
 
-    /** Webflow event id. */
-    public static final String MFA_ESUPOTP_EVENT_ID = "mfa-esupotp";
+    public static final String MFA_ESUPOTP_ID = "mfa-esupotp";
 
-    private FlowDefinitionRegistry esupotpFlowRegistry;
+    public EsupOtpMultifactorWebflowConfigurer(FlowBuilderServices flowBuilderServices,
+			FlowDefinitionRegistry loginFlowDefinitionRegistry, ConfigurableApplicationContext applicationContext,
+			CasConfigurationProperties casProperties, Optional<FlowDefinitionRegistry> mfaFlowDefinitionRegistry,
+			List<CasMultifactorWebflowCustomizer> mfaFlowCustomizers) {
+		super(flowBuilderServices, loginFlowDefinitionRegistry, applicationContext, casProperties, mfaFlowDefinitionRegistry,
+				mfaFlowCustomizers);
+	}
 
+    
     @Override
-    protected void doInitialize() throws Exception {
-        registerMultifactorProviderAuthenticationWebflow(getLoginFlow(), MFA_ESUPOTP_EVENT_ID, this.esupotpFlowRegistry);
+    protected void doInitialize() {
+        registerMultifactorProviderAuthenticationWebflow(getLoginFlow(), MFA_ESUPOTP_ID, MFA_ESUPOTP_ID);
 
-    }
-
-    public void setEsupOtpFlowRegistry(final FlowDefinitionRegistry esupotpFlowRegistry) {
-        this.esupotpFlowRegistry = esupotpFlowRegistry;
     }
 }

@@ -1,17 +1,11 @@
 package org.apereo.cas.adaptors.esupotp;
 
 import org.apereo.cas.adaptors.esupotp.web.flow.EsupOtpMultifactorWebflowConfigurer;
-import org.apereo.cas.authentication.Authentication;
+import org.apereo.cas.authentication.AbstractMultifactorAuthenticationProvider;
 import org.apereo.cas.authentication.AuthenticationHandler;
-import org.apereo.cas.services.AbstractMultifactorAuthenticationProvider;
-import org.apereo.cas.services.MultifactorAuthenticationProviderBypass;
-import org.apereo.cas.services.RegisteredService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.webflow.execution.Event;
 
 /**
  * The authentication provider
@@ -32,7 +26,7 @@ public class EsupOtpMultifactorAuthenticationProvider extends AbstractMultifacto
         
     @Override
     public String getId() {
-        return EsupOtpMultifactorWebflowConfigurer.MFA_ESUPOTP_EVENT_ID;
+        return EsupOtpMultifactorWebflowConfigurer.MFA_ESUPOTP_ID;
     }
 
     @Override
@@ -40,8 +34,8 @@ public class EsupOtpMultifactorAuthenticationProvider extends AbstractMultifacto
         return this.rank;
     }
 
-    @Override
-    protected boolean isAvailable() {
-        return true;
-    }
+	@Override
+	public String getFriendlyName() {
+		return EsupOtpMultifactorWebflowConfigurer.MFA_ESUPOTP_ID;
+	}
 }

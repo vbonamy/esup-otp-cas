@@ -3,14 +3,10 @@ package org.apereo.cas.adaptors.esupotp;
 import org.apereo.cas.authentication.AuthenticationBuilder;
 import org.apereo.cas.authentication.AuthenticationHandler;
 import org.apereo.cas.authentication.AuthenticationManager;
-import org.apereo.cas.authentication.AuthenticationMetaDataPopulator;
+import org.apereo.cas.authentication.AuthenticationTransaction;
 import org.apereo.cas.authentication.Credential;
-import org.apereo.cas.services.MultifactorAuthenticationProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.stereotype.Component;
+import org.apereo.cas.authentication.MultifactorAuthenticationProvider;
+import org.apereo.cas.authentication.metadata.BaseAuthenticationMetaDataPopulator;
 
 /**
  * This is {@link EsupOtpAuthenticationMetaDataPopulator} which inserts the
@@ -20,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @since 5.0.0
  */
 
-public class EsupOtpAuthenticationMetaDataPopulator implements AuthenticationMetaDataPopulator {
+public class EsupOtpAuthenticationMetaDataPopulator extends BaseAuthenticationMetaDataPopulator {
 
 	private String authenticationContextAttribute;
 
@@ -28,8 +24,8 @@ public class EsupOtpAuthenticationMetaDataPopulator implements AuthenticationMet
 
     private MultifactorAuthenticationProvider provider;
 
-    @Override
-    public void populateAttributes(final AuthenticationBuilder builder, final Credential credential) {
+	@Override
+	public void populateAttributes(AuthenticationBuilder builder, AuthenticationTransaction transaction) {
         if (builder.hasAttribute(AuthenticationManager.AUTHENTICATION_METHOD_ATTRIBUTE,
                 obj -> obj.toString().equals(this.authenticationHandler.getName()))) {
             builder.mergeAttribute(this.authenticationContextAttribute, this.provider.getId());
@@ -52,5 +48,7 @@ public class EsupOtpAuthenticationMetaDataPopulator implements AuthenticationMet
     public void setProvider(final MultifactorAuthenticationProvider provider) {
         this.provider = provider;
     }
+
+
 }
 

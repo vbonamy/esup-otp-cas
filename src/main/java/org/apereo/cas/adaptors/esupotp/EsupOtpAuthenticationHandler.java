@@ -1,29 +1,27 @@
 package org.apereo.cas.adaptors.esupotp;
 
-import org.apereo.cas.authentication.Credential;
-import org.apereo.cas.authentication.HandlerResult;
-import org.apereo.cas.authentication.PreventedException;
-import org.apereo.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
-import org.apereo.cas.web.support.WebUtils;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.stereotype.Component;
-import org.springframework.webflow.execution.RequestContext;
-import org.springframework.webflow.execution.RequestContextHolder;
-import javax.annotation.PostConstruct;
-import javax.security.auth.login.AccountNotFoundException;
-import javax.security.auth.login.FailedLoginException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.GeneralSecurityException;
+
+import javax.security.auth.login.FailedLoginException;
+
+import org.apereo.cas.authentication.AuthenticationHandlerExecutionResult;
+import org.apereo.cas.authentication.Credential;
+import org.apereo.cas.authentication.PreventedException;
+import org.apereo.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
+import org.apereo.cas.authentication.principal.PrincipalFactory;
+import org.apereo.cas.services.ServicesManager;
+import org.apereo.cas.web.support.WebUtils;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.webflow.execution.RequestContext;
+import org.springframework.webflow.execution.RequestContextHolder;
 
 /**
  * An authentication handler that uses the token provided to authenticator
@@ -33,7 +31,7 @@ import org.slf4j.LoggerFactory;
  */
 public class EsupOtpAuthenticationHandler extends AbstractPreAndPostProcessingAuthenticationHandler {
 	
-    protected final transient Logger logger = LoggerFactory.getLogger(this.getClass());
+	protected final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Value("${cas.mfa.esupotp.urlApi:CAS}")
 	private String urlApi;
@@ -44,18 +42,13 @@ public class EsupOtpAuthenticationHandler extends AbstractPreAndPostProcessingAu
 	/**
 	 * Instantiates a new Esup otp authentication handler.
 	 */
-	public EsupOtpAuthenticationHandler() {
-	}
-
-	/**
-	 * Init.
-	 */
-	@PostConstruct
-	public void init() {
+    public EsupOtpAuthenticationHandler(String name, ServicesManager servicesManager, PrincipalFactory principalFactory,
+			Integer order) {
+		super(name, servicesManager, principalFactory, order);
 	}
 
 	@Override
-	protected HandlerResult doAuthentication(final Credential credential)
+	protected AuthenticationHandlerExecutionResult doAuthentication(final Credential credential)
 			throws GeneralSecurityException, PreventedException {
 		final EsupOtpCredential esupotpCredential = (EsupOtpCredential) credential;
 		final String otp = esupotpCredential.getToken();
