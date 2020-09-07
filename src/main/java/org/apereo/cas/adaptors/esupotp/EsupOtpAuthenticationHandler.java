@@ -45,6 +45,7 @@ public class EsupOtpAuthenticationHandler extends AbstractPreAndPostProcessingAu
     public EsupOtpAuthenticationHandler(String name, ServicesManager servicesManager, PrincipalFactory principalFactory,
 			Integer order) {
 		super(name, servicesManager, principalFactory, order);
+    	logger.info("new EsupOtpAuthenticationHandler ...");
 	}
 
 	@Override

@@ -13,11 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.webflow.config.FlowDefinitionRegistryBuilder;
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices;
@@ -64,7 +66,9 @@ public class EsupOtpConfiguration {
         return p;
     }
 
+    @ConditionalOnMissingBean(name = "esupotpWebflowConfigurer")
     @Bean
+    @DependsOn("defaultWebflowConfigurer")
     public CasWebflowConfigurer esupotpWebflowConfigurer() {
     	logger.info("esupotpWebflowConfigurer");
     	Optional<FlowDefinitionRegistry> mfaFlowDefinitionRegistry = Optional.of(esupotpFlowRegistry());
@@ -75,5 +79,9 @@ public class EsupOtpConfiguration {
         		mfaFlowDefinitionRegistry,
         		new ArrayList<CasMultifactorWebflowCustomizer>());
     }
+    
+    
+
+    
     
 }
