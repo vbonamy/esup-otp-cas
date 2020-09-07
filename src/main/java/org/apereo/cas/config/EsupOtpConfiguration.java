@@ -9,6 +9,8 @@ import org.apereo.cas.authentication.MultifactorAuthenticationProvider;
 import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.web.flow.CasWebflowConfigurer;
 import org.apereo.cas.web.flow.configurer.CasMultifactorWebflowCustomizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,6 +25,9 @@ import org.springframework.webflow.engine.builder.support.FlowBuilderServices;
 @Configuration("esupotpConfiguration")
 @EnableConfigurationProperties(CasConfigurationProperties.class)
 public class EsupOtpConfiguration {
+	
+    protected final transient Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired
 	private CasConfigurationProperties casProperties;
 
@@ -44,6 +49,7 @@ public class EsupOtpConfiguration {
 	@RefreshScope
 	@Bean
 	public FlowDefinitionRegistry esupotpFlowRegistry() {
+		logger.info("esupotpFlowRegistry");
 		final FlowDefinitionRegistryBuilder builder = new FlowDefinitionRegistryBuilder(this.applicationContext, this.builder);
 		builder.setBasePath("classpath*:/webflow");
 		builder.addFlowLocationPattern("/mfa-esupotp/*-webflow.xml");
@@ -52,6 +58,7 @@ public class EsupOtpConfiguration {
 
     @Bean
     public MultifactorAuthenticationProvider esupotpAuthenticationProvider() {
+    	logger.info("esupotpAuthenticationProvider");
         final EsupOtpMultifactorAuthenticationProvider p = new EsupOtpMultifactorAuthenticationProvider();
         p.setId(EsupOtpMultifactorWebflowConfigurer.MFA_ESUPOTP_ID);
         return p;
@@ -59,6 +66,7 @@ public class EsupOtpConfiguration {
 
     @Bean
     public CasWebflowConfigurer esupotpWebflowConfigurer() {
+    	logger.info("esupotpWebflowConfigurer");
     	Optional<FlowDefinitionRegistry> mfaFlowDefinitionRegistry = Optional.of(esupotpFlowRegistry());
         return new EsupOtpMultifactorWebflowConfigurer(flowBuilderServices, 
         		loginFlowDefinitionRegistry, 

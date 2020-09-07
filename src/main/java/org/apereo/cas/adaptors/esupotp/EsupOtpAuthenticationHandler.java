@@ -50,6 +50,7 @@ public class EsupOtpAuthenticationHandler extends AbstractPreAndPostProcessingAu
 	@Override
 	protected AuthenticationHandlerExecutionResult doAuthentication(final Credential credential)
 			throws GeneralSecurityException, PreventedException {
+		logger.info("EsupOtpAuthenticationHandler.doAuthentication ...");
 		final EsupOtpCredential esupotpCredential = (EsupOtpCredential) credential;
 		final String otp = esupotpCredential.getToken();
 		final RequestContext context = RequestContextHolder.getRequestContext();
@@ -71,10 +72,13 @@ public class EsupOtpAuthenticationHandler extends AbstractPreAndPostProcessingAu
 
 	@Override
 	public boolean supports(final Credential credential) {
-		return EsupOtpCredential.class.isAssignableFrom(credential.getClass());
+		Boolean isAssignableFromEsupOtpCredential = EsupOtpCredential.class.isAssignableFrom(credential.getClass());
+		logger.info(String.format("EsupOtpAuthenticationHandler.supports ... -> %s", isAssignableFromEsupOtpCredential));
+		return isAssignableFromEsupOtpCredential;
 	}
 
 	private JSONObject verifyOtp(String uid, String otp) throws IOException {
+		logger.info("verifyOtp ...");
 		String url = urlApi + "/protected/users/" + uid + "/" + otp + "/" + apiPassword;
 		URL obj = new URL(url);
 		int responseCode;

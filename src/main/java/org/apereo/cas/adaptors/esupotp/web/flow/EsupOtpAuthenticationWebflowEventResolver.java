@@ -18,7 +18,6 @@ public class EsupOtpAuthenticationWebflowEventResolver extends AbstractCasWebflo
 	public EsupOtpAuthenticationWebflowEventResolver(
 			CasWebflowEventResolutionConfigurationContext webflowEventResolutionConfigurationContext) {
 		super(webflowEventResolutionConfigurationContext);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
