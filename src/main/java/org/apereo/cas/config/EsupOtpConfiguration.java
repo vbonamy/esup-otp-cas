@@ -3,10 +3,15 @@ package org.apereo.cas.config;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import org.apereo.cas.adaptors.esupotp.EsupOtpAuthenticationHandler;
 import org.apereo.cas.adaptors.esupotp.EsupOtpMultifactorAuthenticationProvider;
 import org.apereo.cas.adaptors.esupotp.web.flow.EsupOtpMultifactorWebflowConfigurer;
+import org.apereo.cas.authentication.AuthenticationHandler;
 import org.apereo.cas.authentication.MultifactorAuthenticationProvider;
+import org.apereo.cas.authentication.principal.DefaultPrincipalFactory;
+import org.apereo.cas.authentication.principal.PrincipalFactory;
 import org.apereo.cas.configuration.CasConfigurationProperties;
+import org.apereo.cas.services.ServicesManager;
 import org.apereo.cas.web.flow.CasWebflowConfigurer;
 import org.apereo.cas.web.flow.configurer.CasMultifactorWebflowCustomizer;
 import org.slf4j.Logger;
@@ -46,7 +51,26 @@ public class EsupOtpConfiguration {
 	@Autowired
 	@Qualifier("builder")
 	private FlowBuilderServices builder;
+	
 
+	@Autowired
+	@Qualifier("servicesManager")
+	private ServicesManager servicesManager;
+
+	@Bean
+	public PrincipalFactory esupotpPrincipalFactory() {
+		return new DefaultPrincipalFactory();
+	}
+
+	@Bean
+	public AuthenticationHandler esupotpAuthenticationHandler() {
+		final EsupOtpAuthenticationHandler h = new EsupOtpAuthenticationHandler(
+				EsupOtpMultifactorWebflowConfigurer.MFA_ESUPOTP_ID,
+				servicesManager, 
+				esupotpPrincipalFactory(),
+				0);
+		return h;
+	}
         
 	@RefreshScope
 	@Bean
