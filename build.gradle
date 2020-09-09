@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.json:json:20160810'
+    compile "org.json:json:20160810"
 	compile "org.apereo.cas:cas-server-core-web-api:${project.'cas.version'}"
     compile "org.apereo.cas:cas-server-core-authentication-api:${project.'cas.version'}"
     compile "org.apereo.cas:cas-server-core-authentication-mfa-api:${project.'cas.version'}"
