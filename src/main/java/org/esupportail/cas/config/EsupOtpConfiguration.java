@@ -1,28 +1,26 @@
-package org.apereo.cas.config;
+package org.esupportail.cas.config;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apereo.cas.CentralAuthenticationService;
-import org.apereo.cas.adaptors.esupotp.web.flow.EsupOtpGetTransportsAction;
-import org.apereo.cas.adaptors.esupotp.web.flow.EsupOtpAuthenticationWebflowAction;
-import org.apereo.cas.adaptors.esupotp.web.flow.EsupOtpAuthenticationWebflowEventResolver;
-import org.apereo.cas.adaptors.esupotp.web.flow.EsupOtpMultifactorWebflowConfigurer;
-import org.apereo.cas.authentication.AuthenticationHandler;
-import org.apereo.cas.authentication.AuthenticationMetaDataPopulator;
 import org.apereo.cas.authentication.AuthenticationServiceSelectionPlan;
 import org.apereo.cas.authentication.AuthenticationSystemSupport;
+import org.apereo.cas.authentication.MultifactorAuthenticationProviderSelector;
 import org.apereo.cas.configuration.CasConfigurationProperties;
-import org.apereo.cas.services.MultifactorAuthenticationProviderSelector;
 import org.apereo.cas.services.ServicesManager;
 import org.apereo.cas.ticket.registry.TicketRegistrySupport;
-import org.apereo.cas.web.flow.authentication.RankedMultifactorAuthenticationProviderSelector;
 import org.apereo.cas.web.flow.CasWebflowConfigurer;
+import org.apereo.cas.web.flow.authentication.RankedMultifactorAuthenticationProviderSelector;
 import org.apereo.cas.web.flow.resolver.CasWebflowEventResolver;
+import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpAuthenticationWebflowAction;
+import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpAuthenticationWebflowEventResolver;
+import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpGetTransportsAction;
+import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpMultifactorWebflowConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -32,10 +30,6 @@ import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices;
 import org.springframework.webflow.execution.Action;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
-import java.util.Map;
-
 @Configuration("esupotpConfiguration")
 @EnableConfigurationProperties(CasConfigurationProperties.class)
 public class EsupOtpConfiguration {
@@ -43,7 +37,7 @@ public class EsupOtpConfiguration {
 	private CasConfigurationProperties casProperties;
 
 	@Autowired
-	private ApplicationContext applicationContext;
+	private ConfigurableApplicationContext applicationContext;
 
 	@Autowired
 	@Qualifier("loginFlowRegistry")
@@ -80,10 +74,16 @@ public class EsupOtpConfiguration {
     @Qualifier("authenticationServiceSelectionPlan")
     private AuthenticationServiceSelectionPlan authenticationRequestServiceSelectionStrategies;
     
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+    
     @Autowired(required = false)
     @Qualifier("multifactorAuthenticationProviderSelector")
     private MultifactorAuthenticationProviderSelector multifactorAuthenticationProviderSelector =
             new RankedMultifactorAuthenticationProviderSelector();
+    
+    @Autowired
+    EsupOtpConfigurationProperties esupOtpConfigurationProperties;
             
 	@RefreshScope
 	@Bean
@@ -103,7 +103,7 @@ public class EsupOtpConfiguration {
 
 	@Bean
 	@RefreshScope public Action esupotpGetTransportsAction() {
-		final EsupOtpGetTransportsAction a = new EsupOtpGetTransportsAction();
+		final EsupOtpGetTransportsAction a = new EsupOtpGetTransportsAction(esupOtpConfigurationProperties);
 		return a;
 	}
 
@@ -116,7 +116,8 @@ public class EsupOtpConfiguration {
             ticketRegistrySupport,
             warnCookieGenerator, 
             authenticationRequestServiceSelectionStrategies, 
-            multifactorAuthenticationProviderSelector
+            eventPublisher, 
+            applicationContext
 		);
 	}
     

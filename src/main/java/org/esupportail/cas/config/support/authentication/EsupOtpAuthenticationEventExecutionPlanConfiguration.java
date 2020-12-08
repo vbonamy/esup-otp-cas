@@ -1,29 +1,26 @@
-package org.apereo.cas.adaptors.authy.config.support.authentication;
+package org.esupportail.cas.config.support.authentication;
 
-import org.apereo.cas.adaptors.esupotp.EsupOtpAuthenticationHandler;
+import org.apereo.cas.authentication.AuthenticationEventExecutionPlanConfigurer;
 import org.apereo.cas.authentication.AuthenticationHandler;
-import org.apereo.cas.configuration.CasConfigurationProperties;
-import org.apereo.cas.services.ServicesManager;
-import org.apereo.cas.authentication.principal.DefaultPrincipalFactory;
-import org.apereo.cas.authentication.principal.PrincipalFactory;
-import org.apereo.cas.services.MultifactorAuthenticationProvider;
-import org.apereo.cas.adaptors.esupotp.EsupOtpMultifactorAuthenticationProvider;
-import org.apereo.cas.configuration.model.support.mfa.EsupOtpMultifactorProperties;
+import org.apereo.cas.authentication.MultifactorAuthenticationProvider;
 import org.apereo.cas.authentication.MultifactorAuthenticationProviderBypass;
 import org.apereo.cas.authentication.MultifactorAuthenticationUtils;
-import org.apereo.cas.adaptors.esupotp.EsupOtpAuthenticationMetaDataPopulator;
-import org.springframework.webflow.execution.Action;
-import org.apereo.cas.authentication.AuthenticationEventExecutionPlanConfigurer;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.apereo.cas.authentication.principal.DefaultPrincipalFactory;
+import org.apereo.cas.authentication.principal.PrincipalFactory;
+import org.apereo.cas.configuration.CasConfigurationProperties;
+import org.apereo.cas.services.ServicesManager;
+import org.esupportail.cas.adaptors.esupotp.EsupOtpAuthenticationHandler;
+import org.esupportail.cas.adaptors.esupotp.EsupOtpAuthenticationMetaDataPopulator;
+import org.esupportail.cas.adaptors.esupotp.EsupOtpMultifactorAuthenticationProvider;
+import org.esupportail.cas.config.EsupOtpConfigurationProperties;
+import org.esupportail.cas.configuration.model.support.mfa.EsupOtpMultifactorProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 /**
  * This is {@link EsupOtpAuthenticationEventExecutionPlanConfiguration}.
  *
@@ -40,6 +37,9 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
     @Autowired
     @Qualifier("servicesManager")
     private ServicesManager servicesManager;
+    
+    @Autowired
+    private EsupOtpConfigurationProperties esupOtpConfigurationProperties;
 
     /* Avoid to modify org.apereo.cas.configuration.model.support.mfa.MultifactorAuthenticationProperties
      * Not sure about the result in the future
@@ -57,7 +57,8 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
         return new EsupOtpAuthenticationHandler(
         	esupotpMultifactorProperties().getName(), 
         	servicesManager, 
-        	esupotpPrincipalFactory()
+        	esupotpPrincipalFactory(),
+        	esupOtpConfigurationProperties
         );
     }
 
@@ -72,7 +73,7 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
         final EsupOtpMultifactorProperties esupotp = esupotpMultifactorProperties();
         final EsupOtpMultifactorAuthenticationProvider p = new EsupOtpMultifactorAuthenticationProvider();
         p.setBypassEvaluator(esupOtpBypassEvaluator());
-        p.setGlobalFailureMode(casProperties.getAuthn().getMfa().getGlobalFailureMode());
+        p.setFailureMode(casProperties.getAuthn().getMfa().getGlobalFailureMode());
         p.setOrder(esupotp.getRank());
         p.setId(esupotp.getId());
 		return p;
@@ -99,7 +100,7 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
     public AuthenticationEventExecutionPlanConfigurer esupotpAuthenticationEventExecutionPlanConfigurer() {
         return plan -> {
             plan.registerAuthenticationHandler(esupotpAuthenticationHandler());
-            plan.registerMetadataPopulator(esupotpAuthenticationMetaDataPopulator());
+            plan.registerAuthenticationMetadataPopulator(esupotpAuthenticationMetaDataPopulator());
         };
     }
 }

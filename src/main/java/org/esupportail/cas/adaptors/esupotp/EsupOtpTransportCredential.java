@@ -1,4 +1,4 @@
-package org.apereo.cas.adaptors.esupotp;
+package org.esupportail.cas.adaptors.esupotp;
 
 import java.io.Serializable;
 

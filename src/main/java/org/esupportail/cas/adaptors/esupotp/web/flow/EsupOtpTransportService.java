@@ -1,4 +1,4 @@
-package org.apereo.cas.adaptors.esupotp.web.flow;
+package org.esupportail.cas.adaptors.esupotp.web.flow;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,19 +6,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import org.apereo.cas.adaptors.esupotp.EsupOtpTransportCredential;
-import org.apereo.cas.web.support.WebUtils;
+
+import org.esupportail.cas.adaptors.esupotp.EsupOtpTransportCredential;
+import org.esupportail.cas.config.EsupOtpConfigurationProperties;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.stereotype.Component;
-import org.springframework.webflow.action.AbstractAction;
-import org.springframework.webflow.action.EventFactorySupport;
-import org.springframework.webflow.execution.Event;
-import org.springframework.webflow.execution.RequestContext;
-import org.springframework.webflow.execution.RequestContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.stereotype.Component;
 
 /**
  * This is {@link EsupOtpSencCodeAction}.
@@ -29,11 +25,12 @@ import org.slf4j.LoggerFactory;
 @RefreshScope
 @Component("esupotpTransportService")
 public class EsupOtpTransportService {
+	
     protected final transient Logger logger = LoggerFactory.getLogger(this.getClass());
-
-	@Value("${cas.mfa.esupotp.urlApi:CAS}")
-	private String urlApi;
-
+    
+    @Autowired
+    private EsupOtpConfigurationProperties esupOtpConfigurationProperties;
+    
 	public String sendCode(EsupOtpTransportCredential transportCredential) {
         try {
                 JSONObject response = sendCodeRequest(transportCredential.getUid(), transportCredential.getUserHash(), transportCredential.getTransport(), transportCredential.getMethod());
@@ -49,7 +46,7 @@ public class EsupOtpTransportService {
 	}
 
 	private JSONObject sendCodeRequest(String uid, String userHash, String transport, String method) throws IOException, NoSuchAlgorithmException {
-		String url = urlApi + "/users/" + uid + "/methods/"+ method +"/transports/"+ transport + "/" + userHash;
+		String url = esupOtpConfigurationProperties.getUrlApi() + "/users/" + uid + "/methods/"+ method +"/transports/"+ transport + "/" + userHash;
 		URL obj = new URL(url);
 		int responseCode;
 		HttpURLConnection con = null;

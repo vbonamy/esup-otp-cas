@@ -1,4 +1,4 @@
-package org.apereo.cas.adaptors.esupotp.web.flow;
+package org.esupportail.cas.adaptors.esupotp.web.flow;
 
 import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.web.flow.configurer.AbstractCasMultifactorWebflowConfigurer;
@@ -30,6 +30,6 @@ public class EsupOtpMultifactorWebflowConfigurer extends AbstractCasMultifactorW
     
     @Override
     protected void doInitialize() {
-        registerMultifactorProviderAuthenticationWebflow(getLoginFlow(), MFA_ESUPOTP_EVENT_ID, this.flowDefinitionRegistry);
+    	registerMultifactorProviderAuthenticationWebflow(getLoginFlow(), MFA_ESUPOTP_EVENT_ID, this.flowDefinitionRegistry, MFA_ESUPOTP_EVENT_ID);
     }
 }
