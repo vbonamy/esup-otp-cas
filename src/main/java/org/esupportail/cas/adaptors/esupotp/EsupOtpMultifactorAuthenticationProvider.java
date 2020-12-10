@@ -1,17 +1,14 @@
-package org.apereo.cas.adaptors.esupotp;
+package org.esupportail.cas.adaptors.esupotp;
 
-import org.apereo.cas.adaptors.esupotp.web.flow.EsupOtpMultifactorWebflowConfigurer;
-import org.apereo.cas.authentication.Authentication;
+import org.apache.commons.lang3.StringUtils;
+import org.apereo.cas.authentication.AbstractMultifactorAuthenticationProvider;
 import org.apereo.cas.authentication.AuthenticationHandler;
-import org.apereo.cas.services.AbstractMultifactorAuthenticationProvider;
-import org.apereo.cas.services.MultifactorAuthenticationProviderBypass;
 import org.apereo.cas.services.RegisteredService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.esupportail.cas.config.EsupOtpConfigurationProperties;
+import org.esupportail.cas.configuration.model.support.mfa.EsupOtpMultifactorProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.webflow.execution.Event;
 
 /**
  * The authentication provider
@@ -26,22 +23,27 @@ public class EsupOtpMultifactorAuthenticationProvider extends AbstractMultifacto
     @Autowired
     @Qualifier("esupotpAuthenticationHandler")
     private AuthenticationHandler esupotpAuthenticationHandler;
-
-    @Value("${cas.mfa.esupotp.rank:0}")
-    private int rank;
+    
+    @Autowired
+    EsupOtpConfigurationProperties esupOtpConfigurationProperties;
         
     @Override
     public String getId() {
-        return EsupOtpMultifactorWebflowConfigurer.MFA_ESUPOTP_EVENT_ID;
+        return StringUtils.defaultIfBlank(super.getId(), EsupOtpMultifactorProperties.DEFAULT_IDENTIFIER);
     }
 
     @Override
     public int getOrder() {
-        return this.rank;
+        return esupOtpConfigurationProperties.getRank();
     }
 
     @Override
-    protected boolean isAvailable() {
+    public boolean isAvailable(final RegisteredService service) {
         return true;
+    }
+
+    @Override
+    public String getFriendlyName() {
+        return "Esup OTP MFA";
     }
 }

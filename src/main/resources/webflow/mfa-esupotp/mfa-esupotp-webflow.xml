@@ -4,8 +4,8 @@
       xsi:schemaLocation="http://www.springframework.org/schema/webflow
                           http://www.springframework.org/schema/webflow/spring-webflow.xsd">
 
-    <var name="credential" class="org.apereo.cas.adaptors.esupotp.EsupOtpCredential" />
-    <var name="transportCredential" class="org.apereo.cas.adaptors.esupotp.EsupOtpTransportCredential" />
+    <var name="credential" class="org.esupportail.cas.adaptors.esupotp.EsupOtpCredential" />
+    <var name="transportCredential" class="org.esupportail.cas.adaptors.esupotp.EsupOtpTransportCredential" />
     <on-start>
         <evaluate expression="initialFlowSetupAction" />
     </on-start>

@@ -1,22 +1,26 @@
-<!DOCTYPE html>
 <div id="transportStatus"></div>
 
+<div class="card-body box">
 <form method="post" id="fm2" class="fm-v clearfix" th:object="${credential}">  
     <input type="hidden" name="uid" th:attr="value=${user.getUid()}" id="inputUid"/>
     <input type="hidden" name="userHash" th:attr="value=${user.getHash()}" id="inputUserHash"/>
     <input type="hidden" name="method" value="" id="inputMethod"/>
     <input type="hidden" name="transport" value="" id="inputTransport"/>
 
-    <label for="token" class="fl-label" th:utext="#{cas.mfa.esupotp.receiveCodeFromTransport}"/>
-    <div th:each="transportMap : ${listTransports}">
-        <input 
-            class="btn-submit btn-block transportInput" style="background-color: rgb(29, 113, 184);  margin-bottom:15px;" type="button" 
-            th:attr="value=${transportMap.transport}"
-            th:onclick="|document.getElementById('inputMethod').value='${transportMap.method}';document.getElementById('inputTransport').value='${transportMap.transport}';|"
-        />
-    </div>
-    <input class="btn-submit hide" name="submitCallTransport" accesskey="l"
-       th:value="#{screen.welcome.button.register}" tabindex="4" type="submit" id="submit" />
+    <h3 for="token" th:utext="#{cas.mfa.esupotp.receiveCodeFromTransport}"/>      
+    <section class="form-group" th:each="transportMap : ${listTransports}">
+      
+      <input 
+         class="btn btn-submit btn-block transportInput" style="background-color: rgb(29, 113, 184);  margin-bottom:15px;" type="button" 
+         th:attr="value=${transportMap.transport}"
+         th:onclick="document.getElementById('inputMethod').value=[[${transportMap.method}]];document.getElementById('inputTransport').value=[[${transportMap.transport}]];"
+         />
+    </section>
 
-    <input type="hidden" name="execution" th:value="${flowExecutionKey}"/>                    
+    <section class="form-check">			    
+      <input class="btn btn-block btn-submit hide" name="submitCallTransport" accesskey="l"
+	     th:value="#{screen.welcome.button.register}" tabindex="6" type="submit" id="submit" />
+      <input type="hidden" name="execution" th:value="${flowExecutionKey}"/>                    
+   </section>
 </form>
+</div>

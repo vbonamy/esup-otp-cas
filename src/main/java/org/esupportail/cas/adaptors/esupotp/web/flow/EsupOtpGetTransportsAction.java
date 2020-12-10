@@ -1,4 +1,4 @@
-package org.apereo.cas.adaptors.esupotp.web.flow;
+package org.esupportail.cas.adaptors.esupotp.web.flow;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,28 +10,27 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
+
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+
 import org.apereo.cas.web.support.WebUtils;
+import org.esupportail.cas.adaptors.esupotp.EsupOtpMethod;
+import org.esupportail.cas.adaptors.esupotp.EsupOtpUser;
+import org.esupportail.cas.config.EsupOtpConfigurationProperties;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.webflow.action.AbstractAction;
 import org.springframework.webflow.action.EventFactorySupport;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
-import org.apereo.cas.adaptors.esupotp.EsupOtpMethod;
-import org.apereo.cas.adaptors.esupotp.EsupOtpUser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.AllArgsConstructor;
 
 /**
  * This is {@link EsupOtpGetTransportsAction}.
@@ -39,17 +38,11 @@ import org.slf4j.LoggerFactory;
  * @author Alex Bouskine
  * @since 5.0.0
  */
+@AllArgsConstructor
 public class EsupOtpGetTransportsAction extends AbstractAction {
     protected final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${cas.mfa.esupotp.urlApi:CAS}")
-    private String urlApi;
-
-    @Value("${cas.mfa.esupotp.usersSecret:CAS}")
-    private String usersSecret;
-
-    @Value("${cas.mfa.esupotp.apiPassword:CAS}")
-    private String apiPassword;
+    private EsupOtpConfigurationProperties esupOtpConfigurationProperties;
 
     @Override
     protected Event doExecute(final RequestContext requestContext) throws Exception {
@@ -97,7 +90,7 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
         List listTransports = new ArrayList();
         listTransports = this.getTransports(listMethods);
 
-        requestContext.getFlowScope().put("apiUrl", urlApi);
+        requestContext.getFlowScope().put("apiUrl", esupOtpConfigurationProperties.getUrlApi());
         requestContext.getFlowScope().put("listTransports", listTransports);
         requestContext.getFlowScope().put("user", user);
 
@@ -125,7 +118,7 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
     }
 
     private JSONObject getUserInfos(String uid) throws IOException, NoSuchAlgorithmException {
-        String url = urlApi + "/users/" + uid + "/" + getUserHash(uid);
+        String url = esupOtpConfigurationProperties.getUrlApi() + "/users/" + uid + "/" + getUserHash(uid);
         URL obj = new URL(url);
         int responseCode;
         HttpURLConnection con = null;
@@ -147,7 +140,7 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
 
     public String getUserHash(String uid) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md5Md = MessageDigest.getInstance("MD5");
-        String md5 = (new HexBinaryAdapter()).marshal(md5Md.digest(usersSecret.getBytes()));
+        String md5 = (new HexBinaryAdapter()).marshal(md5Md.digest(esupOtpConfigurationProperties.getUsersSecret().getBytes()));
         md5 = md5.toLowerCase();
         String salt = md5 + getSalt(uid);
         MessageDigest sha256Md = MessageDigest.getInstance("SHA-256");

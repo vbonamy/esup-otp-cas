@@ -17,9 +17,15 @@ repositories {
     jcenter()
 }
 
+archivesBaseName = 'esupOtpCas'
+version = '0.1'
+
 dependencies {
+    // Determined from apereo/cas:gradle.properties
+    compile 'org.projectlombok:lombok:1.18.14'
     compile 'org.json:json:20160810'
     compile "org.apereo.cas:cas-server-core-authentication:${project.'cas.version'}"
     compile "org.apereo.cas:cas-server-core-webflow:${project.'cas.version'}"
+    compile "org.apereo.cas:cas-server-core-webflow-mfa:${project.'cas.version'}"
 }
 

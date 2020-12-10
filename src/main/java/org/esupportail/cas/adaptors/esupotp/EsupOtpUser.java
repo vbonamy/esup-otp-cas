@@ -1,12 +1,9 @@
-package org.apereo.cas.adaptors.esupotp;
+package org.esupportail.cas.adaptors.esupotp;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import org.json.*;
-
-import org.apereo.cas.adaptors.esupotp.EsupOtpMethod;
+import org.json.JSONObject;
 
 /**
  * This is {@link EsupOtpUser}.

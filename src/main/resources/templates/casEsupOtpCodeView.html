@@ -1,37 +1,60 @@
 <!DOCTYPE html>
-<html layout:decorator="layout">
-    <head th:inline="text">
-        <title th:utext="#{cas.mfa.esupotp.pagetitle}"></title>
-    </head>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 
-    <body id="cas">
-        <div layout:fragment="content">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title th:utext="#{cas.mfa.esupotp.pagetitle}">CAS MFA ESUP-OTP</title>
+    <link href="../../static/css/cas.css" rel="stylesheet" th:remove="tag" />
+</head>
+
+<body>
+<main role="main" class="container mt-3 mb-3">
+    <div layout:fragment="content">
             <div id="data" th:data-apiurl="${apiUrl}" th:data-userhash="${user.getHash()}" th:data-uid="${user.getUid()}" th:data-divnocodedisplay="${divNoCodeDisplay}" th:data-waitingformethod="${waitingForMethodName}">
-            <div id="waiting" class="hide">
-                <center><h2><b><label th:utext="#{cas.mfa.esupotp.waitingFor}"></label></b></h2></center>
-                <center><div id="displayTransport" class="btn btn-info" onClick="switchDiv();return false;"><b><label th:utext="#{cas.mfa.esupotp.displayOtherMethod}"></label></b></div></center>
-            </div>
-            <div id="login" class="box fl-panel hide">
-                <form method="post" id="fm1" class="fm-v clearfix" th:object="${credential}">
-                    <div id="msg" class="errors" th:if="${#fields.hasErrors('*')}">
-                        <span th:each="err : ${#fields.errors('*')}" th:utext="${err}"/>
-                    </div>
+	      <div id="content" class="row">
+		<div class="col-md">
+		  <div class="card">
+                    <div class="card-header text-center">
+                      <h2 th:text="#{cas.login.pagetitle}">Login</h2>
+                      <span class="fa-stack fa-2x hidden-xs">
+			<i class="fa fa-circle fa-stack-2x"></i>
+			<i class="fa fa-lock fa-stack-1x fa-inverse"></i>
+		    </div>
+		    <div id="displayTransport" class="btn btn-info" onClick="switchDiv();return false;">
+		      <span th:utext="#{cas.mfa.esupotp.displayOtherMethod}" />
+		    </div>
+		    <div class="card-body box">
+		      <h3 th:utext="#{cas.mfa.esupotp.waitingFor}" id="waiting"></h3>
+		      <div id="loginForm" >
+                      <form method="post" id="fm1" th:object="${credential}">
+			<div id="msg" class="errors" th:if="${#fields.hasErrors('*')}">
+                          <span th:each="err : ${#fields.errors('*')}" th:utext="${err}"/>
+			</div>
+			<section class="form-group">
+                          <label for="token" th:utext="#{cas.mfa.esupotp.password}"/> :			  
+			  <div>
+                            <input type="text" class="form-control required" id="token" size="25" tabindex="1"
+				   th:field="*{token}"
+				   th:accesskey="#{screen.welcome.label.password.accesskey}" autocomplete="off"/>
+			  </div>
+			</section>
+			<section class="form-check">			
+                            <input class="btn btn-submit btn-block" accesskey="l"
+				   th:value="#{screen.welcome.button.login}" tabindex="6" type="submit"/>
+			  </div>
+			</section>
+			
+			<input type="hidden" name="_eventId_submit" value="Login" />
+			<input type="hidden" name="execution" th:value="${flowExecutionKey}"/>
+			<input type="hidden" name="geolocation"/>
+                      </form>
+		    </div>
+		</div>
 
-                    <div class="row fl-controls-left">
-                        <label for="token" class="fl-label" th:utext="#{cas.mfa.esupotp.password}"/>
-
-                        <input type="text" class="required" id="token" size="25" tabindex="1"
-                               th:field="*{token}"
-                               th:accesskey="#{screen.welcome.label.password.accesskey}" autocomplete="off"/>
-                        <input class="btn-submit btn-block" id="submitCode" name="_eventId_submit" accesskey="l"
-                               th:value="#{screen.welcome.button.login}" tabindex="4" type="submit" style="margin-top: 15px;"/>
-                    </div>
-
-                    <input type="hidden" name="execution" th:value="${flowExecutionKey}"/>
-                </form>
-
-                <div id="codeRequest" th:data-url="${flowExecutionKey}"></div>
-            </div>
+                    <div id="codeRequest" th:data-url="${flowExecutionKey}" class="card-header text-center"></div>
+		  </div>
             <script type="text/javascript">
                 $(document).ready(function() {
                     activateWaitingFor();
@@ -69,16 +92,18 @@
                 // if waitingFor method is activated, waitingForDiv will appear else TransportDiv will appear
                 function activateWaitingFor(){
                     if(divNoCodeDisplay){
-                        $('#waiting').toggleClass('hide');
+                        $('#waiting').toggleClass('d-none');
                         submitPushCodeRequest(waitingForMethodName);
                     } else {
-                        $('#login').toggleClass('hide');
+                        $('#loginForm').toggleClass('d-none');
+                        $('#codeRequest').toggleClass('d-none');
                     }
                 }
                 
                 function switchDiv(){
-                    $('#login').toggleClass('hide');
-                    $('#waiting').toggleClass('hide');
+                    $('#loginForm').toggleClass('d-none');
+                    $('#waiting').toggleClass('d-none');
+                    $('#codeRequest').toggleClass('d-none');
                 }
                 
                 function submitCodeRequest(){
@@ -127,6 +152,8 @@
 
             </script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-        </div>
+    </div>
+</div>
+</main>
     </body>
 </html>

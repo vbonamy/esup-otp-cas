@@ -1,4 +1,4 @@
-package org.apereo.cas.adaptors.esupotp.web.flow;
+package org.esupportail.cas.adaptors.esupotp.web.flow;
 
 import org.apereo.cas.web.flow.resolver.CasWebflowEventResolver;
 import org.springframework.beans.factory.annotation.Autowired;
