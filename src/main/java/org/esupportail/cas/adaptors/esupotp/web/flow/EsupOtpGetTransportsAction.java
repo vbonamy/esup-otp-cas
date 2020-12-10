@@ -49,7 +49,7 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
         final RequestContext context = RequestContextHolder.getRequestContext();
         final String uid = WebUtils.getAuthentication(context).getPrincipal().getId();
         String userHash = getUserHash(uid);
-        String waitingForMethodName = null;
+        String waitingForMethodName = "push";
 
         requestContext.getFlowScope().put("uid", uid);
         requestContext.getFlowScope().put("userHash", userHash);
@@ -64,12 +64,14 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
             JSONObject transports = (JSONObject) ((JSONObject) userInfos.get("user")).get("transports");
 
             Boolean defaultWaitingFor = false;
-            for (Object method : methods.keySet()) {
-                if (((String) method).equals("defaultWaitingFor")) {
-                    defaultWaitingFor = true;
-                    waitingForMethodName = (String) methods.get((String) method);
+            for (String method : methods.keySet()) {
+                if ("waitingFor".equals(method)) {
+                    defaultWaitingFor = (Boolean) methods.get(method);
+                } else if ("codeRequired".equals(method)) {
+                	Boolean codeRequired = (Boolean) methods.get(method);
+                	logger.debug("codeRequired : {}", codeRequired);
                 } else {
-                    listMethods.add(new EsupOtpMethod((String) method, (JSONObject) methods.get((String) method)));
+                    listMethods.add(new EsupOtpMethod(method, (JSONObject) methods.get(method)));
                 }
             }
             
@@ -85,10 +87,9 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
             
             user = new EsupOtpUser(uid, userHash, listMethods, transports);
         } catch (JSONException e) {
-            System.out.println(e);
+        	logger.error("JSONException ...", e);
         }
-        List listTransports = new ArrayList();
-        listTransports = this.getTransports(listMethods);
+        List<Map<String, String>> listTransports = this.getTransports(listMethods);
 
         requestContext.getFlowScope().put("apiUrl", esupOtpConfigurationProperties.getUrlApi());
         requestContext.getFlowScope().put("listTransports", listTransports);
@@ -97,8 +98,8 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
         return new EventFactorySupport().event(this, "authWithCode");
     }
 
-    private List<Map> getTransports(List<EsupOtpMethod> methods) {
-        List<Map> transports = new ArrayList<>();
+    private List<Map<String, String>> getTransports(List<EsupOtpMethod> methods) {
+    	List<Map<String, String>> transports = new ArrayList<>();
         //Map<Integer, Map> transports = new HashMap<>();
         Map <String, String> transport;
 
@@ -120,21 +121,19 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
     private JSONObject getUserInfos(String uid) throws IOException, NoSuchAlgorithmException {
         String url = esupOtpConfigurationProperties.getUrlApi() + "/users/" + uid + "/" + getUserHash(uid);
         URL obj = new URL(url);
-        int responseCode;
         HttpURLConnection con = null;
         con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
-        logger.info("mfa-esupotp request send to [{}]", (String) url);
-        responseCode = con.getResponseCode();
+        logger.info("mfa-esupotp request send to [{}]", url.toString());
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
         StringBuffer response = new StringBuffer();
-
         while ((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
         in.close();
-
+        logger.debug("getUserInfos({}) : {}", uid, response.toString());
+        
         return new JSONObject(response.toString());
     }
 
