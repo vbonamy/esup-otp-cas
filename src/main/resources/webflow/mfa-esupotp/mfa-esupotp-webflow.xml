@@ -27,7 +27,7 @@
         <transition on="submit" to="submitTransportEsupOtp"/>
     </view-state>
     
-    <view-state id="submitCodeFormView" view="casEsupOtpCodeView" model="credential">
+    <view-state id="submitCodeFormView" view="esupOtpCodeView" model="credential">
         <binder>
             <binding property="token" required="true"/>
         </binder>
@@ -38,7 +38,7 @@
         <transition on="callTransportView" to="sendRequestCodeView"/>
     </view-state>
     
-    <view-state id="sendRequestCodeView" view="fragments/requestCodeFormView" model="transportCredential">
+    <view-state id="sendRequestCodeView" view="fragments/esupOtpRequestCodeFormView" model="transportCredential">
         <transition on="submitCallTransport" to="submitTransportEsupOtp"/>
     </view-state>
 
@@ -48,8 +48,8 @@
         <transition on="error" to="errorView" />
     </action-state>
 
-    <view-state id="successView" view="fragments/successView"></view-state>
-    <view-state id="errorView" view="fragments/errorView"></view-state>
+    <view-state id="successView" view="fragments/esupOtpSuccessView"></view-state>
+    <view-state id="errorView" view="fragments/esupOtpErrorView"></view-state>
         
     <action-state id="bypassLoginForm">
     	<evaluate expression="credential.activeBypass()" />

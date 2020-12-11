@@ -33,7 +33,7 @@
                           <span th:each="err : ${#fields.errors('*')}" th:utext="${err}"/>
 			</div>
 			<section class="form-group">
-                          <label for="token" th:utext="#{cas.mfa.esupotp.password}"/> :			  
+                          <label for="token" th:utext="#{cas.mfa.esupotp.password}"/>			  
 			  <div>
                             <input type="text" class="form-control required" id="token" size="25" tabindex="1"
 				   th:field="*{token}"
