@@ -14,12 +14,15 @@ import org.springframework.web.util.CookieGenerator;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * This is {@link EsupOtpAuthenticationWebflowEventResolver}.
  *
  * @author Alex Bouskine
  * @since 5.0.0
  */
+@Slf4j
 public class EsupOtpAuthenticationWebflowEventResolver extends AbstractCasWebflowEventResolver {
     
     public EsupOtpAuthenticationWebflowEventResolver(final AuthenticationSystemSupport authenticationSystemSupport,

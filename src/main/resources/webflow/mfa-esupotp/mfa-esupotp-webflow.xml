@@ -19,8 +19,6 @@
         <evaluate expression="esupotpGetTransportsAction" />
         <transition on="authWithoutCode" to="noCodeWaitingView"/>
         <transition on="authWithCode" to="submitCodeFormView"/>
-        
-        <transition on="bypass" to="bypassLoginForm"/>
     </action-state>
     
     <view-state id="noCodeWaitingView" view="casEsupOtpNoCodeView">
@@ -50,13 +48,7 @@
 
     <view-state id="successView" view="fragments/esupOtpSuccessView"></view-state>
     <view-state id="errorView" view="fragments/esupOtpErrorView"></view-state>
-        
-    <action-state id="bypassLoginForm">
-    	<evaluate expression="credential.activeBypass()" />
-        <transition on="success" to="realSubmitEsupOtp" />
-        <transition on="error" to="initializeLoginForm" />
-    </action-state>
-    
+
     <action-state id="realSubmitEsupOtp">
         <evaluate expression="esupotpAuthenticationWebflowAction" />
         <transition on="success" to="success" />

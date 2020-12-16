@@ -35,25 +35,19 @@ public class EsupOtpTransportService {
         try {
                 JSONObject response = sendCodeRequest(transportCredential.getUid(), transportCredential.getUserHash(), transportCredential.getTransport(), transportCredential.getMethod());
                 if(response.getString("code").equals("Ok"))return "success";
-        } catch (NoSuchAlgorithmException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-        } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-        }
+        } catch (NoSuchAlgorithmException|IOException e) {
+        	logger.error("sendCode failed", e);
+        } 
         return "error";
 	}
 
 	private JSONObject sendCodeRequest(String uid, String userHash, String transport, String method) throws IOException, NoSuchAlgorithmException {
-		String url = esupOtpConfigurationProperties.getUrlApi() + "/users/" + uid + "/methods/"+ method +"/transports/"+ transport + "/" + userHash;
+		String url = esupOtpConfigurationProperties.getUrlApi() + "/users/" + uid + "/methods/" + method + "/transports/"+ transport + "/" + userHash;
 		URL obj = new URL(url);
-		int responseCode;
 		HttpURLConnection con = null;
 		con = (HttpURLConnection) obj.openConnection();
 		con.setRequestMethod("POST");
         logger.info("mfa-esupotp request send to [{}]", (String) url);
-		responseCode = con.getResponseCode();
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();

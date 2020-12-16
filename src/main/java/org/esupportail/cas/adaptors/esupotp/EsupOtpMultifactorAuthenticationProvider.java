@@ -8,7 +8,6 @@ import org.esupportail.cas.config.EsupOtpConfigurationProperties;
 import org.esupportail.cas.configuration.model.support.mfa.EsupOtpMultifactorProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 
 /**
  * The authentication provider

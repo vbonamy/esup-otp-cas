@@ -1,11 +1,11 @@
 package org.esupportail.cas.adaptors.esupotp;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apereo.cas.authentication.Credential;
-
-import java.io.Serializable;
 
 /**
  * This is {@link EsupOtpCredential}.
@@ -14,11 +14,10 @@ import java.io.Serializable;
  * @since 5.0.0
  */
 public class EsupOtpCredential implements Credential, Serializable {
+	
     private static final long serialVersionUID = -7570600701132111037L;
 
     private String token;
-    
-    private Boolean bypass = false;
 
 	/**
      * Instantiates a new Esup otp token credential.
@@ -79,17 +78,5 @@ public class EsupOtpCredential implements Credential, Serializable {
 
     public boolean isValid() {
         return this.token != null;
-    }
-    
-    public Boolean getBypass() {
-        return bypass;
-    }
-
-    public void setBypass(final Boolean bypass) {
-        this.bypass = bypass;
-    }
-
-    public void activeBypass() {
-        this.bypass = true;
     }
 }

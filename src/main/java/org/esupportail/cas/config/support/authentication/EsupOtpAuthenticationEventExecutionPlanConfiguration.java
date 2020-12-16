@@ -2,6 +2,7 @@ package org.esupportail.cas.config.support.authentication;
 
 import org.apereo.cas.authentication.AuthenticationEventExecutionPlanConfigurer;
 import org.apereo.cas.authentication.AuthenticationHandler;
+import org.apereo.cas.authentication.ChainingMultifactorAuthenticationBypassProvider;
 import org.apereo.cas.authentication.MultifactorAuthenticationProvider;
 import org.apereo.cas.authentication.MultifactorAuthenticationProviderBypass;
 import org.apereo.cas.authentication.MultifactorAuthenticationUtils;
@@ -12,6 +13,7 @@ import org.apereo.cas.services.ServicesManager;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpAuthenticationHandler;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpAuthenticationMetaDataPopulator;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpMultifactorAuthenticationProvider;
+import org.esupportail.cas.adaptors.esupotp.EsupOtpService;
 import org.esupportail.cas.config.EsupOtpConfigurationProperties;
 import org.esupportail.cas.configuration.model.support.mfa.EsupOtpMultifactorProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +60,16 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
         	esupotpMultifactorProperties().getName(), 
         	servicesManager, 
         	esupotpPrincipalFactory(),
-        	esupOtpConfigurationProperties
+        	esupOtpConfigurationProperties,
+        	esupOtpService()
         );
     }
 
+	@Bean
+	public EsupOtpService esupOtpService() {
+		return new EsupOtpService(esupOtpConfigurationProperties);
+	}
+	
 	@Bean
 	public PrincipalFactory esupotpPrincipalFactory() {
 		return new DefaultPrincipalFactory();
@@ -82,7 +90,9 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
     @Bean
     @RefreshScope
     public MultifactorAuthenticationProviderBypass esupOtpBypassEvaluator() {
-        return MultifactorAuthenticationUtils.newMultifactorAuthenticationProviderBypass(esupotpMultifactorProperties().getBypass());
+    	ChainingMultifactorAuthenticationBypassProvider esupOtpBypassEvaluator = (ChainingMultifactorAuthenticationBypassProvider)MultifactorAuthenticationUtils.newMultifactorAuthenticationProviderBypass(esupotpMultifactorProperties().getBypass());
+    	esupOtpBypassEvaluator.addBypass(new EsupTopBypassProvider(esupOtpService()));
+    	return esupOtpBypassEvaluator;
     }
 
 	@Bean

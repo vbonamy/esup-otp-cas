@@ -10,6 +10,7 @@ import org.apereo.cas.ticket.registry.TicketRegistrySupport;
 import org.apereo.cas.web.flow.CasWebflowConfigurer;
 import org.apereo.cas.web.flow.authentication.RankedMultifactorAuthenticationProviderSelector;
 import org.apereo.cas.web.flow.resolver.CasWebflowEventResolver;
+import org.esupportail.cas.adaptors.esupotp.EsupOtpService;
 import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpAuthenticationWebflowAction;
 import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpAuthenticationWebflowEventResolver;
 import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpGetTransportsAction;
@@ -102,8 +103,8 @@ public class EsupOtpConfiguration {
 	}
 
 	@Bean
-	@RefreshScope public Action esupotpGetTransportsAction() {
-		final EsupOtpGetTransportsAction a = new EsupOtpGetTransportsAction(esupOtpConfigurationProperties);
+	@RefreshScope public Action esupotpGetTransportsAction(EsupOtpService esupOtpService) {
+		final EsupOtpGetTransportsAction a = new EsupOtpGetTransportsAction(esupOtpConfigurationProperties, esupOtpService);
 		return a;
 	}
 
