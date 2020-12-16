@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
+import org.apereo.cas.web.flow.CasWebflowConstants;
 import org.apereo.cas.web.support.WebUtils;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpMethod;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpUser;
@@ -78,7 +79,7 @@ public class EsupOtpGetTransportsAction extends AbstractAction {
             //Uncomment for bypass users with no activated methods
             if (bypass(listMethods)) {
                 logger.info("mfa-esupotp bypass");
-                return new EventFactorySupport().event(this, "bypass");
+                return new EventFactorySupport().event(this, CasWebflowConstants.TRANSITION_ID_BYPASS);
             }
             
             // will give order to the page to display only WaitingFor block if needed
