@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @AllArgsConstructor
-public class EsupTopBypassProvider implements MultifactorAuthenticationProviderBypass {
+public class EsupOtpBypassProvider implements MultifactorAuthenticationProviderBypass {
 
 	private static final long serialVersionUID = 1L;
 
