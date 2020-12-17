@@ -12,7 +12,7 @@
 <body>
 <main role="main" class="container mt-3 mb-3">
     <div layout:fragment="content">
-            <div id="data" th:data-apiurl="${apiUrl}" th:data-userhash="${user.getHash()}" th:data-uid="${user.getUid()}" th:data-divnocodedisplay="${divNoCodeDisplay}" th:data-waitingformethod="${waitingForMethodName}">
+            <div id="data" th:data-apiurl="${apiUrl}" th:data-userhash="${user.getHash()}" th:data-uid="${user.getUid()}" th:data-divnocodedisplay="${divNoCodeDisplay}" th:data-pushAsked="${pushAsked}">
 	      <div id="content" class="row">
 		<div class="col-md">
 		  <div class="card">
@@ -77,7 +77,7 @@
                         if($(this).val() != 'push'){
                             submitCodeRequest();
                         } else {
-                            submitPushCodeRequest($(this).val());
+                            submitPushCodeRequest();
                         }
                     });
                 });
@@ -85,18 +85,21 @@
                 var socket;
                 var apiUrl = $("#data").data('apiurl');
                 var divNoCodeDisplay = $("#data").data('divnocodedisplay');
-                var waitingForMethodName = $("#data").data('waitingformethod');
+                var pushAsked = $("#data").data('pushAsked');
                 var uid = $('#data').data('uid');
                 var userHash = $('#data').data('userhash');
                 
                 // if waitingFor method is activated, waitingForDiv will appear else TransportDiv will appear
                 function activateWaitingFor(){
-                    if(divNoCodeDisplay){
+                    if(divNoCodeDisplay) {
                         $('#waiting').toggleClass('d-none');
-                        submitPushCodeRequest(waitingForMethodName);
+                        initializeSocket();
                     } else {
                         $('#loginForm').toggleClass('d-none');
                         $('#codeRequest').toggleClass('d-none');
+                    }
+                    if(pushAsked) {
+                    	submitPushCodeRequest();
                     }
                 }
                 
@@ -120,28 +123,25 @@
                     });
                 }
                 
-                function submitPushCodeRequest(methodName) {
+                function submitPushCodeRequest() {
                     $.ajax({
                         type: 'POST',
-                        url: apiUrl + '/users/'+ uid +'/methods/' + methodName + '/transports/push/' + userHash
+                        url: apiUrl + '/users/'+ uid +'/methods/push/transports/push/' + userHash
                     }).done(function(data) {
-                        if (data.code == "Ok") {
-                            socket = io.connect(apiUrl, {
-                                reconnect: true, 
-                                path: "/sockets", 
-                                query: 'uid=' + uid + '&hash=' + userHash + '&app=cas'
-                            });
-                            initializeSocket();
-                        } else {
-                            console.log("Something is broken");
+                        if (data.code != "Ok") {
+                            console.log("Something is broken : " + data);
                         }
                     });
                 }
                 
                 function initializeSocket() {
-                    socket.on('connect', function () {
+                    socket = io.connect(apiUrl, {
+                        reconnect: true, 
+                        path: "/sockets", 
+                        query: 'uid=' + uid + '&hash=' + userHash + '&app=cas'
                     });
-                
+                    socket.on('connect', function () {
+                    });          
                     socket.on('userAuth', function (data) {
                         if (data.code == "Ok") {
                             $('#token').val(data.otp);

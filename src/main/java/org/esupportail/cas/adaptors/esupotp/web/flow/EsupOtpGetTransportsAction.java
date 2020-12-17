@@ -41,9 +41,7 @@ public class EsupOtpGetTransportsAction extends AbstractMultifactorAuthenticatio
         final RequestContext context = RequestContextHolder.getRequestContext();
         final String uid = WebUtils.getAuthentication(context).getPrincipal().getId();
         String userHash = esupOtpService.getUserHash(uid);
-        String waitingForMethodName = "push";
-        
-        WebUtils.putCredential(requestContext, new EsupOtpCredential());
+        boolean pushAsked = false;
 
         requestContext.getFlowScope().put("uid", uid);
         requestContext.getFlowScope().put("userHash", userHash);
@@ -65,13 +63,17 @@ public class EsupOtpGetTransportsAction extends AbstractMultifactorAuthenticatio
                 	Boolean codeRequired = (Boolean) methods.get(method);
                 	log.debug("codeRequired : {}", codeRequired);
                 } else {
-                    listMethods.add(new EsupOtpMethod(method, (JSONObject) methods.get(method)));
+                	EsupOtpMethod m = new EsupOtpMethod(method, (JSONObject) methods.get(method));
+                    listMethods.add(m);
+                    if("push".equals(m.getName()) && m.getActive()) {
+                    	pushAsked = true;
+                    }
                 }
             }
 
             // will give order to the page to display only WaitingFor block if needed
             requestContext.getFlowScope().put("divNoCodeDisplay", defaultWaitingFor);
-            requestContext.getFlowScope().put("waitingForMethodName", waitingForMethodName);
+            requestContext.getFlowScope().put("pushAsked", pushAsked);
             
             user = new EsupOtpUser(uid, userHash, listMethods, transports);
         } catch (JSONException e) {
