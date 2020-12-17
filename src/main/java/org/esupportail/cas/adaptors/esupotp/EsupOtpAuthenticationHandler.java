@@ -1,14 +1,9 @@
 package org.esupportail.cas.adaptors.esupotp;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
-import javax.annotation.PostConstruct;
 import javax.security.auth.login.FailedLoginException;
 
 import org.apereo.cas.authentication.AuthenticationHandlerExecutionResult;
@@ -18,15 +13,11 @@ import org.apereo.cas.authentication.handler.support.AbstractPreAndPostProcessin
 import org.apereo.cas.authentication.principal.PrincipalFactory;
 import org.apereo.cas.services.ServicesManager;
 import org.apereo.cas.web.support.WebUtils;
-import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpGetTransportsAction;
 import org.esupportail.cas.config.EsupOtpConfigurationProperties;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**

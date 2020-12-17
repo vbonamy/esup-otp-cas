@@ -31,26 +31,29 @@ public class EsupOtpBypassProvider implements MultifactorAuthenticationProviderB
 	public boolean shouldMultifactorAuthenticationProviderExecute(Authentication authentication,
 			RegisteredService registeredService, MultifactorAuthenticationProvider provider,
 			HttpServletRequest request) {
-		
-		final RequestContext context = RequestContextHolder.getRequestContext();
-		final String uid = WebUtils.getAuthentication(context).getPrincipal().getId();
-
-		try {
-			JSONObject userInfos = esupOtpService.getUserInfos(uid);
-			List<EsupOtpMethod> listMethods = new ArrayList<EsupOtpMethod>();
-
-			JSONObject methods = (JSONObject) ((JSONObject) userInfos.get("user")).get("methods");
-
-			for (String method : methods.keySet()) {
-				if (!"waitingFor".equals(method) && !"codeRequired".equals(method)) {
-					listMethods.add(new EsupOtpMethod(method, (JSONObject) methods.get(method)));
+		try {		
+			final RequestContext context = RequestContextHolder.getRequestContext();
+			if(context == null) {
+				log.debug("Not in flow context");
+			} else {
+				final String uid = WebUtils.getAuthentication(context).getPrincipal().getId();
+	
+				JSONObject userInfos = esupOtpService.getUserInfos(uid);
+				List<EsupOtpMethod> listMethods = new ArrayList<EsupOtpMethod>();
+	
+				JSONObject methods = (JSONObject) ((JSONObject) userInfos.get("user")).get("methods");
+	
+				for (String method : methods.keySet()) {
+					if (!"waitingFor".equals(method) && !"codeRequired".equals(method)) {
+						listMethods.add(new EsupOtpMethod(method, (JSONObject) methods.get(method)));
+					}
 				}
-			}
-
-			//Uncomment for bypass users with no activated methods
-			if (esupOtpService.bypass(listMethods)) {
-				log.info("mfa-esupotp bypass");
-				return false;
+	
+				//Uncomment for bypass users with no activated methods
+				if (esupOtpService.bypass(listMethods)) {
+					log.info("mfa-esupotp bypass");
+					return false;
+				}
 			}
 		} catch (Exception e) {
 			log.error("Exception ...", e);
