@@ -12,7 +12,7 @@
 <body>
 <main role="main" class="container mt-3 mb-3">
     <div layout:fragment="content">
-            <div id="data" th:data-apiurl="${apiUrl}" th:data-userhash="${user.getHash()}" th:data-uid="${user.getUid()}" th:data-divnocodedisplay="${divNoCodeDisplay}" th:data-pushAsked="${pushAsked}">
+            <div id="data" th:data-apiurl="${apiUrl}" th:data-userhash="${user.getHash()}" th:data-uid="${user.getUid()}" th:data-divnocodedisplay="${divNoCodeDisplay}" th:data-pushasked="${pushAsked}">
 	      <div id="content" class="row">
 		<div class="col-md">
 		  <div class="card">
@@ -85,7 +85,7 @@
                 var socket;
                 var apiUrl = $("#data").data('apiurl');
                 var divNoCodeDisplay = $("#data").data('divnocodedisplay');
-                var pushAsked = $("#data").data('pushAsked');
+                var pushAsked = $("#data").data('pushasked');
                 var uid = $('#data').data('uid');
                 var userHash = $('#data').data('userhash');
                 
