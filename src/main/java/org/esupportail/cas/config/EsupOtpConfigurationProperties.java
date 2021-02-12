@@ -26,6 +26,8 @@ public class EsupOtpConfigurationProperties implements InitializingBean {
 	String usersSecret = "CAS";
 	
 	String apiPassword = "CAS";
+	
+	Boolean byPassIfNoEsupOtpMethodIsActive = true;
 
 	@Override
 	public void afterPropertiesSet() throws Exception {

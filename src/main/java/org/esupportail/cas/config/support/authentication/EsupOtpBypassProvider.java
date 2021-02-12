@@ -12,6 +12,7 @@ import org.apereo.cas.services.RegisteredService;
 import org.apereo.cas.web.support.WebUtils;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpMethod;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpService;
+import org.esupportail.cas.config.EsupOtpConfigurationProperties;
 import org.json.JSONObject;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
@@ -27,14 +28,18 @@ public class EsupOtpBypassProvider implements MultifactorAuthenticationProviderB
 
     EsupOtpService esupOtpService;
     
+    EsupOtpConfigurationProperties esupOtpConfigurationProperties;
+    
 	@Override
 	public boolean shouldMultifactorAuthenticationProviderExecute(Authentication authentication,
 			RegisteredService registeredService, MultifactorAuthenticationProvider provider,
 			HttpServletRequest request) {
-		try {		
+		try {					
+			log.debug("mfa-esupotp bypass evaluation ...");		
 			final RequestContext context = RequestContextHolder.getRequestContext();
 			if(context == null) {
-				log.debug("Not in flow context");
+				log.trace("Not in flow context");
+				return false;
 			} else {
 				final String uid = WebUtils.getAuthentication(context).getPrincipal().getId();
 	
@@ -49,9 +54,8 @@ public class EsupOtpBypassProvider implements MultifactorAuthenticationProviderB
 					}
 				}
 	
-				//Uncomment for bypass users with no activated methods
-				if (esupOtpService.bypass(listMethods)) {
-					log.info("mfa-esupotp bypass");
+				if (esupOtpConfigurationProperties.getByPassIfNoEsupOtpMethodIsActive() && esupOtpService.bypass(listMethods)) {
+					log.info(String.format("no method active for %s - mfa-esupotp bypass", uid));
 					return false;
 				}
 			}

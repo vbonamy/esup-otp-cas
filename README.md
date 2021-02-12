@@ -12,6 +12,7 @@ esupotp.rank=0
 esupotp.urlApi=http://my-api.com:8081
 esupotp.usersSecret=changeit
 esupotp.apiPassword=changeit
+esupotp.byPassIfNoEsupOtpMethodIsActive=true
 ```
 
 In cas.properties

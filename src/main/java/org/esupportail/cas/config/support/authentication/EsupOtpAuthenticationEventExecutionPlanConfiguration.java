@@ -91,7 +91,7 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
     @RefreshScope
     public MultifactorAuthenticationProviderBypass esupOtpBypassEvaluator() {
     	ChainingMultifactorAuthenticationBypassProvider esupOtpBypassEvaluator = (ChainingMultifactorAuthenticationBypassProvider)MultifactorAuthenticationUtils.newMultifactorAuthenticationProviderBypass(esupotpMultifactorProperties().getBypass());
-    	esupOtpBypassEvaluator.addBypass(new EsupOtpBypassProvider(esupOtpService()));
+    	esupOtpBypassEvaluator.addBypass(new EsupOtpBypassProvider(esupOtpService(), esupOtpConfigurationProperties));
     	return esupOtpBypassEvaluator;
     }
 
