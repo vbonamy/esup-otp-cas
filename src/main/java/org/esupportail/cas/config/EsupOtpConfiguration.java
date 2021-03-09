@@ -7,17 +7,23 @@ import org.apereo.cas.authentication.MultifactorAuthenticationProviderSelector;
 import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.services.ServicesManager;
 import org.apereo.cas.ticket.registry.TicketRegistrySupport;
+import org.apereo.cas.trusted.authentication.api.MultifactorAuthenticationTrustStorage;
 import org.apereo.cas.web.flow.CasWebflowConfigurer;
+import org.apereo.cas.web.flow.CasWebflowExecutionPlan;
+import org.apereo.cas.web.flow.CasWebflowExecutionPlanConfigurer;
 import org.apereo.cas.web.flow.authentication.RankedMultifactorAuthenticationProviderSelector;
 import org.apereo.cas.web.flow.resolver.CasWebflowEventResolver;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpService;
 import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpAuthenticationWebflowAction;
 import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpAuthenticationWebflowEventResolver;
 import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpGetTransportsAction;
+import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpMultifactorTrustWebflowConfigurer;
 import org.esupportail.cas.adaptors.esupotp.web.flow.EsupOtpMultifactorWebflowConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.ApplicationEventPublisher;
@@ -31,9 +37,13 @@ import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices;
 import org.springframework.webflow.execution.Action;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration("esupotpConfiguration")
 @EnableConfigurationProperties(CasConfigurationProperties.class)
 public class EsupOtpConfiguration {
+		
 	@Autowired
 	private CasConfigurationProperties casProperties;
 
@@ -131,5 +141,33 @@ public class EsupOtpConfiguration {
         w.initialize();
         return w;
     }
+    
+
+    /**                                                                                                                                                                                                            
+     * multifactor trust configuration.                                                                                                                                                                 
+     */
+    @ConditionalOnClass(value = MultifactorAuthenticationTrustStorage.class)
+    @ConditionalOnProperty(prefix = "esupotp", name = "trustedDeviceEnabled", havingValue = "true", matchIfMissing = true)
+    @Configuration("esupOtpMultifactorTrustConfiguration")
+    public class EsupOtpMultifactorTrustConfiguration implements CasWebflowExecutionPlanConfigurer {
+
+        @ConditionalOnMissingBean(name = "esupotpMultifactorTrustWebflowConfigurer")
+        @Bean
+        @DependsOn("defaultWebflowConfigurer")
+        public CasWebflowConfigurer esupotpMultifactorTrustWebflowConfigurer() {
+        	log.debug("esupotp.trustedDeviceEnabled true, esupotpMultifactorTrustWebflowConfigurer ok");
+        	final CasWebflowConfigurer w =  new EsupOtpMultifactorTrustWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry,
+                casProperties.getAuthn().getMfa().getTrusted().isDeviceRegistrationEnabled(), esupotpFlowRegistry(),
+                applicationContext, casProperties);
+        	w.initialize();
+            return w;
+        }
+
+        @Override
+        public void configureWebflowExecutionPlan(final CasWebflowExecutionPlan plan) {
+            plan.registerWebflowConfigurer(esupotpMultifactorTrustWebflowConfigurer());
+        }
+    }
+
 
 }

@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apereo.cas.web.flow.actions.AbstractMultifactorAuthenticationAction;
 import org.apereo.cas.web.support.WebUtils;
-import org.esupportail.cas.adaptors.esupotp.EsupOtpCredential;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpMethod;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpMultifactorAuthenticationProvider;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpService;

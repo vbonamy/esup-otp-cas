@@ -27,5 +27,6 @@ dependencies {
     compile "org.apereo.cas:cas-server-core-authentication:${project.'cas.version'}"
     compile "org.apereo.cas:cas-server-core-webflow:${project.'cas.version'}"
     compile "org.apereo.cas:cas-server-core-webflow-mfa:${project.'cas.version'}"
+    compile "org.apereo.cas:cas-server-support-trusted-mfa:${project.'cas.version'}"
 }
 

@@ -28,7 +28,9 @@ public class EsupOtpConfigurationProperties implements InitializingBean {
 	String apiPassword = "CAS";
 	
 	Boolean byPassIfNoEsupOtpMethodIsActive = true;
-
+	
+	Boolean trustedDeviceEnabled = true;
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		log.info("rank : {}", rank);
