@@ -26,7 +26,7 @@ public class EsupOtpMultifactorTrustWebflowConfigurer extends AbstractMultifacto
                                                       final FlowDefinitionRegistry flowDefinitionRegistry,
                                                       final ApplicationContext applicationContext,
                                                       final CasConfigurationProperties casProperties) {
-        super(flowBuilderServices, loginFlowDefinitionRegistry, enableDeviceRegistration, applicationContext, casProperties);
+        super(flowBuilderServices, loginFlowDefinitionRegistry, enableDeviceRegistration && isDeviceRegistrationRequired, applicationContext, casProperties);
         this.flowDefinitionRegistry = flowDefinitionRegistry;
         this.isDeviceRegistrationRequired = isDeviceRegistrationRequired;
     }
@@ -36,8 +36,9 @@ public class EsupOtpMultifactorTrustWebflowConfigurer extends AbstractMultifacto
         val flowId = Arrays.stream(flowDefinitionRegistry.getFlowDefinitionIds()).findFirst().get();
         val flow = (Flow) flowDefinitionRegistry.getFlowDefinition(flowId);
         // Hack : override DECISION_STATE_REQUIRE_REGISTRATION that is used (and normally created) by AbstractMultifactorTrustedDeviceWebflowConfigurer.registerMultifactorTrustedAuthentication
+        // -> with this, we bypass register form device if isDeviceRegistrationRequired=false
         createDecisionState(flow, CasWebflowConstants.DECISION_STATE_REQUIRE_REGISTRATION,
-                isDeviceRegistrationRequired.toString(),
+                isDeviceRegistrationRequired.toString() + " and flashScope.".concat(MFA_TRUSTED_AUTHN_SCOPE_ATTR).concat("== null"),
                 CasWebflowConstants.VIEW_ID_REGISTER_DEVICE, CasWebflowConstants.STATE_ID_REGISTER_TRUSTED_DEVICE);
         registerMultifactorTrustedAuthentication(this.flowDefinitionRegistry);
 
