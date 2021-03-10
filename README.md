@@ -14,6 +14,7 @@ esupotp.usersSecret=changeit
 esupotp.apiPassword=changeit
 esupotp.byPassIfNoEsupOtpMethodIsActive=true
 esupotp.trustedDeviceEnabled=true
+esupotp.isDeviceRegistrationRequired=false
 ```
 
 In cas.properties

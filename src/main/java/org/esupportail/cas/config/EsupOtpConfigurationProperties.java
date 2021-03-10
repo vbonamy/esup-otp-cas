@@ -31,6 +31,8 @@ public class EsupOtpConfigurationProperties implements InitializingBean {
 	
 	Boolean trustedDeviceEnabled = true;
 	
+	Boolean isDeviceRegistrationRequired = false;
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		log.info("rank : {}", rank);
