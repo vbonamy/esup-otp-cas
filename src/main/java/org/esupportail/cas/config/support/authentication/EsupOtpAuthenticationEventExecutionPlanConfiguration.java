@@ -2,10 +2,9 @@ package org.esupportail.cas.config.support.authentication;
 
 import org.apereo.cas.authentication.AuthenticationEventExecutionPlanConfigurer;
 import org.apereo.cas.authentication.AuthenticationHandler;
-import org.apereo.cas.authentication.ChainingMultifactorAuthenticationBypassProvider;
 import org.apereo.cas.authentication.MultifactorAuthenticationProvider;
-import org.apereo.cas.authentication.MultifactorAuthenticationProviderBypass;
-import org.apereo.cas.authentication.MultifactorAuthenticationUtils;
+import org.apereo.cas.authentication.bypass.DefaultChainingMultifactorAuthenticationBypassProvider;
+import org.apereo.cas.authentication.bypass.MultifactorAuthenticationProviderBypassEvaluator;
 import org.apereo.cas.authentication.principal.DefaultPrincipalFactory;
 import org.apereo.cas.authentication.principal.PrincipalFactory;
 import org.apereo.cas.configuration.CasConfigurationProperties;
@@ -89,9 +88,9 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
 	
     @Bean
     @RefreshScope
-    public MultifactorAuthenticationProviderBypass esupOtpBypassEvaluator() {
-    	ChainingMultifactorAuthenticationBypassProvider esupOtpBypassEvaluator = (ChainingMultifactorAuthenticationBypassProvider)MultifactorAuthenticationUtils.newMultifactorAuthenticationProviderBypass(esupotpMultifactorProperties().getBypass());
-    	esupOtpBypassEvaluator.addBypass(new EsupOtpBypassProvider(esupOtpService(), esupOtpConfigurationProperties));
+    public MultifactorAuthenticationProviderBypassEvaluator esupOtpBypassEvaluator() {
+    	DefaultChainingMultifactorAuthenticationBypassProvider esupOtpBypassEvaluator =  new DefaultChainingMultifactorAuthenticationBypassProvider();
+    	esupOtpBypassEvaluator.addMultifactorAuthenticationProviderBypassEvaluator(new EsupOtpBypassProvider(esupOtpService(), esupOtpConfigurationProperties));
     	return esupOtpBypassEvaluator;
     }
 

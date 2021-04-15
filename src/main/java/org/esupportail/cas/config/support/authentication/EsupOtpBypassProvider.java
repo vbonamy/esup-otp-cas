@@ -7,22 +7,21 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apereo.cas.authentication.Authentication;
 import org.apereo.cas.authentication.MultifactorAuthenticationProvider;
-import org.apereo.cas.authentication.MultifactorAuthenticationProviderBypass;
+import org.apereo.cas.authentication.bypass.BaseMultifactorAuthenticationProviderBypassEvaluator;
 import org.apereo.cas.services.RegisteredService;
 import org.apereo.cas.web.support.WebUtils;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpMethod;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpService;
 import org.esupportail.cas.config.EsupOtpConfigurationProperties;
+import org.esupportail.cas.configuration.model.support.mfa.EsupOtpMultifactorProperties;
 import org.json.JSONObject;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@AllArgsConstructor
-public class EsupOtpBypassProvider implements MultifactorAuthenticationProviderBypass {
+public class EsupOtpBypassProvider extends BaseMultifactorAuthenticationProviderBypassEvaluator {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,8 +29,15 @@ public class EsupOtpBypassProvider implements MultifactorAuthenticationProviderB
     
     EsupOtpConfigurationProperties esupOtpConfigurationProperties;
     
+	public EsupOtpBypassProvider(EsupOtpService esupOtpService,
+			EsupOtpConfigurationProperties esupOtpConfigurationProperties) {
+		super(EsupOtpMultifactorProperties.DEFAULT_IDENTIFIER);
+		this.esupOtpService = esupOtpService;
+		this.esupOtpConfigurationProperties = esupOtpConfigurationProperties;
+	}
+
 	@Override
-	public boolean shouldMultifactorAuthenticationProviderExecute(Authentication authentication,
+	public boolean shouldMultifactorAuthenticationProviderExecuteInternal(Authentication authentication,
 			RegisteredService registeredService, MultifactorAuthenticationProvider provider,
 			HttpServletRequest request) {
 		try {					
