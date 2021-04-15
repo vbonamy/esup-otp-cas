@@ -13,12 +13,12 @@ import org.esupportail.cas.adaptors.esupotp.EsupOtpUser;
 import org.esupportail.cas.config.EsupOtpConfigurationProperties;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.context.ApplicationContext;
 import org.springframework.webflow.action.EventFactorySupport;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.RequestContextHolder;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -28,14 +28,20 @@ import lombok.extern.slf4j.Slf4j;
  * @since 5.0.0
  */
 @Slf4j
-@AllArgsConstructor
 public class EsupOtpGetTransportsAction extends AbstractMultifactorAuthenticationAction<EsupOtpMultifactorAuthenticationProvider> {
 
     private EsupOtpConfigurationProperties esupOtpConfigurationProperties;
 
     EsupOtpService esupOtpService;
-    
-    @Override
+
+    public EsupOtpGetTransportsAction(ApplicationContext applicationContext,
+			EsupOtpConfigurationProperties esupOtpConfigurationProperties, EsupOtpService esupOtpService) {
+		super(applicationContext);
+		this.esupOtpConfigurationProperties = esupOtpConfigurationProperties;
+		this.esupOtpService = esupOtpService;
+	}
+
+	@Override
     protected Event doExecute(final RequestContext requestContext) throws Exception {
         final RequestContext context = RequestContextHolder.getRequestContext();
         final String uid = WebUtils.getAuthentication(context).getPrincipal().getId();

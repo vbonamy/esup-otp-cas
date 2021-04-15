@@ -1,8 +1,12 @@
 package org.esupportail.cas.adaptors.esupotp.web.flow;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.web.flow.configurer.AbstractCasMultifactorWebflowConfigurer;
-import org.springframework.context.ApplicationContext;
+import org.apereo.cas.web.flow.configurer.CasMultifactorWebflowCustomizer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices;
 
@@ -22,14 +26,15 @@ public class EsupOtpMultifactorWebflowConfigurer extends AbstractCasMultifactorW
     public EsupOtpMultifactorWebflowConfigurer(final FlowBuilderServices flowBuilderServices,
                                                            final FlowDefinitionRegistry loginFlowDefinitionRegistry,
                                                            final FlowDefinitionRegistry flowDefinitionRegistry,
-                                                           final ApplicationContext applicationContext,
-                                                           final CasConfigurationProperties casProperties) {
-        super(flowBuilderServices, loginFlowDefinitionRegistry, applicationContext, casProperties);
+                                                           final ConfigurableApplicationContext applicationContext,
+                                                           final CasConfigurationProperties casProperties,
+                                                           final List<CasMultifactorWebflowCustomizer> mfaFlowCustomizers) {
+        super(flowBuilderServices, loginFlowDefinitionRegistry, applicationContext, casProperties, Optional.of(flowDefinitionRegistry), mfaFlowCustomizers);
         this.flowDefinitionRegistry = flowDefinitionRegistry;
     }
     
     @Override
     protected void doInitialize() {
-    	registerMultifactorProviderAuthenticationWebflow(getLoginFlow(), MFA_ESUPOTP_EVENT_ID, this.flowDefinitionRegistry, MFA_ESUPOTP_EVENT_ID);
+    	registerMultifactorProviderAuthenticationWebflow(getLoginFlow(), MFA_ESUPOTP_EVENT_ID, MFA_ESUPOTP_EVENT_ID);
     }
 }
