@@ -1,23 +1,23 @@
 <div id="transportStatus"></div>
 
-<div class="card-body box">
+<div class="form-wrapper">
 <form method="post" id="fm2" class="fm-v clearfix" th:object="${credential}">  
     <input type="hidden" name="uid" th:value="${user.uid}" id="inputUid"/>
     <input type="hidden" name="userHash" th:value="${user.hash}" id="inputUserHash"/>
     <input type="hidden" name="method" value="" id="inputMethod"/>
     <input type="hidden" name="transport" value="" id="inputTransport"/>
 
-    <h3 for="token" th:utext="#{cas.mfa.esupotp.receiveCodeFromTransport}"/>      
-    <section class="form-group" th:each="transportMap : ${listTransports}">
-      
+    <h3 class="text-center" for="token" th:utext="#{cas.mfa.esupotp.receiveCodeFromTransport}"/>      
+
+    <section class="cas-field my-3" th:each="transportMap : ${listTransports}">
       <input 
-         class="btn btn-submit btn-block transportInput" style="background-color: rgb(29, 113, 184);  margin-bottom:15px;" type="button" 
+         class="mdc-button mdc-button--raised transportInput" style="background-color: rgb(29, 113, 184);  margin-bottom:15px;" type="button" 
          th:value="#{|cas.mfa.esupotp.transport.${transportMap.transport}.${transportMap.method}|}"
          th:onclick="document.getElementById('inputMethod').value=[[${transportMap.method}]];document.getElementById('inputTransport').value=[[${transportMap.transport}]];"
          />
     </section>
 
-    <section class="form-check">			    
+    <section class="cas-field my-3">			    
       <input class="btn btn-block btn-submit d-none" name="submitCallTransport" accesskey="l"
 	     th:value="#{screen.welcome.button.register}" tabindex="6" type="submit" id="submit" />
       <input type="hidden" name="execution" th:value="${flowExecutionKey}"/>                    

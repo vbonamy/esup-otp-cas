@@ -12,49 +12,59 @@
 <body>
 <main role="main" class="container mt-3 mb-3">
     <div layout:fragment="content">
-            <div id="data" th:data-apiurl="${apiUrl}" th:data-userhash="${user.getHash()}" th:data-uid="${user.getUid()}" th:data-divnocodedisplay="${divNoCodeDisplay}" th:data-pushasked="${pushAsked}">
-	      <div id="content" class="row">
-		<div class="col-md">
-		  <div class="card">
-                    <div class="card-header text-center">
-                      <h2 th:text="#{cas.login.pagetitle}">Login</h2>
-                      <span class="fa-stack fa-2x hidden-xs">
-			<i class="fa fa-circle fa-stack-2x"></i>
-			<i class="fa fa-lock fa-stack-1x fa-inverse"></i>
+            <div id="data" th:data-apiurl="${apiUrl}" th:data-userhash="${user.getHash()}" th:data-uid="${user.getUid()}" th:data-divnocodedisplay="${divNoCodeDisplay}" th:data-pushasked="${pushAsked}" class="d-flex justify-content-center flex-md-row flex-column mdc-card mdc-card-content w-lg-25">
+	      <section id="content" class="login-section login-form">
+		<div class="d-flex flex-column justify-content-between m-auto">
+		  <div>
+		    <div id="serviceui" class="mb-4">
+		      <div class="d-flex align-items-center p-2">
+			<img src="images/webapp.png"><div id="servicedesc" class="ml-2">
+			  <h5 th:text="#{cas.login.pagetitle}">Login</h5>
+			  <h3 th:utext="#{cas.mfa.esupotp.waitingFor}" id="waiting" class="text-center"></h3>
+			  <div id="displayTransport" class="btn btn-info" onClick="switchDiv();return false;">
+			    <span th:utext="#{cas.mfa.esupotp.displayOtherMethod}" />
+			  </div>
+			</div>
+		      </div>
 		    </div>
-		    <div id="displayTransport" class="btn btn-info" onClick="switchDiv();return false;">
-		      <span th:utext="#{cas.mfa.esupotp.displayOtherMethod}" />
-		    </div>
-		    <div class="card-body box">
-		      <h3 th:utext="#{cas.mfa.esupotp.waitingFor}" id="waiting" class="d-none"></h3>
-		      <div id="loginForm" class="d-none">
+		  </div>
+		  <div id="loginForm" class="form-wrapper">
                       <form method="post" id="fm1" th:object="${credential}">
 			<div id="msg" class="errors" th:if="${#fields.hasErrors('*')}">
                           <span th:each="err : ${#fields.errors('*')}" th:utext="${err}"/>
 			</div>
-			<section class="form-group">
-                          <label for="token" th:utext="#{cas.mfa.esupotp.password}"/>			  
-			  <div>
-                            <input type="text" class="form-control required" id="token" size="25" tabindex="1"
-				   th:field="*{token}"
-				   th:accesskey="#{screen.welcome.label.password.accesskey}" autocomplete="off"/>
-			  </div>
-			</section>
-			<section class="form-check">			
-                            <input class="btn btn-submit btn-block" accesskey="l" id="submitCode"
-				   th:value="#{screen.welcome.button.login}" tabindex="6" type="submit"/>
-			  </div>
-			</section>
-			
+			  <h3 class="text-center">
+			    <i class="mdi mdi-security"></i>
+			    <span th:utext="#{cas.mfa.esupotp.password}"/>			  
+			  </h3>
+			  <section class="cas-field my-3">
+			    <div class="d-flex">
+                            <label for="token" class="mdc-text-field mdc-text-field--outlined">
+                              <input type="text" class="mdc-text-field__input required" id="token" size="25" tabindex="1"
+				     th:field="*{token}"
+				     th:accesskey="#{screen.welcome.label.password.accesskey}" autocomplete="off"/>
+			      <span class="mdc-notched-outline mdc-notched-outline--upgraded">
+			      <span class="mdc-notched-outline__leading"></span>
+			      <span class="mdc-notched-outline__notch" style="">
+				<span class="mdc-floating-label" style=""><span class="accesskey">C</span>ode :</span>
+			      </span>
+			      <span class="mdc-notched-outline__trailing"></span>
+                            </span>
+			    </label>
+			    </div>
+			  </section>
+                            <button class="mdc-button mdc-button--raised" accesskey="l" id="submitCode"
+				   tabindex="6" type="submit">
+			      <span class="mdc-button__label" th:utext="#{screen.welcome.button.login}"/>
+			    </button>
 			<input type="hidden" name="_eventId_submit" value="Login" />
 			<input type="hidden" name="execution" th:value="${flowExecutionKey}"/>
 			<input type="hidden" name="geolocation"/>
                       </form>
-		    </div>
-		</div>
 
-                    <div id="codeRequest" th:data-url="${flowExecutionKey}" class="card-header text-center d-none"></div>
+                    <div id="codeRequest" th:data-url="${flowExecutionKey}" class="card-header text-center"></div>
 		  </div>
+		  </section>
             <script type="text/javascript">
                 $(document).ready(function() {
                     activateWaitingFor();
