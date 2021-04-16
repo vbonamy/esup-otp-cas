@@ -1,4 +1,4 @@
-Works on CAS V6.0.8.1
+Works on CAS V6.3.3
 
 ## Config
 
@@ -38,7 +38,7 @@ dependencies {
     compile "org.apereo.cas:cas-server-webapp:${project.'cas.version'}@war"
     
     // Becareful: Conflict with other packages, needs to be first on the list
-    compile 'com.github.EsupPortail:esup-otp-cas:6.0.x-SNAPSHOT'
+    compile 'com.github.EsupPortail:esup-otp-cas:6.3.x-SNAPSHOT'
 }
 ```
 
