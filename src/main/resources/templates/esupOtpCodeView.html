@@ -20,7 +20,7 @@
 		      <div class="d-flex align-items-center p-2">
 			<img src="images/webapp.png"><div id="servicedesc" class="ml-2">
 			  <h5 th:text="#{cas.login.pagetitle}">Login</h5>
-			  <h3 th:utext="#{cas.mfa.esupotp.waitingFor}" id="waiting" class="text-center"></h3>
+			  <h3 th:utext="#{cas.mfa.esupotp.waitingFor}" id="waiting" class="text-center d-none"></h3>
 			  <div id="displayTransport" class="btn btn-info" onClick="switchDiv();return false;">
 			    <span th:utext="#{cas.mfa.esupotp.displayOtherMethod}" />
 			  </div>
@@ -31,7 +31,7 @@
 		  <div id="loginForm" class="form-wrapper">
                       <form method="post" id="fm1" th:object="${credential}">
 			<div id="msg" class="errors" th:if="${#fields.hasErrors('*')}">
-                          <span th:each="err : ${#fields.errors('*')}" th:utext="${err}"/>
+                          <span class="mdc-theme--error" th:each="err : ${#fields.errors('*')}" th:utext="${err}"/>
 			</div>
 			  <h3 class="text-center">
 			    <i class="mdi mdi-security"></i>
@@ -102,11 +102,8 @@
                 // if waitingFor method is activated, waitingForDiv will appear else TransportDiv will appear
                 function activateWaitingFor(){
                     if(divNoCodeDisplay) {
-                        $('#waiting').toggleClass('d-none');
+		        switchDiv();
                         initializeSocket();
-                    } else {
-                        $('#loginForm').toggleClass('d-none');
-                        $('#codeRequest').toggleClass('d-none');
                     }
                     if(pushAsked) {
                     	submitPushCodeRequest();
