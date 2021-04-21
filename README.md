@@ -30,19 +30,22 @@ cas.messageBundle.baseNames=classpath:custom_messages,classpath:messages,classpa
 In cas/build.gradle
 
 ``` groovy
-// Tell to springboot to use that version, if not gradle will download 2 versions 2014**** and 20160810, 
-// but it will use 2014**** on runtime
-ext['json.version'] = 20160810
+...
+repositories {
+  ...
+  maven {
+        url "https://jitpack.io"
+    }
+}
+...
 
 dependencies {
-    compile "org.apereo.cas:cas-server-webapp:${project.'cas.version'}@war"
-    
-    // Becareful: Conflict with other packages, needs to be first on the list
-    compile 'com.github.EsupPortail:esup-otp-cas:6.3.x-SNAPSHOT'
+    ...
+    implementation "com.github.EsupPortail:esup-otp-cas:ad586a2475"
 }
 ```
 
-    TIPS: Look for https://jitpack.io/#EsupPortail/esup-otp-cas and check the available version you can use
+    TIPS: Look for https://jitpack.io/#EsupPortail/esup-otp-cas and check the available version you can use - here ad586a2475 is ok with 6.3.3 but maybe it's not the last one
 
 In log4j2.xml
 ```
