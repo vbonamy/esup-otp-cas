@@ -7,7 +7,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 
-import org.esupportail.cas.adaptors.esupotp.EsupOtpTransportCredential;
+import org.esupportail.cas.adaptors.esupotp.EsupOtpCredentialTransport;
 import org.esupportail.cas.config.EsupOtpConfigurationProperties;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class EsupOtpTransportService {
     @Autowired
     private EsupOtpConfigurationProperties esupOtpConfigurationProperties;
     
-	public String sendCode(EsupOtpTransportCredential transportCredential) {
+	public String sendCode(EsupOtpCredentialTransport transportCredential) {
         try {
                 JSONObject response = sendCodeRequest(transportCredential.getUid(), transportCredential.getUserHash(), transportCredential.getTransport(), transportCredential.getMethod());
                 if(response.getString("code").equals("Ok"))return "success";

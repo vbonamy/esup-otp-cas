@@ -18,22 +18,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class EsupOtpMultifactorAuthenticationProvider extends AbstractMultifactorAuthenticationProvider {
 
     private static final long serialVersionUID = 4789727148634156909L;
-    
-    @Autowired
-    @Qualifier("esupotpAuthenticationHandler")
-    private AuthenticationHandler esupotpAuthenticationHandler;
-    
-    @Autowired
-    EsupOtpConfigurationProperties esupOtpConfigurationProperties;
         
     @Override
     public String getId() {
         return StringUtils.defaultIfBlank(super.getId(), EsupOtpMultifactorProperties.DEFAULT_IDENTIFIER);
-    }
-
-    @Override
-    public int getOrder() {
-        return esupOtpConfigurationProperties.getRank();
     }
 
     @Override

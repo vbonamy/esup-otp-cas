@@ -1,6 +1,6 @@
 package org.esupportail.cas.configuration.model.support.mfa;
 
-import org.apereo.cas.configuration.model.support.mfa.BaseMultifactorProviderProperties;
+import org.apereo.cas.configuration.model.support.mfa.BaseMultifactorAuthenticationProviderProperties;
 
 /**
  * This is {@link EsupOtpMultifactorProperties}.
@@ -8,7 +8,7 @@ import org.apereo.cas.configuration.model.support.mfa.BaseMultifactorProviderPro
  * @author Francis Le Coq
  * @since 5.2.2
  */
-public class EsupOtpMultifactorProperties extends BaseMultifactorProviderProperties {
+public class EsupOtpMultifactorProperties extends BaseMultifactorAuthenticationProviderProperties {
     /**
      * Provider id by default.
      */

@@ -5,7 +5,7 @@
                           http://www.springframework.org/schema/webflow/spring-webflow.xsd">
 
     <var name="credential" class="org.esupportail.cas.adaptors.esupotp.EsupOtpCredential" />
-    <var name="transportCredential" class="org.esupportail.cas.adaptors.esupotp.EsupOtpTransportCredential" />
+    <var name="credentialTransport" class="org.esupportail.cas.adaptors.esupotp.EsupOtpCredentialTransport" />
     <on-start>
         <evaluate expression="initialFlowSetupAction" />
     </on-start>
@@ -41,7 +41,7 @@
     </view-state>
 
     <action-state id="submitTransportEsupOtp">
-        <evaluate expression="esupotpTransportService.sendCode(transportCredential)" />
+        <evaluate expression="esupotpTransportService.sendCode(credentialTransport)" />
         <transition on="success" to="successView" />
         <transition on="error" to="errorView" />
     </action-state>

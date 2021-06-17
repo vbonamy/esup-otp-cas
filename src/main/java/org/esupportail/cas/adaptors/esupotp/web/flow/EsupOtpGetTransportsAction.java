@@ -36,7 +36,7 @@ public class EsupOtpGetTransportsAction extends AbstractMultifactorAuthenticatio
 
     public EsupOtpGetTransportsAction(ApplicationContext applicationContext,
 			EsupOtpConfigurationProperties esupOtpConfigurationProperties, EsupOtpService esupOtpService) {
-		super(applicationContext);
+		super();
 		this.esupOtpConfigurationProperties = esupOtpConfigurationProperties;
 		this.esupOtpService = esupOtpService;
 	}

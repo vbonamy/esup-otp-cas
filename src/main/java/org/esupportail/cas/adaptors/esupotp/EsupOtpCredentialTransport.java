@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Alex Bouskine
  * @since 5.0.0
  */
-public class EsupOtpTransportCredential implements Serializable {
+public class EsupOtpCredentialTransport implements Serializable {
     private static final long serialVersionUID = 6182390898687671093L;
 
     private String transport;
@@ -22,7 +22,7 @@ public class EsupOtpTransportCredential implements Serializable {
 	/**
      * Instantiates a new Esup otp token credential.
      */
-    public EsupOtpTransportCredential() {
+    public EsupOtpCredentialTransport() {
     }
 
     public String getTransport() {

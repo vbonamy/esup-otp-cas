@@ -44,6 +44,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.webflow.config.FlowDefinitionRegistryBuilder;
 import org.springframework.webflow.definition.registry.FlowDefinitionRegistry;
+import org.springframework.webflow.engine.builder.FlowBuilder;
 import org.springframework.webflow.engine.builder.support.FlowBuilderServices;
 import org.springframework.webflow.execution.Action;
 
@@ -72,12 +73,12 @@ public class EsupOtpConfiguration {
 	@Qualifier("loginFlowRegistry")
 	private FlowDefinitionRegistry loginFlowDefinitionRegistry;
 
-	@Autowired
-	private FlowBuilderServices flowBuilderServices;
+    @Autowired
+    private ObjectProvider<FlowBuilderServices> flowBuilderServices;
 
-	@Autowired
-	@Qualifier("builder")
-	private FlowBuilderServices builder;
+    @Autowired
+    @Qualifier("flowBuilder")
+    private ObjectProvider<FlowBuilder> flowBuilder;
 
 	@Autowired
 	@Qualifier("centralAuthenticationService")
@@ -138,9 +139,8 @@ public class EsupOtpConfiguration {
 	@RefreshScope
 	@Bean
 	public FlowDefinitionRegistry esupotpFlowRegistry() {
-		final FlowDefinitionRegistryBuilder builder = new FlowDefinitionRegistryBuilder(this.applicationContext, this.builder);
-		builder.setBasePath("classpath*:/webflow");
-		builder.addFlowLocationPattern("/mfa-esupotp/*-webflow.xml");
+		final FlowDefinitionRegistryBuilder builder = new FlowDefinitionRegistryBuilder(this.applicationContext, flowBuilderServices.getObject());
+		builder.addFlowBuilder(flowBuilder.getObject(), EsupOtpMultifactorWebflowConfigurer.MFA_ESUPOTP_EVENT_ID);
 		return builder.build();
 	}
 
@@ -184,10 +184,9 @@ public class EsupOtpConfiguration {
     @Bean
     @DependsOn("defaultWebflowConfigurer")
     public CasWebflowConfigurer esupotpMultifactorWebflowConfigurer() {
-        final CasWebflowConfigurer w = new EsupOtpMultifactorWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry,
+        final CasWebflowConfigurer cfg = new EsupOtpMultifactorWebflowConfigurer(flowBuilderServices.getObject(), loginFlowDefinitionRegistry,
                 esupotpFlowRegistry(), applicationContext, casProperties, MultifactorAuthenticationWebflowUtils.getMultifactorAuthenticationWebflowCustomizers(applicationContext));
-        w.initialize();
-        return w;
+        return cfg;
     }
     
 
@@ -204,8 +203,7 @@ public class EsupOtpConfiguration {
         @DependsOn("defaultWebflowConfigurer")
         public CasWebflowConfigurer esupotpMultifactorTrustWebflowConfigurer() {
         	log.debug("esupotp.trustedDeviceEnabled true, esupotpMultifactorTrustWebflowConfigurer ok");
-        	final CasWebflowConfigurer w =  new EsupOtpMultifactorTrustWebflowConfigurer(flowBuilderServices, loginFlowDefinitionRegistry,
-                casProperties.getAuthn().getMfa().getTrusted().isDeviceRegistrationEnabled(), 
+        	final CasWebflowConfigurer w =  new EsupOtpMultifactorTrustWebflowConfigurer(flowBuilderServices.getObject(), loginFlowDefinitionRegistry, 
                 esupOtpConfigurationProperties.getIsDeviceRegistrationRequired(),
                 esupotpFlowRegistry(),
                 applicationContext, casProperties, MultifactorAuthenticationWebflowUtils.getMultifactorAuthenticationWebflowCustomizers(applicationContext));

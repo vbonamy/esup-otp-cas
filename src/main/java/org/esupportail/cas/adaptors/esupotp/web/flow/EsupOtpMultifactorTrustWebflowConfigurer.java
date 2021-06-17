@@ -26,7 +26,6 @@ public class EsupOtpMultifactorTrustWebflowConfigurer extends AbstractMultifacto
 
     public EsupOtpMultifactorTrustWebflowConfigurer(final FlowBuilderServices flowBuilderServices,
                                                       final FlowDefinitionRegistry loginFlowDefinitionRegistry,
-                                                      final boolean enableDeviceRegistration,
                                                       final boolean isDeviceRegistrationRequired,
                                                       final FlowDefinitionRegistry flowDefinitionRegistry,
                                                       final ConfigurableApplicationContext applicationContext,

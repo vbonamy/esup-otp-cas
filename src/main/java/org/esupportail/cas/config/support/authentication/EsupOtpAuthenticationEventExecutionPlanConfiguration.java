@@ -2,15 +2,16 @@ package org.esupportail.cas.config.support.authentication;
 
 import org.apereo.cas.authentication.AuthenticationEventExecutionPlanConfigurer;
 import org.apereo.cas.authentication.AuthenticationHandler;
+import org.apereo.cas.authentication.AuthenticationMetaDataPopulator;
 import org.apereo.cas.authentication.MultifactorAuthenticationProvider;
 import org.apereo.cas.authentication.bypass.DefaultChainingMultifactorAuthenticationBypassProvider;
 import org.apereo.cas.authentication.bypass.MultifactorAuthenticationProviderBypassEvaluator;
+import org.apereo.cas.authentication.metadata.AuthenticationContextAttributeMetaDataPopulator;
 import org.apereo.cas.authentication.principal.DefaultPrincipalFactory;
 import org.apereo.cas.authentication.principal.PrincipalFactory;
 import org.apereo.cas.configuration.CasConfigurationProperties;
 import org.apereo.cas.services.ServicesManager;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpAuthenticationHandler;
-import org.esupportail.cas.adaptors.esupotp.EsupOtpAuthenticationMetaDataPopulator;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpMultifactorAuthenticationProvider;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpService;
 import org.esupportail.cas.config.EsupOtpConfigurationProperties;
@@ -48,7 +49,9 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
     @Bean
     public EsupOtpMultifactorProperties esupotpMultifactorProperties() {
         // that line replace casProperties.getAuthn().getMfa().getEsupOtp()
-        return new EsupOtpMultifactorProperties(); 
+    	EsupOtpMultifactorProperties esupOtpMultifactorProperties = new EsupOtpMultifactorProperties();
+    	esupOtpMultifactorProperties.setOrder(esupOtpConfigurationProperties.getRank());
+    	return esupOtpMultifactorProperties;
     }
 
     @ConditionalOnMissingBean(name = "esupotpAuthenticationHandler")
@@ -80,7 +83,6 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
         final EsupOtpMultifactorProperties esupotp = esupotpMultifactorProperties();
         final EsupOtpMultifactorAuthenticationProvider p = new EsupOtpMultifactorAuthenticationProvider();
         p.setBypassEvaluator(esupOtpBypassEvaluator());
-        p.setFailureMode(casProperties.getAuthn().getMfa().getGlobalFailureMode());
         p.setOrder(esupotp.getRank());
         p.setId(esupotp.getId());
 		return p;
@@ -93,16 +95,16 @@ public class EsupOtpAuthenticationEventExecutionPlanConfiguration {
     	esupOtpBypassEvaluator.addMultifactorAuthenticationProviderBypassEvaluator(new EsupOtpBypassProvider(esupOtpService(), esupOtpConfigurationProperties));
     	return esupOtpBypassEvaluator;
     }
-
+	
 	@Bean
 	@RefreshScope
-	public EsupOtpAuthenticationMetaDataPopulator esupotpAuthenticationMetaDataPopulator() {
-		return new EsupOtpAuthenticationMetaDataPopulator(
-			casProperties.getAuthn().getMfa().getAuthenticationContextAttribute(),
-			esupotpAuthenticationHandler(),
-			esupotpAuthenticationProvider()
-		);
-	}
+	public AuthenticationMetaDataPopulator esupotpAuthenticationMetaDataPopulator() {
+            return new AuthenticationContextAttributeMetaDataPopulator(
+                casProperties.getAuthn().getMfa().getCore().getAuthenticationContextAttribute(),
+                esupotpAuthenticationHandler(),
+                esupotpAuthenticationProvider().getId()
+            );
+        }
 	
     @ConditionalOnMissingBean(name = "esupotpAuthenticationEventExecutionPlanConfigurer")
     @Bean
