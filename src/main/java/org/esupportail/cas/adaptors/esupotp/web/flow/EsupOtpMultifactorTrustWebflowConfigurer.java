@@ -52,7 +52,7 @@ public class EsupOtpMultifactorTrustWebflowConfigurer extends AbstractMultifacto
 	            return null;
 	        });
         } 
-        registerMultifactorTrustedAuthentication(this.flowDefinitionRegistry);
+        registerMultifactorTrustedAuthentication();
     }
 
 }
