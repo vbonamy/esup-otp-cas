@@ -215,7 +215,7 @@ public class EsupOtpConfiguration {
                 esupOtpConfigurationProperties.getIsDeviceRegistrationRequired(),
                 esupotpFlowRegistry(),
                 applicationContext, casProperties, MultifactorAuthenticationWebflowUtils.getMultifactorAuthenticationWebflowCustomizers(applicationContext));
-        	w.setOrder(WEBFLOW_CONFIGURER_ORDER);
+        	w.setOrder(WEBFLOW_CONFIGURER_ORDER + 1);
             return w;
         }
 
