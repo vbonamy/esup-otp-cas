@@ -212,7 +212,7 @@ public class EsupOtpConfiguration {
         @DependsOn("defaultWebflowConfigurer")
         public CasWebflowConfigurer esupotpMultifactorTrustWebflowConfigurer() {
         	log.debug("esupotp.trustedDeviceEnabled true, esupotpMultifactorTrustWebflowConfigurer ok");
-        	final CasWebflowConfigurer w =  new EsupOtpMultifactorTrustWebflowConfigurer(flowBuilderServices.getObject(), loginFlowDefinitionRegistry, 
+        	final AbstractCasWebflowConfigurer w =  new EsupOtpMultifactorTrustWebflowConfigurer(flowBuilderServices.getObject(), loginFlowDefinitionRegistry, 
                 esupOtpConfigurationProperties.getIsDeviceRegistrationRequired(),
                 esupotpFlowRegistry(),
                 applicationContext, casProperties, MultifactorAuthenticationWebflowUtils.getMultifactorAuthenticationWebflowCustomizers(applicationContext));
