@@ -15,7 +15,6 @@ import org.apereo.cas.ticket.registry.TicketRegistrySupport;
 import org.apereo.cas.trusted.config.MultifactorAuthnTrustConfiguration;
 import org.apereo.cas.web.cookie.CasCookieBuilder;
 import org.apereo.cas.web.flow.CasWebflowConfigurer;
-import org.apereo.cas.web.flow.CasWebflowExecutionPlan;
 import org.apereo.cas.web.flow.CasWebflowExecutionPlanConfigurer;
 import org.apereo.cas.web.flow.SingleSignOnParticipationStrategy;
 import org.apereo.cas.web.flow.authentication.RankedMultifactorAuthenticationProviderSelector;
@@ -205,7 +204,7 @@ public class EsupOtpConfiguration {
     @ConditionalOnClass(value = MultifactorAuthnTrustConfiguration.class)
     @ConditionalOnProperty(prefix = "esupotp", name = "trustedDeviceEnabled", havingValue = "true", matchIfMissing = true)
     @Configuration("esupOtpMultifactorTrustConfiguration")
-    public class EsupOtpMultifactorTrustConfiguration implements CasWebflowExecutionPlanConfigurer {
+    public class EsupOtpMultifactorTrustConfiguration {
 
         @ConditionalOnMissingBean(name = "esupotpMultifactorTrustWebflowConfigurer")
         @Bean
@@ -220,9 +219,10 @@ public class EsupOtpConfiguration {
             return w;
         }
 
-        @Override
-        public void configureWebflowExecutionPlan(final CasWebflowExecutionPlan plan) {
-            plan.registerWebflowConfigurer(esupotpMultifactorTrustWebflowConfigurer());
+        @ConditionalOnMissingBean(name = "esupOtpMultifactorTrustWebflowExecutionPlanConfigurer")
+        @Bean
+        public CasWebflowExecutionPlanConfigurer casSimpleMultifactorTrustWebflowExecutionPlanConfigurer() {
+            return plan -> plan.registerWebflowConfigurer(esupotpMultifactorTrustWebflowConfigurer());
         }
     }
 
