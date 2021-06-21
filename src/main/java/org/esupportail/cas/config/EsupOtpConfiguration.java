@@ -208,7 +208,7 @@ public class EsupOtpConfiguration {
 
         @ConditionalOnMissingBean(name = "esupotpMultifactorTrustWebflowConfigurer")
         @Bean
-        @DependsOn("defaultWebflowConfigurer")
+        @DependsOn({"defaultWebflowConfigurer", "esupotpMultifactorWebflowConfigurer"})
         public CasWebflowConfigurer esupotpMultifactorTrustWebflowConfigurer() {
         	log.debug("esupotp.trustedDeviceEnabled true, esupotpMultifactorTrustWebflowConfigurer ok");
         	final AbstractCasWebflowConfigurer w =  new EsupOtpMultifactorTrustWebflowConfigurer(flowBuilderServices.getObject(), loginFlowDefinitionRegistry, 
