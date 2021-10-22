@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apereo.cas.authentication.Authentication;
 import org.apereo.cas.authentication.MultifactorAuthenticationProvider;
 import org.apereo.cas.authentication.bypass.BaseMultifactorAuthenticationProviderBypassEvaluator;
+import org.apereo.cas.configuration.model.support.mfa.BaseMultifactorAuthenticationProviderProperties.MultifactorAuthenticationProviderFailureModes;
 import org.apereo.cas.services.RegisteredService;
 import org.apereo.cas.web.support.WebUtils;
 import org.esupportail.cas.adaptors.esupotp.EsupOtpMethod;
@@ -67,7 +68,10 @@ public class EsupOtpBypassProvider extends BaseMultifactorAuthenticationProvider
 			}
 		} catch (Exception e) {
 			log.error("Exception ...", e);
-			return false;
+			if(!MultifactorAuthenticationProviderFailureModes.CLOSED.equals(esupOtpConfigurationProperties.getFailureMode())) {
+				log.warn("EsupOtpBypassProvider failed to execute and failureMode is not CLOSED, we bypass EsupOtp MFA");
+				return false;
+			}
 		}
 		return true;
 	}
